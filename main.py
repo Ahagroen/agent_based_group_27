@@ -2,6 +2,7 @@ from src.datatypes import Aircraft,TowingVehicle
 from src.atc import ATC
 from src.ground_control import groundControl
 from src.environment import Airport
+from random import choice
 
 
 #CURRENT ASSUMPTIONS = 2 RUNWAYS (one departing one arriving)
@@ -9,7 +10,7 @@ from src.environment import Airport
 #STATE
 num_tugs = 2
 ac_freq = 15 #min - standard timestep
-
+airport = Airport("baseline_airport.json")
 ac_waiting:dict[str,list[Aircraft]] = {}#AC waiting at runway (arriving), or gate (departing)
 ac_loading:list[Aircraft] = []#AC that are currently loading, 
 
@@ -17,20 +18,20 @@ tug_waiting:list[TowingVehicle] = []
 tug_travelling:list[TowingVehicle] = []
 tug_intersection:list[TowingVehicle] = []
 
-atc = ATC(ac_freq,10,45,[])
+atc = ATC(ac_freq,10,45,airport.gates,airport.arrival_runways)
 ground_control = groundControl()
 
 def add_new_aircraft(time):
-    carry = atc.add_aircraft(time)
+    carry,runway = atc.add_aircraft(time)
     if carry is not None:
-        ac_waiting["arv_runway"].append(carry)
+        ac_waiting[runway].append(carry)
 
 def check_loading(time):
     for i in ac_loading:
         if i.loading_completion_time <= time:
             ac_loading.remove(i)
             ac_waiting[i.target.name].append(i)
-            i.target = None #Fix this once nodes are defined
+            i.target = choice(airport.dept_runways) #Fix this once nodes are defined
             atc.empty_gate(i)
 
 def check_tug_waiting():

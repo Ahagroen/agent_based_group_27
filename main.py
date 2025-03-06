@@ -15,7 +15,6 @@ ac_waiting:dict[str,list[Aircraft]] = airport.populate_waiting_dict()#AC waiting
 ac_loading:list[Aircraft] = []#AC that are currently loading, 
 
 tug_waiting:list[TowingVehicle] = []
-tug_travelling:list[TowingVehicle] = []
 tug_intersection:list[TowingVehicle] = []
 
 atc = ATC(ac_freq,10,45,airport.gates,airport.arrival_runways)
@@ -49,27 +48,23 @@ def check_tug_waiting():
 
 def check_tug_intersection(time):
     for i in tug_intersection:
-        tug_intersection.remove(i)
-        if i.pos == i.connected_aircraft:
-            if i.pos.name in airport.dept_runways: #The aircraft has arrived at the departure runway
-                i.connected_aircraft = None
-                tug_waiting.append(i)
-            else:
-                i.connected_aircraft.loading_completion_time = time + i.connected_aircraft.loading_time
-                ac_loading.append(i.connected_aircraft)
-                i.connected_aircraft = None
+        if len(i.next_node_list) == 0: #we have arrived at our destination
+            if i.connected_aircraft:
+                if i.pos.name in airport.dept_runways: #The aircraft has arrived at the departure runway
+                    i.connected_aircraft = None
+                    i.next_node_list = ground_control.determine_route(i.pos,ground_control.determine_next_wait_position(i.pos,ac_loading))
+                else:
+                    i.connected_aircraft.loading_completion_time = time + i.connected_aircraft.loading_time
+                    ac_loading.append(i.connected_aircraft)
+                    i.connected_aircraft = None
+                    i.next_node_list = ground_control.determine_route(i.pos,ground_control.determine_next_wait_position(i.pos,ac_loading))
+            else: #We are waiting
+                tug_intersection.remove(i)
                 tug_waiting.append(i)
         else:
-            next_node = i.next_node_list.pop(0) 
-            i.arrival_time = i.pos.edges[next_node.name]
+            #add collision avoidance here TODO's
+            next_node = i.next_node_list.pop(0)
             i.pos = next_node
-            tug_travelling.append(i)
-
-def check_tug_travelling(time):
-    for i in tug_travelling:
-        if i.arrival_time >= time:
-            tug_travelling.remove(i)
-            tug_intersection.append(i)
 
 
 
@@ -82,7 +77,6 @@ def main():
         add_new_aircraft(time)
         check_tug_waiting()
         check_tug_intersection(time)
-        check_tug_travelling(time)
         time +=1
 
 

@@ -13,7 +13,8 @@ class Aircraft():
 
 @dataclass
 class TowingVehicle():
-    pos:int#Node the vehicle will _arrive_ to: IE if travelling from A to B this is B and distance is != 0
+    pos:int#Assume all travel time takes the same number of mins (say 1)
     next_node_list = []
     connected_aircraft:Aircraft
+    priority:int
 

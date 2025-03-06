@@ -11,7 +11,7 @@ from random import choice
 num_tugs = 2
 ac_freq = 15 #min - standard timestep
 airport = Airport("baseline_airport.json")
-ac_waiting:dict[str,list[Aircraft]] = {}#AC waiting at runway (arriving), or gate (departing)
+ac_waiting:dict[str,list[Aircraft]] = airport.populate_waiting_dict()#AC waiting at runway (arriving), or gate (departing)
 ac_loading:list[Aircraft] = []#AC that are currently loading, 
 
 tug_waiting:list[TowingVehicle] = []
@@ -22,9 +22,9 @@ atc = ATC(ac_freq,10,45,airport.gates,airport.arrival_runways)
 ground_control = groundControl()
 
 def add_new_aircraft(time):
-    carry,runway = atc.add_aircraft(time)
+    carry = atc.add_aircraft(time)
     if carry is not None:
-        ac_waiting[runway].append(carry)
+        ac_waiting[carry[1]].append(carry[0])
 
 def check_loading(time):
     for i in ac_loading:
@@ -51,7 +51,7 @@ def check_tug_intersection(time):
     for i in tug_intersection:
         tug_intersection.remove(i)
         if i.pos == i.connected_aircraft:
-            if i.pos.name == "dep_runway": #The aircraft has arrived at the departure runway
+            if i.pos.name in airport.dept_runways: #The aircraft has arrived at the departure runway
                 i.connected_aircraft = None
                 tug_waiting.append(i)
             else:

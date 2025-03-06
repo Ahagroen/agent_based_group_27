@@ -1,4 +1,6 @@
 import json
+
+from src.datatypes import Aircraft
 class Airport():
     def __init__(self,airport_file):
         self.load_airport_data(airport_file)
@@ -21,6 +23,16 @@ class Airport():
     def save_airport_data(self,airport_file):
         with open(airport_file,"w") as fs:
             json.dump(self.data,fs)
+
+    def populate_waiting_dict(self)->dict[str,list[Aircraft]]:
+        carry = {}
+        for i in self.arrival_runways:
+            carry[i] = []
+        for i in self.dept_runways:
+            carry[i] = []
+        for i in self.gates:
+            carry[i] = []
+        return carry
 
 
 

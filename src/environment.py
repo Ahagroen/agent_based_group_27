@@ -1,25 +1,21 @@
 import json
 from typing import Union
 
-from datatypes import Aircraft
+from src.datatypes import Aircraft, Node
 class Airport():
-    def __init__(self,airport_file):
-        self._load_airport_data(airport_file)
-    def _load_airport_data(self,airport_file):
+    def __init__(self,airport_file,window_dims:tuple[int,int]=(700,500)):
+        self._load_airport_data(airport_file,window_dims)
+    def _load_airport_data(self,airport_file,window_dims:tuple[int,int]):
         with open(airport_file,"r") as fs:
             data = json.load(fs)
             node_map = data["nodes"]
-            # updated_map = deepcopy(node_map)
-            # for i in node_map.keys():
-            #     for j in node_map[i]:
-            #         if j not in updated_map.keys():
-            #             updated_map[j] = [i]
-            #         elif i not in updated_map[j]:
-            #             updated_map[j].append(i)
-            self.dept_runways= data["dept_runways"]
-            self.arrival_runways = data["arrival_runways"]
-            self.gates = data["gates"]
-            self.nodes = node_map
+            updated_node_map = {}
+            for i in node_map.keys():
+                updated_node_map[i] = Node(node_map[i]["edges"],int(((node_map[i]["x_pos"]-1)/8)*window_dims[0]+75),int(((node_map[i]["y_pos"]-1)/7)*window_dims[1]+75))
+            self.dept_runways:list= data["dept_runways"]
+            self.arrival_runways:list = data["arrival_runways"]
+            self.gates:list = data["gates"]
+            self.nodes:dict[int,Node] = updated_node_map
  
 
     def populate_waiting_dict(self)->dict[str,Union[Aircraft|None]]:

@@ -11,23 +11,25 @@ class Simulation:
         self.atc:ATC = ATC(ac_freq,taxi_margin,loading_margin,airport.gates,airport.arrival_runways)
         self.ground_control:groundControl = groundControl(airport.nodes)
         self.max_time:int = max_time
-        self.ac_waiting:dict[str,list[Aircraft]] = airport.populate_waiting_dict()#AC waiting at runway (arriving), or gate (departing)
-        self.ac_loading:list[Aircraft] = []#AC that are currently loading, 
-        self.tug_waiting:list[TowingVehicle] = []
-        self.tug_intersection:list[TowingVehicle] = []
+        self.ac_waiting:dict[str,Aircraft|None] = airport.populate_waiting_dict()#AC waiting at runway (arriving), or gate (departing)
+        self.ac_loading:list[Aircraft] = []#AC that are currently loading - location is inside struct 
+        self.tug_waiting:list[TowingVehicle] = [] #empty tugs
+        self.tug_intersection:list[TowingVehicle] = [] #full tugs - we might need to add travel down the line
         self.time:int = 0
         self.state:Status = Status.Running
 
     def _add_new_aircraft(self):
         carry = self.atc.add_aircraft(self.time)
         if carry is not None:
-            self.ac_waiting[carry[1]].append(carry[0])
+            if self.ac_waiting[carry[1]] is not None:
+                self.state = Status.Failed_No_Landing_Space
+            self.ac_waiting[carry[1]] = carry[0]
 
     def _check_loading(self):
         for i in self.ac_loading:
             if i.loading_completion_time <= self.time:
                 self.ac_loading.remove(i)
-                self.ac_waiting[i.target.name].append(i)
+                self.ac_waiting[i.target.name] = i
                 i.target = choice(self.airport.dept_runways) #Fix this once nodes are defined
                 i.direction = False
                 self.atc.empty_gate(i)
@@ -36,9 +38,9 @@ class Simulation:
         for i in self.tug_waiting:
             for j in self.ac_waiting.keys():
                 if i.pos.name == j:
-                    if len(self.ac_waiting[j])>0:
-                        aircraft = self.ac_waiting[j][0]
-                        self.ac_waiting[j].remove(aircraft)#No longer waiting
+                    if self.ac_waiting[j] is not None:
+                        aircraft = self.ac_waiting[j]
+                        self.ac_waiting[j] = None#No longer waiting
                         i.connected_aircraft = aircraft
                         i.next_node_list = self.ground_control.determine_route(i.pos,aircraft.target)
                         self.tug_waiting.remove(i)
@@ -73,12 +75,12 @@ class Simulation:
 
     def _check_ac_waiting_time(self):
         for i in self.ac_waiting.keys():
-            for j in self.ac_waiting[i]:
-                if j.direction:#arriving
-                    if j.target_arrival_time < self.time:
+            if self.ac_waiting[i] is not None:
+                if self.ac_waiting[i].direction:#arriving
+                    if self.ac_waiting[i].target_arrival_time < self.time:
                         self.state = Status.Failed_Aircraft_Taxi_Time
                 else:
-                    if j.target_departure_time < self.time:
+                    if self.ac_waiting[i].target_departure_time < self.time:
                         self.state = Status.Failed_Aircraft_Taxi_Time
 
     def simulation_tick(self):
@@ -90,3 +92,19 @@ class Simulation:
         self._check_tug_waiting()
         self._check_tug_intersection()
         self.time += 1
+    
+    def position_list(self)->dict[str,list[tuple[str,int]]]:
+        output = {}
+        output["aircraft"] = []
+        output["tugs"] = []
+        output["tugs_loaded"] = []
+        for i in self.ac_loading:
+            output["aircraft"].append(i.name,i.target)
+        for i in self.tug_waiting:
+            output["tugs"].append(i.name,i.pos)
+        for i in self.tug_intersection:
+            if i.connected_aircraft is not None:
+                output["tugs_loaded"].append(i.name,i.pos)
+            else:
+                output["tugs"].append(i.name,i.pos)
+        return output

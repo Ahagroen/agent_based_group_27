@@ -1,4 +1,5 @@
 import json
+from typing import Union
 
 from src.datatypes import Aircraft
 class Airport():
@@ -24,14 +25,14 @@ class Airport():
         with open(airport_file,"w") as fs:
             json.dump(self.data,fs)
 
-    def populate_waiting_dict(self)->dict[str,list[Aircraft]]:
+    def populate_waiting_dict(self)->dict[str,Union[Aircraft|None]]:
         carry = {}
         for i in self.arrival_runways:
-            carry[i] = []
+            carry[i] = None
         for i in self.dept_runways:
-            carry[i] = []
+            carry[i] = None
         for i in self.gates:
-            carry[i] = []
+            carry[i] = None
         return carry
 
 

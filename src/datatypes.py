@@ -6,6 +6,7 @@ from enum import Enum
 
 @dataclass
 class Aircraft():
+    name:str
     target:int #This implicitly holds direction, since its either a gate or a runway
     direction:bool #false = departing (travelling to runway) true = arriving
     target_arrival_time:int #When the aircraft must be at the target
@@ -15,6 +16,7 @@ class Aircraft():
 
 @dataclass
 class TowingVehicle():
+    name:str
     pos:int#Assume all travel time takes the same number of mins (say 1) - can't assume this
     next_node_list = []
     connected_aircraft:Aircraft
@@ -26,4 +28,5 @@ class Status(Enum):
     Success = 1
     Failed_Aircraft_Taxi_Time = 2
     Failed_Collision = 3
+    Failed_No_Landing_Space = 4
 

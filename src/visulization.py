@@ -1,4 +1,4 @@
-from raylib import BeginDrawing, ClearBackground, EndDrawing, InitWindow, SetTargetFPS, WindowShouldClose,DrawCircle,RED,GREEN,PURPLE,WHITE,LoadTexture,DrawTextureEx
+from raylib import BeginDrawing, ClearBackground, EndDrawing, InitWindow, SetTargetFPS, WindowShouldClose,DrawCircle,RED,GREEN,PURPLE,WHITE,LoadTexture,DrawTexturePro
 from src.simulation import Simulation
 from src.environment import Airport
 from src.datatypes import ImageType
@@ -15,13 +15,14 @@ def Run_simulation(x_dim,y_dim,fps,run_time,ac_freq,taxi_margin,loading_time):
     triple_intersection = LoadTexture(b"images\\taxiway_3way.png")
     quad_intersection = LoadTexture(b"images\\taxiway_4way.png")
     debug = True
-    scale = 0.2
+    unit_height = 45
+    unit_width = 45
 
 
     sim = Simulation(2,airport,ac_freq,taxi_margin,loading_time,run_time)
     while not WindowShouldClose():
         BeginDrawing()
-        ClearBackground(WHITE)
+        ClearBackground((27,108,39))
         if debug:
             for i in airport.nodes.keys():
                 if int(i) in airport.dept_runways:
@@ -33,13 +34,13 @@ def Run_simulation(x_dim,y_dim,fps,run_time,ac_freq,taxi_margin,loading_time):
                 else:
                     match airport.nodes[i].image_type:
                         case ImageType.four_way_intersection:
-                            DrawTextureEx(quad_intersection,(airport.nodes[i].x_pos,airport.nodes[i].y_pos),airport.nodes[i].orientation,scale,WHITE)
+                            DrawTexturePro(quad_intersection,(0,0,quad_intersection.width,quad_intersection.height),(airport.nodes[i].x_pos,airport.nodes[i].y_pos,unit_width,unit_height),(unit_width/2,unit_height/2),airport.nodes[i].orientation,WHITE)
                         case ImageType.three_way_intersection:
-                            DrawTextureEx(triple_intersection,(airport.nodes[i].x_pos,airport.nodes[i].y_pos),airport.nodes[i].orientation,scale,WHITE)
+                            DrawTexturePro(triple_intersection,(0,0,triple_intersection.width,triple_intersection.height),(airport.nodes[i].x_pos,airport.nodes[i].y_pos,unit_width,unit_height),(unit_width/2,unit_height/2),-airport.nodes[i].orientation,WHITE)
                         case ImageType.turn:
-                            DrawTextureEx(turns,(airport.nodes[i].x_pos,airport.nodes[i].y_pos),airport.nodes[i].orientation,scale,WHITE)
+                            DrawTexturePro(turns,(0,0,turns.width,turns.height),(airport.nodes[i].x_pos,airport.nodes[i].y_pos,unit_width,unit_height),(unit_width/2,unit_height/2),-airport.nodes[i].orientation,WHITE)
                         case ImageType.straight:
-                            DrawTextureEx(straightaway,(airport.nodes[i].x_pos,airport.nodes[i].y_pos),airport.nodes[i].orientation,scale,WHITE)
+                            DrawTexturePro(straightaway,(0,0,straightaway.width,straightaway.height),(airport.nodes[i].x_pos,airport.nodes[i].y_pos,unit_width,unit_height),(unit_width/2,unit_height/2),airport.nodes[i].orientation,WHITE)
         EndDrawing()
 
 

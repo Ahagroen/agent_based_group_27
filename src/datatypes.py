@@ -35,3 +35,4 @@ class Node():
     edges:list
     x_pos:int
     y_pos:int
+    orientation:int #0 for first 

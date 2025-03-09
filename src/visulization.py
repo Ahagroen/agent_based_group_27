@@ -2,11 +2,11 @@ from raylib import BeginDrawing, ClearBackground, EndDrawing, InitWindow, SetTar
 from src.simulation import Simulation
 from src.environment import Airport
 
-def Run_simulation():
-    InitWindow(800,600,b"AutoTaxi Simulation")
-    SetTargetFPS(24)
+def Run_simulation(x_dim,y_dim,fps,run_time,ac_freq,taxi_margin,loading_time):
+    InitWindow(x_dim,y_dim,b"AutoTaxi Simulation")
+    SetTargetFPS(fps)
     airport = Airport("baseline_airport.json")
-    sim = Simulation(2,airport,15,10,45,1080)
+    sim = Simulation(2,airport,ac_freq,taxi_margin,loading_time,run_time)
     debug = True
     while not WindowShouldClose():
         BeginDrawing()

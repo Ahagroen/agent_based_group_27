@@ -11,7 +11,9 @@ class Airport():
             node_map = data["nodes"]
             updated_node_map = {}
             for i in node_map.keys():
-                updated_node_map[i] = Node(node_map[i]["edges"],int(((node_map[i]["x_pos"]-1)/8)*window_dims[0]+75),int(((node_map[i]["y_pos"]-1)/7)*window_dims[1]+75))
+                #why does this need +75? Explore later
+                #This might need to be extracted into a method
+                updated_node_map[i] = Node(node_map[i]["edges"],int(((node_map[i]["x_pos"]-1)/8)*window_dims[0]+75),window_dims[1]+100 -int(((node_map[i]["y_pos"]-1)/7)*window_dims[1]+75))
             self.dept_runways:list= data["dept_runways"]
             self.arrival_runways:list = data["arrival_runways"]
             self.gates:list = data["gates"]

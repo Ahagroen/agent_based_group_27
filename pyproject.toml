@@ -7,5 +7,6 @@ requires-python = ">=3.12"
 dependencies = [
     "fastparquet>=2024.11.0",
     "pandas>=2.2.3",
+    "raylib>=5.5.0.2",
 ]
 

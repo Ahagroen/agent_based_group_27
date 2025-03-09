@@ -1,84 +1,13 @@
-from src.datatypes import Aircraft,TowingVehicle
-from src.atc import ATC
-from src.ground_control import groundControl
+from src.datatypes import Status
 from src.environment import Airport
-from random import choice
-
-
-#CURRENT ASSUMPTIONS = 2 RUNWAYS (one departing one arriving)
-
-#STATE
-num_tugs = 2
-ac_freq = 15 #min - standard timestep
-airport = Airport("baseline_airport.json")
-ac_waiting:dict[str,list[Aircraft]] = airport.populate_waiting_dict()#AC waiting at runway (arriving), or gate (departing)
-ac_loading:list[Aircraft] = []#AC that are currently loading, 
-
-tug_waiting:list[TowingVehicle] = []
-tug_intersection:list[TowingVehicle] = []
-
-atc = ATC(ac_freq,10,45,airport.gates,airport.arrival_runways)
-ground_control = groundControl()
-
-def add_new_aircraft(time):
-    carry = atc.add_aircraft(time)
-    if carry is not None:
-        ac_waiting[carry[1]].append(carry[0])
-
-def check_loading(time):
-    for i in ac_loading:
-        if i.loading_completion_time <= time:
-            ac_loading.remove(i)
-            ac_waiting[i.target.name].append(i)
-            i.target = choice(airport.dept_runways) #Fix this once nodes are defined
-            atc.empty_gate(i)
-
-def check_tug_waiting():
-    for i in tug_waiting:
-        for j in ac_waiting.keys():
-            if i.pos.name == j:
-                if len(ac_waiting[j])>0:
-                    aircraft = ac_waiting[j][0]
-                    ac_waiting[j].remove(aircraft)#No longer waiting
-                    i.connected_aircraft = aircraft
-                    i.next_node_list = ground_control.determine_route(i.pos,aircraft.target)
-                    tug_waiting.remove(i)
-                    tug_intersection.append(i)
-
-
-def check_tug_intersection(time):
-    for i in tug_intersection:
-        if len(i.next_node_list) == 0: #we have arrived at our destination
-            if i.connected_aircraft:
-                if i.pos.name in airport.dept_runways: #The aircraft has arrived at the departure runway
-                    i.connected_aircraft = None
-                    i.next_node_list = ground_control.determine_route(i.pos,ground_control.determine_next_wait_position(i.pos,ac_loading))
-                else:
-                    i.connected_aircraft.loading_completion_time = time + i.connected_aircraft.loading_time
-                    ac_loading.append(i.connected_aircraft)
-                    i.connected_aircraft = None
-                    i.next_node_list = ground_control.determine_route(i.pos,ground_control.determine_next_wait_position(i.pos,ac_loading))
-            else: #We are waiting
-                tug_intersection.remove(i)
-                tug_waiting.append(i)
-        else:
-            #add collision avoidance here TODO's
-            next_node = i.next_node_list.pop(0)
-            i.pos = next_node
-
-
-
+from src.simulation import Simulation
 
 
 def main():
-    time = 0
-    while time < 1080:
-        check_loading(time)
-        add_new_aircraft(time)
-        check_tug_waiting()
-        check_tug_intersection(time)
-        time +=1
-
+    sim = Simulation(2,Airport("baseline_airport.json"),15,10,45,1080)
+    while sim.state == Status.Running:
+        sim.simulation_tick()
+    print(sim.state)
 
 if __name__ == "__main__":
     main()

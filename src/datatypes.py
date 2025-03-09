@@ -30,9 +30,16 @@ class Status(Enum):
     Failed_Collision = 3
     Failed_No_Landing_Space = 4
 
+class ImageType(Enum):
+    four_way_intersection = 0
+    three_way_intersection = 1
+    turn = 2
+    straight = 3
+
 @dataclass
 class Node():
     edges:list
     x_pos:int
     y_pos:int
+    image_type:ImageType
     orientation:int #0 for first 

@@ -18,10 +18,15 @@ class Aircraft():
 class TowingVehicle():
     name:str
     pos:int#Assume all travel time takes the same number of mins (say 1) - can't assume this
-    next_node_list = []
-    connected_aircraft:Aircraft
+    connected_aircraft:Aircraft|None
     priority:int
+    time_to_next_node:int = 60 #seconds
+    next_node_list = []
 
+@dataclass
+class TravellingVehicle():
+    vehicle:TowingVehicle
+    remaining_time:int
 
 class Status(Enum):
     Running = 0

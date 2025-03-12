@@ -24,9 +24,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showguides="false"
-     inkscape:zoom="0.54236816"
-     inkscape:cx="-252.59595"
-     inkscape:cy="528.23897"
+     inkscape:zoom="1.0847363"
+     inkscape:cx="463.70716"
+     inkscape:cy="359.99532"
      inkscape:window-width="1848"
      inkscape:window-height="1057"
      inkscape:window-x="-8"
@@ -42,7 +42,8 @@
      id="layer1">
     <g
        id="g3"
-       transform="translate(89.837792,168.02726)">
+       transform="translate(89.837792,168.02726)"
+       inkscape:label="straight">
       <g
          id="g4"
          transform="translate(-3.1045296,-53.537962)">
@@ -72,7 +73,8 @@
     </g>
     <g
        id="g1"
-       transform="translate(-89.066036,112.76844)">
+       transform="translate(-89.066036,112.76844)"
+       inkscape:label="corner">
       <rect
          style="fill:#1b6c27;fill-opacity:1;stroke:none;stroke-width:0.580648;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
          id="rect8"
@@ -273,7 +275,8 @@
     </g>
     <g
        id="g5"
-       transform="matrix(0.99942082,0,0,0.99532546,31.112426,-154.14423)">
+       transform="matrix(0.99942082,0,0,0.99532546,26.721958,-158.06004)"
+       inkscape:label="3way">
       <rect
          style="fill:#818181;fill-opacity:1;stroke:none;stroke-width:0.501284;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
          id="rect10-0"

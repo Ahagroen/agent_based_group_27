@@ -29,7 +29,7 @@ class ATC():
             loading_time = self.loading_margin
             self.loading_margin = self.base_loading_margin + self.get_random_shift(self.base_loading_margin)
             self.next_aircraft_name += 1
-            return Aircraft(self.next_aircraft_name,gate,True,current_time+self.taxi_margin,loading_time,0,current_time+loading_time+2*self.taxi_margin),choice(self.arrival_runways)
+            return Aircraft(str(self.next_aircraft_name),gate,True,current_time+self.taxi_margin,loading_time,0,current_time+loading_time+2*self.taxi_margin),choice(self.arrival_runways)
         else:
             return None
     def empty_gate(self,aircraft:Aircraft):

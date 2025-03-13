@@ -1,3 +1,4 @@
+from loguru import logger
 from src.datatypes import Aircraft,TowingVehicle,Status,TravellingVehicle
 from src.atc import ATC
 from src.ground_control import groundControl
@@ -20,6 +21,8 @@ class Simulation:
         self.state:Status = Status.Running
 
     def _add_new_aircraft(self):
+        """Adds new aircraft to the simulation if there is a free gate. Aircraft are added to the corresponding arrival runway off-ramp
+        """
         carry = self.atc.add_aircraft(self.time)
         if carry is not None:
             if self.ac_waiting[carry[1]] is not None:
@@ -27,6 +30,8 @@ class Simulation:
             self.ac_waiting[carry[1]] = carry[0]
 
     def _check_loading(self):
+        """Determines if an aircraft is finished loading. if so, adds the aircraft to the waiting list
+        """
         for i in self.ac_loading:
             if i.loading_completion_time <= self.time:
                 self.ac_loading.remove(i)
@@ -53,6 +58,11 @@ class Simulation:
 
     def _check_tug_intersection(self):
         for i in self.tug_intersection:
+            collision_risk = [x for x in self.tug_intersection if x is not i and x.pos == i.pos].sort(key=lambda x: x.priority,reverse=True)
+            if len(collision_risk>0):
+                logger.debug("potential collision!")
+                if collision_risk[0].priority > i.priority:
+                    continue #stay where we are, we aren't the highest priority to take the corner
             if i.connected_aircraft:
                 if i.connected_aircraft.direction:#arriving
                     if i.connected_aircraft.target_arrival_time < self.time:
@@ -76,9 +86,16 @@ class Simulation:
             else:
                 #add collision avoidance here TODO's
                 next_node = i.next_node_list.pop(0)
+                old_pos = i.pos
                 i.pos = next_node
                 self.tug_intersection.remove(i)
-                self.tug_travelling.append(TravellingVehicle(i,i.time_to_next_node))
+                self.tug_travelling.append(TravellingVehicle(i,i.time_to_next_node,old_pos,i.pos))
+
+    def _find_local_info(self,node)->list[TowingVehicle]:
+        carry= []
+        for i in self.tug_intersection:
+            if i.pos == node:
+                carry.append(i)
 
     def _check_ac_waiting_time(self):
         for i in self.ac_waiting.keys():
@@ -115,6 +132,10 @@ class Simulation:
         output["aircraft"] = []
         output["tugs"] = []
         output["tugs_loaded"] = []
+        output["tugs_travelling"] = []
+        for i in self.ac_waiting.keys():
+            if self.ac_waiting[i]:
+                output["aircraft"].append(((self.ac_waiting[i]).name,i))
         for i in self.ac_loading:
             output["aircraft"].append((i.name,i.target))
         for i in self.tug_waiting:
@@ -124,4 +145,6 @@ class Simulation:
                 output["tugs_loaded"].append((i.name,i.pos))
             else:
                 output["tugs"].append((i.name,i.pos))
+        for i in self.tug_travelling:
+            output["tugs_travelling"].append(i)
         return output

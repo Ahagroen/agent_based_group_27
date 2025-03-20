@@ -31,8 +31,8 @@ print(nodes)
 # print(nodes["1"])
 
 gc = groundControl(nodes)
-start = 1
-end = 22
+start = 38
+end = 98
 route = gc.determine_route(start, end)
 print("Test Route:", route)
 

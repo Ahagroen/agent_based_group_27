@@ -51,7 +51,7 @@ class Simulation:
                             i.connected_aircraft = aircraft
                         else:
                             raise RuntimeError
-                        i.next_node_list = self.ground_control.determine_route(i.pos,aircraft.target)
+                        i.next_node_list = self.ground_control.determine_route(i.pos, aircraft.target)
                         self.tug_waiting.remove(i)
                         self.tug_intersection.append(i)
 

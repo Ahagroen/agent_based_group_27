@@ -1,4 +1,7 @@
 
+from src.datatypes import TowingVehicle
+
+
 class groundControl():
     def __init__(self,nodes):
         self.nodes = nodes
@@ -14,12 +17,11 @@ class groundControl():
         """
         #The main pathfinding algorithm - TODO
         pass
-    def determine_next_wait_position(self,start_pos:int,loading_ac:list)->int:
+    def determine_next_wait_position(self,tug:TowingVehicle)->int:
         """Determine where aircraft should wait/pick up the next aircraft
 
         Args:
-            start_pos (int): node starting
-            loading_ac (list): current ac loading state
+            tug(TowingVehicle): data corresponding to the tug doing the computation
 
         Returns:
             int: end node to wait

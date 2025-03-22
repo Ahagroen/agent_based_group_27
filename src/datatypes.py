@@ -15,12 +15,17 @@ class Aircraft():
     target_departure_time:int #When the aircraft should depart = arrival time + load time + allowable taxi
 
 @dataclass
+class Schedule():
+    vehicle:str #might make this int
+
+
+@dataclass
 class TowingVehicle():
     name:str
     pos:int#Assume all travel time takes the same number of mins (say 1) - can't assume this
     connected_aircraft:Aircraft|None
-    priority:int
-    time_to_next_node:int = 15 #seconds
+    time_to_next_node:int = 15 #seconds - Come back to this
+    schedule=[]
     next_node_list = []
 
 @dataclass

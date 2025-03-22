@@ -17,6 +17,7 @@ class Simulation:
         self.tug_waiting:list[TowingVehicle] = [] #empty tugs
         self.tug_intersection:list[TowingVehicle] = [] #full tugs - we might need to add travel down the line
         self.tug_travelling:list[TravellingVehicle] = []
+        self.current_known_routes:list = []
         self.time:int = 0
         self.state:Status = Status.Running
 
@@ -46,23 +47,23 @@ class Simulation:
                 if i.pos == j:
                     if self.ac_waiting[j] is not None:
                         aircraft = self.ac_waiting[j]
-                        self.ac_waiting[j] = None#No longer waiting
+                        self.ac_waiting[j] = None  #No longer waiting
                         if aircraft:
                             i.connected_aircraft = aircraft
                         else:
                             raise RuntimeError
-                        i.next_node_list = self.ground_control.determine_route(i.pos,aircraft.target)
+                        i.next_node_list = self.ground_control.determine_route(i.pos,aircraft.target,self.current_known_routes)
+                        self.current_known_routes.append(i.next_node_list)
                         self.tug_waiting.remove(i)
                         self.tug_intersection.append(i)
 
 
     def _check_tug_intersection(self):
         for i in self.tug_intersection:
-            collision_risk = [x for x in self.tug_intersection if x is not i and x.pos == i.pos].sort(key=lambda x: x.priority,reverse=True)
+            collision_risk = [x for x in self.tug_intersection if x is not i and x.pos == i.pos]
             if len(collision_risk>0):
-                logger.debug("potential collision!")
-                if collision_risk[0].priority > i.priority:
-                    continue #stay where we are, we aren't the highest priority to take the corner
+                logger.warning("Collision!")
+                self.state = Status.Failed_Collision
             if i.connected_aircraft:
                 if i.connected_aircraft.direction:#arriving
                     if i.connected_aircraft.target_arrival_time < self.time:
@@ -74,12 +75,12 @@ class Simulation:
                 if i.connected_aircraft:
                     if i.pos in self.airport.dept_runways: #The aircraft has arrived at the departure runway
                         i.connected_aircraft = None
-                        i.next_node_list = self.ground_control.determine_route(i.pos,self.ground_control.determine_next_wait_position(i.pos,self.ac_loading))
+                        i.next_node_list = self.ground_control.determine_route(i.pos,self.ground_control.determine_next_wait_position(i),self.current_known_routes)
                     else:
                         i.connected_aircraft.loading_completion_time = self.time + i.connected_aircraft.loading_time
                         self.ac_loading.append(i.connected_aircraft)
                         i.connected_aircraft = None
-                        i.next_node_list = self.ground_control.determine_route(i.pos,self.ground_control.determine_next_wait_position(i.pos,self.ac_loading))
+                        i.next_node_list = self.ground_control.determine_route(i.pos,self.ground_control.determine_next_wait_position(i),self.current_known_routes)
                 else: #We are waiting
                     self.tug_intersection.remove(i)
                     self.tug_waiting.append(i)
@@ -126,7 +127,7 @@ class Simulation:
         self._check_tug_intersection()
         self._check_tug_travelling()
         self.time += 1
-    
+
     def position_list(self)->dict[str,list[tuple[str,int]]]:
         output = {}
         output["aircraft"] = []
@@ -148,3 +149,11 @@ class Simulation:
         for i in self.tug_travelling:
             output["tugs_travelling"].append(i)
         return output
+    
+
+def run_simulation(taxi_bots,airport,run_time,ac_freq,taxi_margin,loading_time):
+    sim = Simulation(2,airport,ac_freq,taxi_margin,loading_time,run_time)
+    while sim.state == Status.Running:
+        sim.simulation_tick()
+    logger.warning(f"Simulation Ended!\nreason: {sim.state}")
+    return sim.state

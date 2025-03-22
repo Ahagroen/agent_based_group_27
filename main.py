@@ -1,8 +1,12 @@
-from src.visulization import Run_simulation
+from src.environment import Airport
+from src.visulization import Run_visualization
+from src.simulation import run_simulation
+
 
 
 def main():
-    Run_simulation(800,600,30,1080*60,15*60,10*60,45*60)
+    airport = Airport("baseline_airport.json")
+    run_simulation(2,airport,1080*60,15*60,10*60,45*60)
 
 if __name__ == "__main__":
     main()

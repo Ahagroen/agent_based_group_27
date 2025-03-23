@@ -1,5 +1,5 @@
 from src.environment import Airport
-from src.visulization import Run_visualization
+from src.visulization import Run_visualization  # noqa: F401
 from src.simulation import run_simulation
 
 

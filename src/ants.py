@@ -20,7 +20,7 @@ seed(101)
 rng = randint(0,num_nodes-1)
 
 def run_ACO_batch(batch_size: int):
-    running = False
+    # running = False
     #Evaporate
     for i in range(num_nodes):
         for j in range(num_nodes):
@@ -32,11 +32,11 @@ def run_ACO_batch(batch_size: int):
     for i in range(batch_size):
         ret = get_random_path_from(rng)
         path = ret[0]
-        l = ret[1]
-
-        if l < best_len:
-            best_len = l
-        diff = l-best_len+0.05
+        len = ret[1]
+        best_len = 99999999999999999
+        if len < best_len:
+            best_len = len
+        diff = len-best_len+0.05
         w = 0.01/diff #is Q=0.01?
         for i in range(num_nodes + 1):
             idx1 = path[i%num_nodes]
@@ -56,7 +56,6 @@ def run_ACO_batch(batch_size: int):
             weights[i][j] = 2*new_weights[i][j]/n_sum
     #add_edges()
     #draw_stuff()
-    running = True
     return best_len
 run_ACO_batch(1)
 

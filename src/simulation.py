@@ -6,10 +6,10 @@ from src.environment import Airport
 from random import choice
 
 class Simulation:
-    def __init__(self,num_tugs,airport:Airport,ac_freq:int,taxi_margin:int,loading_margin:int,max_time:int):
+    def __init__(self,num_tugs,airport:Airport,schedule:list,taxi_margin:int,loading_margin:int,max_time:int):
         self.num_tugs = num_tugs
         self.airport:Airport = airport
-        self.atc:ATC = ATC(ac_freq,taxi_margin,loading_margin,airport.gates,airport.arrival_runways)
+        self.atc:ATC = ATC(schedule,taxi_margin,loading_margin,airport.gates,airport.arrival_runways)
         self.ground_control:groundControl = groundControl(airport.nodes)
         self.max_time:int = max_time
         self.ac_waiting:dict[str,Aircraft|None] = airport.populate_waiting_dict()#AC waiting at runway (arriving), or gate (departing)

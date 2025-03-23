@@ -4,6 +4,7 @@ from src.datatypes import Aircraft, Node,ImageType
 class Airport():
     def __init__(self,airport_file,window_dims:tuple[int,int]=(700,500)):
         self._load_airport_data(airport_file,window_dims)
+        
     def _load_airport_data(self,airport_file,window_dims:tuple[int,int]):
         with open(airport_file,"r") as fs:
             data = json.load(fs)

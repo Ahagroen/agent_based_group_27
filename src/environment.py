@@ -4,7 +4,6 @@ from src.datatypes import Aircraft, Node,ImageType
 class Airport():
     def __init__(self,airport_file,window_dims:tuple[int,int]=(700,500)):
         self._load_airport_data(airport_file,window_dims)
-        
     def _load_airport_data(self,airport_file,window_dims:tuple[int,int]):
         with open(airport_file,"r") as fs:
             data = json.load(fs)
@@ -59,6 +58,7 @@ class Airport():
                 updated_node_map[i] = Node(node_map[i]["edges"],x_pos,y_pos,image_type,orientation)
             self.dept_runways:list= data["dept_runways"]
             self.arrival_runways:list = data["arrival_runways"]
+            self.tug_chargers:list = data["chargers"]
             self.gates:list = data["gates"]
             self.nodes:dict[int,Node] = updated_node_map
 

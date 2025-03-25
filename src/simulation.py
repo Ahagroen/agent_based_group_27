@@ -3,24 +3,26 @@ from src.datatypes import Aircraft,TowingVehicle,Status,TravellingVehicle
 from src.atc import ATC
 from src.ground_control import groundControl
 from src.environment import Airport
+from src.ants_v2 import generate_schedule_tugs
 from random import choice
 
 class Simulation:
     def __init__(self,num_tugs,airport:Airport,schedule:list,taxi_margin:int,loading_margin:int,max_time:int):
         self.num_tugs = num_tugs
         self.airport:Airport = airport
-        self.atc:ATC = ATC(schedule,taxi_margin,loading_margin,airport.gates,airport.arrival_runways)
+        self.atc:ATC = ATC(max_time,schedule,taxi_margin,loading_margin,airport.gates,airport.arrival_runways,self.airport.dept_runways)
         self.ground_control:groundControl = groundControl(airport.nodes)
         self.max_time:int = max_time
         self.ac_waiting:dict[str,Aircraft|None] = airport.populate_waiting_dict()#AC waiting at runway (arriving), or gate (departing)
         self.ac_loading:list[Aircraft] = []#AC that are currently loading - location is inside struct 
         self.tug_waiting:list[TowingVehicle] = [] #empty tugs
-        self.tug_intersection:list[TowingVehicle] = [] #full tugs - we might need to add travel down the line
+        self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs(self.airport,self.atc.ac_schedule,self.num_tugs) #full tugs - we might need to add travel down the line
         self.tug_travelling:list[TravellingVehicle] = []
         self.current_known_routes:list = []
         self.time:int = 0
         self.state:Status = Status.Running
 
+        
     def _add_new_aircraft(self):
         """Adds new aircraft to the simulation if there is a free gate. Aircraft are added to the corresponding arrival runway off-ramp
         """
@@ -61,7 +63,7 @@ class Simulation:
     def _check_tug_intersection(self):
         for i in self.tug_intersection:
             collision_risk = [x for x in self.tug_intersection if x is not i and x.pos == i.pos]
-            if len(collision_risk>0):
+            if len(collision_risk>0) and i.pos != 109:
                 logger.warning("Collision!")
                 self.state = Status.Failed_Collision
             if i.connected_aircraft:

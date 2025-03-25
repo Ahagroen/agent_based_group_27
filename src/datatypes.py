@@ -23,9 +23,9 @@ class Schedule():
 class TowingVehicle():
     name:str
     pos:int#Assume all travel time takes the same number of mins (say 1) - can't assume this
+    schedule:list
     connected_aircraft:Aircraft|None
     time_to_next_node:int = 15 #seconds - Come back to this
-    schedule=[]
     next_node_list = []
 
 @dataclass

@@ -5,7 +5,7 @@ from src.environment import Airport
 from src.datatypes import ImageType, Status
 from loguru import logger
 
-def Run_simulation(x_dim,y_dim,fps,run_time,ac_freq,taxi_margin,loading_time):
+def Run_visualization(x_dim,y_dim,fps,run_time,ac_freq,taxi_margin,loading_time):
     InitWindow(x_dim,y_dim,b"AutoTaxi Simulation")
     SetTargetFPS(fps)
     airport = Airport("baseline_airport.json")

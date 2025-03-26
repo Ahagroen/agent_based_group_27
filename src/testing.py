@@ -20,6 +20,7 @@ nodes = {
 }
 """
 
+
 # Importing Node Data
 # -------------------
 airport = Airport("../baseline_airport.json")

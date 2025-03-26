@@ -1,5 +1,5 @@
 from loguru import logger
-from src.datatypes import Aircraft,TowingVehicle,Status,TravellingVehicle
+from src.datatypes import ActiveRoute, Aircraft,TowingVehicle,Status,TravellingVehicle
 from src.atc import ATC
 from src.ground_control import groundControl
 from src.environment import Airport
@@ -18,7 +18,7 @@ class Simulation:
         self.tug_waiting:list[TowingVehicle] = [] #empty tugs
         self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs(self.airport,self.atc.ac_schedule,self.num_tugs) #full tugs - we might need to add travel down the line
         self.tug_travelling:list[TravellingVehicle] = []
-        self.current_known_routes:list = []
+        self.current_active_routes:list[ActiveRoute] = []
         self.time:int = 0
         self.state:Status = Status.Running
 
@@ -44,6 +44,7 @@ class Simulation:
                 self.atc.empty_gate(i)
 
     def _check_tug_waiting(self):
+        """ Checks if a tug has an aircraft ready"""
         for i in self.tug_waiting:
             for j in self.ac_waiting.keys():
                 if i.pos == j:
@@ -54,13 +55,15 @@ class Simulation:
                             i.connected_aircraft = aircraft
                         else:
                             raise RuntimeError
-                        i.next_node_list = self.ground_control.determine_route(i.pos,aircraft.target,self.current_known_routes)
-                        self.current_known_routes.append(i.next_node_list)
+                        i.determine_route(self.current_active_routes,self.time,self.ground_control)
+                        self.current_active_routes.append(ActiveRoute(self.time,i.pos,i.get_next_pos()))
                         self.tug_waiting.remove(i)
                         self.tug_intersection.append(i)
 
 
     def _check_tug_intersection(self):
+        """Handles tugs arriving at a node
+        """
         for i in self.tug_intersection:
             collision_risk = [x for x in self.tug_intersection if x is not i and x.pos == i.pos]
             if len(collision_risk>0) and i.pos != 109:
@@ -75,14 +78,12 @@ class Simulation:
                         self.state = Status.Failed_Aircraft_Taxi_Time
             if len(i.next_node_list) == 0: #we have arrived at our destination
                 if i.connected_aircraft:
-                    if i.pos in self.airport.dept_runways: #The aircraft has arrived at the departure runway
-                        i.connected_aircraft = None
-                        i.next_node_list = self.ground_control.determine_route(i.pos,self.ground_control.determine_next_wait_position(i),self.current_known_routes)
-                    else:
+                    if i.pos not in self.airport.dept_runways: #The aircraft has arrived at the departure runway
                         i.connected_aircraft.loading_completion_time = self.time + i.connected_aircraft.loading_time
                         self.ac_loading.append(i.connected_aircraft)
-                        i.connected_aircraft = None
-                        i.next_node_list = self.ground_control.determine_route(i.pos,self.ground_control.determine_next_wait_position(i),self.current_known_routes)
+                    i.connected_aircraft = None
+                    i.determine_route(self.current_active_routes,self.time,self.ground_control)
+                    self.current_active_routes.append(ActiveRoute(self.time,i.pos,i.get_next_pos()))
                 else: #We are waiting
                     self.tug_intersection.remove(i)
                     self.tug_waiting.append(i)
@@ -94,11 +95,6 @@ class Simulation:
                 self.tug_intersection.remove(i)
                 self.tug_travelling.append(TravellingVehicle(i,i.time_to_next_node,old_pos,i.pos))
 
-    def _find_local_info(self,node)->list[TowingVehicle]:
-        carry= []
-        for i in self.tug_intersection:
-            if i.pos == node:
-                carry.append(i)
 
     def _check_ac_waiting_time(self):
         for i in self.ac_waiting.keys():

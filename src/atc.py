@@ -1,5 +1,5 @@
 from random import random,choice
-from src.datatypes import Aircraft
+from src.datatypes import Aircraft, Schedule
 from loguru import logger
 
 class ATC():
@@ -22,10 +22,10 @@ class ATC():
         if self.next_ac_time-current_time <=0:
             self.next_ac_time = current_time + self.ac_pace + self.get_random_shift(self.ac_pace)
             while True:
-                carry = self.ac_schedule.pop(0)
-                if carry[4]:
-                    gate = carry[1]
-                    arr_runway = carry[2]
+                carry:Schedule = self.ac_schedule.pop(0)
+                if carry.landing:
+                    gate = carry.start_pos
+                    arr_runway = carry.end_pos
                     break
             loading_time = self.loading_margin
             self.loading_margin = self.base_loading_time + self.get_random_shift(self.base_loading_time)
@@ -54,6 +54,6 @@ class ATC():
             gate = choice(working_gates_list)
             working_gates_list.remove(gate)
             gates.append((gate,carry+self.taxi_margin+self.loading_margin))
-            output.append((carry,choice(self.arrival_runways),gate,True))
-            output.append((carry+self.taxi_margin+self.loading_margin,gate,choice(self.departure_runways),False))
+            output.append(Schedule(carry,choice(self.arrival_runways),gate,True))
+            output.append(Schedule(carry+self.taxi_margin+self.loading_margin,gate,choice(self.departure_runways),False))
         return output

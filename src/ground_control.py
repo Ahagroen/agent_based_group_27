@@ -1,7 +1,3 @@
-
-from src.datatypes import TowingVehicle
-
-
 class groundControl():
     def __init__(self,nodes):
         self.nodes = nodes

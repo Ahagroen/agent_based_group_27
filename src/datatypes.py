@@ -44,12 +44,12 @@ class TowingVehicle():
         for i in known_routes:
             nodes = ground_control.determine_route(i.start_node,i.end_node,active_route_pathing)
             current_time = (time - i.start_time)//15 #the number of timesteps already taken on this route
-            remaining_nodes = nodes[current_time:]
-            for index,val in enumerate(remaining_nodes):
-                if active_route_pathing[index]:
-                    active_route_pathing[index].append(val)
-                else:
-                    active_route_pathing[index] = [val]
+            if current_time < len(nodes):
+                for index,val in enumerate(nodes[current_time:]):
+                    if active_route_pathing[index]:
+                        active_route_pathing[index].append(val)
+                    else:
+                        active_route_pathing[index] = [val]
         self.next_node_list = ground_control.determine_route((self.pos,self.get_next_pos(),active_route_pathing))
 
     def get_next_pos(self)->int:

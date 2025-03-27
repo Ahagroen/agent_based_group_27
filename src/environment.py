@@ -85,13 +85,13 @@ class Airport():
         carry = {}
         for i in self.arrival_runways:
             print(i)
-            carry[i] = []
+            carry[i] = None
         for i in self.dept_runways:
             print(i)
-            carry[i] = []
+            carry[i] = None
         print(self.gates)
         for i in self.gates:
             print(i)
-            carry[i] = []
+            carry[i] = None
         return carry
 

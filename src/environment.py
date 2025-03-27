@@ -58,6 +58,7 @@ class Airport():
                 updated_node_map[i] = Node(node_map[i]["edges"],x_pos,y_pos,image_type,orientation)
             self.dept_runways:list= data["dept_runways"]
             self.arrival_runways:list = data["arrival_runways"]
+            self.tug_chargers:list = data["chargers"]
             self.gates:list = data["gates"]
             self.nodes:dict[int,Node] = updated_node_map
 

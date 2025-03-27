@@ -1,5 +1,5 @@
 from copy import deepcopy
-from raylib import BeginDrawing, ClearBackground, DrawText, EndDrawing, InitWindow, SetTargetFPS, WindowShouldClose,DrawCircle,RED,GREEN,PURPLE,WHITE,BLUE,YELLOW,LoadTexture,DrawTexturePro
+from raylib import ORANGE, BeginDrawing, ClearBackground, DrawText, EndDrawing, InitWindow, SetTargetFPS, WindowShouldClose,DrawCircle,RED,GREEN,PURPLE,WHITE,BLUE,YELLOW,LoadTexture,DrawTexturePro
 from src.simulation import Simulation
 from src.environment import Airport
 from src.datatypes import ImageType, Status
@@ -29,6 +29,8 @@ def Run_visualization(x_dim,y_dim,fps,run_time,ac_freq,taxi_margin,loading_time)
                 DrawCircle(airport.nodes[i].x_pos,airport.nodes[i].y_pos,10,GREEN)
             elif int(i) in baseline_gates:
                 DrawCircle(airport.nodes[i].x_pos,airport.nodes[i].y_pos,10,PURPLE)
+            elif int(i) in airport.tug_chargers:
+                DrawCircle(airport.nodes[i].x_pos,airport.nodes[i].y_pos,10,ORANGE)
             else:
                 match airport.nodes[i].image_type:
                     case ImageType.four_way_intersection:

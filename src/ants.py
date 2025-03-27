@@ -7,21 +7,19 @@ def compute_schedule(airport:Airport,num_taxibots:int):
     nodes = airport.nodes
     weights = []
     distances = []
-    def populate_weights_distances():
-        for i in nodes:
-            weight_i = []
-            distance_i = []
-            for j in nodes:
-                if j == i:
-                    weight_i.append(0.0)
-                    distance_i.append(0.0)
-                    continue
-                else:
-                    weight_i.append(1.0)
-                    distance_i.append(5.0)
-            weights.append(weight_i)
-            distances.append(distance_i)
-    populate_weights_distances()
+    for i in nodes:
+        weight_i = []
+        distance_i = []
+        for j in nodes:
+            if j == i:
+                weight_i.append(0.0)
+                distance_i.append(0.0)
+                continue
+            else:
+                weight_i.append(1.0)
+                distance_i.append(5.0)
+        weights.append(weight_i)
+        distances.append(distance_i)
     alpha = 1.0 #pheromone weight
     beta = 2.0 #greedy weight
     rho = 0.001

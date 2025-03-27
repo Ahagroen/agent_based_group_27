@@ -21,6 +21,7 @@ class groundControl:
         Args:
             start_pos (int): starting node
             end_pos (int): ending node
+            invalid_nodes: list of list of nodes that are occupied at any one time - how do we handle edges?
 
         Returns:
             list[int]: list of nodes to travel to

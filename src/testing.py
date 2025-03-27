@@ -30,7 +30,6 @@ nodes = {int(key): value for key, value in nodes.items()}
 print(nodes)
 
 # print(nodes["1"])
-
 gc = groundControl(nodes)
 start = 38
 end = 98

@@ -1,3 +1,4 @@
+from copy import deepcopy
 from random import random,choice
 from src.datatypes import Aircraft, Schedule
 from loguru import logger
@@ -6,7 +7,7 @@ class ATC():
     def __init__(self,total_time:int,ac_pace:int,taxi_margin:int,loading_time:int,gates_list:list,arrival_runways:list,departure_runways:list):
         self.ac_pace = ac_pace
         self.next_ac_time = ac_pace+self.get_random_shift(self.ac_pace)
-        self.gates_list:list = gates_list
+        self.gates_list:list = deepcopy(gates_list)
         self.departure_runways = departure_runways
         self.taxi_margin = taxi_margin
         self.arrival_runways = arrival_runways

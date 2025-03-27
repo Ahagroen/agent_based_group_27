@@ -66,7 +66,7 @@ class Simulation:
         """
         for i in self.tug_intersection:
             collision_risk = [x for x in self.tug_intersection if x is not i and x.pos == i.pos]
-            if len(collision_risk>0) and i.pos != 109:
+            if len(collision_risk)>0 and i.pos != 109:
                 logger.warning("Collision!")
                 self.state = Status.Failed_Collision
             if i.connected_aircraft:

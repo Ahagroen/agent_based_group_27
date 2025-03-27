@@ -68,17 +68,3 @@ class groundControl:
                     heapq.heappush(open_set, (f_score[neighbor], neighbor))
 
         return []  # No path found, nodes might not be connected
-
-
-    def determine_next_wait_position(self,start_pos:int,loading_ac:list)->int:
-        """Determine where aircraft should wait/pick up the next aircraft
-
-        Args:
-            start_pos (int): node starting
-            loading_ac (list): current ac loading state
-
-        Returns:
-            int: end node to wait
-        """
-        #scheduler TODO - where do tugs wait for aircraft
-        pass

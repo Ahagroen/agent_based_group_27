@@ -59,7 +59,9 @@ class Airport():
             self.dept_runways:list= data["dept_runways"]
             self.arrival_runways:list = data["arrival_runways"]
             self.tug_chargers:list = data["chargers"]
+            print(data["gates"])
             self.gates:list = data["gates"]
+            print(self.gates)
             self.nodes:dict[int,Node] = updated_node_map
 
     def determine_incoming(self, node_map, i):
@@ -82,10 +84,14 @@ class Airport():
     def populate_waiting_dict(self)->dict[str,Aircraft|None]:
         carry = {}
         for i in self.arrival_runways:
-            carry[i] = None
+            print(i)
+            carry[i] = []
         for i in self.dept_runways:
-            carry[i] = None
+            print(i)
+            carry[i] = []
+        print(self.gates)
         for i in self.gates:
-            carry[i] = None
+            print(i)
+            carry[i] = []
         return carry
 

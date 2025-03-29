@@ -17,7 +17,7 @@ def Run_visualization(x_dim,y_dim,fps,run_time,ac_freq,taxi_margin,loading_time)
     unit_width = 45
 
 
-    sim = Simulation(2,airport,ac_freq,taxi_margin,loading_time,run_time)
+    sim = Simulation(airport,run_time,ac_freq,taxi_margin,loading_time)
     baseline_gates = deepcopy(airport.gates)
     while not WindowShouldClose():
         BeginDrawing()

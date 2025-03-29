@@ -3,17 +3,18 @@ from src.datatypes import ActiveRoute, Aircraft,TowingVehicle,Status,TravellingV
 from src.atc import ATC
 from src.ground_control import groundControl
 from src.environment import Airport
-from src.ants_v2 import generate_schedule_tugs, generate_schedule_tugs_2
+from src.ants_v2 import generate_schedule_tugs
 class Simulation:
-    def __init__(self,airport:Airport,schedule:list,taxi_margin:int,loading_margin:int,max_time:int):
+    def __init__(self,airport:Airport,max_time,ac_interval:int,taxi_margin:int,loading_margin:int):
         self.airport:Airport = airport
-        self.atc:ATC = ATC(max_time,schedule,taxi_margin,loading_margin,airport.gates,airport.arrival_runways,self.airport.dept_runways)
         self.ground_control:groundControl = groundControl(airport.nodes)
+        self.atc:ATC = ATC(max_time,ac_interval,loading_margin,airport,self.ground_control)
         self.max_time:int = max_time
+        self.taxi_margin = taxi_margin
         self.ac_waiting:dict[str,Aircraft|None] = airport.populate_waiting_dict()#AC waiting at runway (arriving), or gate (departing)
         self.ac_loading:list[Aircraft] = []#AC that are currently loading - location is inside struct 
         self.tug_waiting:list[TowingVehicle] = [] #empty tugs
-        self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs_2(self.airport,self.atc.ac_schedule,self.ground_control) #full tugs - we might need to add travel down the line
+        self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs(self.airport,self.atc.ac_schedule,self.ground_control) #full tugs - we might need to add travel down the line
         self.tug_travelling:list[TravellingVehicle] = []
         self.current_active_routes:list[ActiveRoute] = []
         self.time:int = 0
@@ -28,6 +29,8 @@ class Simulation:
             logger.info(f"Added Aircraft to {carry[1]}")
             if self.ac_waiting[carry[1]] is not None:
                 self.state = Status.Failed_No_Landing_Space
+            aircraft = carry[0]
+            aircraft.max_travel_time= self.time+self.taxi_margin
             self.ac_waiting[carry[1]] = carry[0]
 
     def _check_loading(self):
@@ -39,6 +42,7 @@ class Simulation:
                 self.ac_loading.remove(i)
                 self.ac_waiting[i.target] = i
                 i.target = i.departure_runway #Fix this once nodes are defined
+                i.max_travel_time= self.time+self.taxi_margin
                 i.direction = False
                 self.atc.empty_gate(i)
 
@@ -55,10 +59,13 @@ class Simulation:
                             i.connected_aircraft = aircraft
                         else:
                             raise RuntimeError
-                        i.determine_route(self.current_active_routes,self.time,self.ground_control)
-                        self.current_active_routes.append(ActiveRoute(self.time,i.pos,i.get_next_pos()))
-                        self.tug_waiting.remove(i)
-                        self.tug_intersection.append(i)
+                        if len(i.schedule) != 0:
+                            i.determine_route(self.current_active_routes,self.time,self.ground_control)
+                            self.current_active_routes.append(ActiveRoute(self.time,i.pos,i.get_next_pos()))
+                            if i.connected_aircraft:
+                                i.schedule.pop(0)
+                            self.tug_waiting.remove(i)
+                            self.tug_intersection.append(i)
 
 
     def _check_tug_intersection(self):
@@ -72,12 +79,8 @@ class Simulation:
             if i.start_time > self.time:
                 continue
             if i.connected_aircraft:
-                if i.connected_aircraft.direction:#arriving
-                    if i.connected_aircraft.target_arrival_time < self.time:
-                        self.state = Status.Failed_Aircraft_Taxi_Time
-                else:
-                    if i.connected_aircraft.target_departure_time < self.time:
-                        self.state = Status.Failed_Aircraft_Taxi_Time
+                if i.connected_aircraft.max_travel_time < self.time:
+                    self.state = Status.Failed_Aircraft_Taxi_Time
             if len(i.next_node_list) == 0: #we have arrived at our destination
                 if i.connected_aircraft:
                     if i.pos not in self.airport.dept_runways: #The aircraft has arrived at the departure runway
@@ -110,10 +113,10 @@ class Simulation:
         for i in self.ac_waiting.keys():
             if self.ac_waiting[i]:
                 if self.ac_waiting[i].direction:# type: ignore #arriving
-                    if self.ac_waiting[i].target_arrival_time < self.time: # type: ignore
+                    if self.ac_waiting[i].max_travel_time < self.time: # type: ignore
                         self.state = Status.Failed_Aircraft_Taxi_Time
                 else:
-                    if self.ac_waiting[i].target_departure_time < self.time: # type: ignore
+                    if self.ac_waiting[i].max_travel_time < self.time: # type: ignore
                         self.state = Status.Failed_Aircraft_Taxi_Time
 
     def _check_tug_travelling(self):
@@ -159,8 +162,8 @@ class Simulation:
         return output
     
 
-def run_simulation(taxi_bots,airport,run_time,ac_freq,taxi_margin,loading_time):
-    sim = Simulation(2,airport,ac_freq,taxi_margin,loading_time,run_time)
+def run_simulation(airport,run_time,ac_freq,taxi_margin,loading_time):
+    sim = Simulation(airport,run_time,ac_freq,taxi_margin,loading_time)
     while sim.state == Status.Running:
         sim.simulation_tick()
     logger.warning(f"Simulation Ended!\nreason: {sim.state}")

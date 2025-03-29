@@ -1,5 +1,5 @@
 from copy import deepcopy
-from raylib import ORANGE, BeginDrawing, ClearBackground, DrawText, EndDrawing, InitWindow, SetTargetFPS, WindowShouldClose,DrawCircle,RED,GREEN,PURPLE,WHITE,BLUE,YELLOW,LoadTexture,DrawTexturePro
+from raylib import ORANGE, PINK, BeginDrawing, ClearBackground, DrawText, EndDrawing, InitWindow, SetTargetFPS, WindowShouldClose,DrawCircle,RED,GREEN,PURPLE,WHITE,BLUE,YELLOW,LoadTexture,DrawTexturePro
 from src.simulation import Simulation
 from src.environment import Airport
 from src.datatypes import ImageType, Status
@@ -47,12 +47,12 @@ def Run_visualization(x_dim,y_dim,fps,run_time,ac_freq,taxi_margin,loading_time)
             for j in positions["tugs"]:
                 DrawCircle(airport.nodes[str(j[1])].x_pos,airport.nodes[str(j[1])].y_pos,5,BLUE)
             for j in positions["tugs_loaded"]:
-                DrawCircle(airport.nodes[str(j[1])].x_pos,airport.nodes[str(j[1])].y_pos,5,BLUE)
+                DrawCircle(airport.nodes[str(j[1])].x_pos,airport.nodes[str(j[1])].y_pos,5,PINK)
             for j in positions["tugs_travelling"]:
-                new_pos = str(j.new_pos)
-                old_pos = str(j.old_pos)
-                x_pos = (airport.nodes[new_pos]-airport.nodes[old_pos])+airport.nodes[old_pos]
-                y_pos = (airport.nodes[new_pos]-airport.nodes[old_pos])+airport.nodes[old_pos]
+                new_pos = str(j.arrival_node)
+                old_pos = str(j.departure_node)
+                x_pos = (airport.nodes[new_pos].x_pos-airport.nodes[old_pos].x_pos)+airport.nodes[old_pos].x_pos
+                y_pos = (airport.nodes[new_pos].y_pos-airport.nodes[old_pos].y_pos)+airport.nodes[old_pos].y_pos
                 if (airport.nodes[new_pos].x_pos-airport.nodes[old_pos].x_pos) > 0:
                     #going right
                     pass
@@ -65,7 +65,10 @@ def Run_visualization(x_dim,y_dim,fps,run_time,ac_freq,taxi_margin,loading_time)
                 elif (airport.nodes[new_pos].y_pos-airport.nodes[old_pos].y_pos) < 0:
                     #going up
                     pass
-                DrawCircle(x_pos,y_pos,5,BLUE)
+                if j.loaded:
+                    DrawCircle(x_pos,y_pos,5,PINK)
+                else:
+                    DrawCircle(x_pos,y_pos,5,BLUE)
         DrawText(bytes(f"Current Timestep: {sim.time}","utf-8"),0,0,15,WHITE)
         EndDrawing()
         if sim.state is not Status.Running:

@@ -24,15 +24,15 @@ class ATC():
             self.next_ac_time = current_time + self.ac_pace + self.get_random_shift(self.ac_pace)
             while True:
                 carry:Schedule = self.ac_schedule.pop(0)
-                if carry.landing:
-                    gate = carry.start_pos
-                    arr_runway = carry.end_pos
+                if carry.dept_runway:
+                    gate = carry.end_pos
+                    arr_runway = carry.start_pos
+                    dept_runway = carry.dept_runway
                     break
             loading_time = self.loading_margin
             self.loading_margin = self.base_loading_time + self.get_random_shift(self.base_loading_time)
             self.next_aircraft_name += 1
-            logger.info("Added Aircraft")
-            return Aircraft(str(self.next_aircraft_name),gate,True,current_time+self.taxi_margin,loading_time,0,current_time+loading_time+2*self.taxi_margin),arr_runway
+            return Aircraft(str(self.next_aircraft_name),gate,dept_runway,True,current_time+self.taxi_margin,loading_time,0,current_time+loading_time+2*self.taxi_margin),arr_runway
         else:
             return None
     def empty_gate(self,aircraft:Aircraft):
@@ -55,6 +55,7 @@ class ATC():
             gate = choice(working_gates_list)
             working_gates_list.remove(gate)
             gates.append((gate,carry+self.taxi_margin+self.loading_margin))
-            output.append(Schedule(carry,choice(self.arrival_runways),gate,True))
-            output.append(Schedule(carry+self.taxi_margin+self.loading_margin,gate,choice(self.departure_runways),False))
+            dept_runway = choice(self.departure_runways)
+            output.append(Schedule(carry,choice(self.arrival_runways),gate,dept_runway))
+            output.append(Schedule(carry+self.taxi_margin+self.loading_margin,gate,dept_runway,False))
         return output

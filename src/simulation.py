@@ -3,12 +3,9 @@ from src.datatypes import ActiveRoute, Aircraft,TowingVehicle,Status,TravellingV
 from src.atc import ATC
 from src.ground_control import groundControl
 from src.environment import Airport
-from src.ants_v2 import generate_schedule_tugs
-from random import choice
-
+from src.ants_v2 import generate_schedule_tugs, generate_schedule_tugs_2
 class Simulation:
-    def __init__(self,num_tugs,airport:Airport,schedule:list,taxi_margin:int,loading_margin:int,max_time:int):
-        self.num_tugs = num_tugs
+    def __init__(self,airport:Airport,schedule:list,taxi_margin:int,loading_margin:int,max_time:int):
         self.airport:Airport = airport
         self.atc:ATC = ATC(max_time,schedule,taxi_margin,loading_margin,airport.gates,airport.arrival_runways,self.airport.dept_runways)
         self.ground_control:groundControl = groundControl(airport.nodes)
@@ -16,7 +13,7 @@ class Simulation:
         self.ac_waiting:dict[str,Aircraft|None] = airport.populate_waiting_dict()#AC waiting at runway (arriving), or gate (departing)
         self.ac_loading:list[Aircraft] = []#AC that are currently loading - location is inside struct 
         self.tug_waiting:list[TowingVehicle] = [] #empty tugs
-        self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs(self.airport,self.atc.ac_schedule,self.num_tugs) #full tugs - we might need to add travel down the line
+        self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs_2(self.airport,self.atc.ac_schedule,self.ground_control) #full tugs - we might need to add travel down the line
         self.tug_travelling:list[TravellingVehicle] = []
         self.current_active_routes:list[ActiveRoute] = []
         self.time:int = 0
@@ -28,6 +25,7 @@ class Simulation:
         """
         carry = self.atc.add_aircraft(self.time)
         if carry is not None:
+            logger.info(f"Added Aircraft to {carry[1]}")
             if self.ac_waiting[carry[1]] is not None:
                 self.state = Status.Failed_No_Landing_Space
             self.ac_waiting[carry[1]] = carry[0]
@@ -37,9 +35,10 @@ class Simulation:
         """
         for i in self.ac_loading:
             if i.loading_completion_time <= self.time:
+                logger.info(f"Aircraft completed loading at {i.target}")
                 self.ac_loading.remove(i)
-                self.ac_waiting[str(i.target)] = i
-                i.target = choice(self.airport.dept_runways) #Fix this once nodes are defined
+                self.ac_waiting[i.target] = i
+                i.target = i.departure_runway #Fix this once nodes are defined
                 i.direction = False
                 self.atc.empty_gate(i)
 
@@ -49,6 +48,7 @@ class Simulation:
             for j in self.ac_waiting.keys():
                 if i.pos == j:
                     if self.ac_waiting[j] is not None:
+                        logger.debug("aircraft is picked up")
                         aircraft = self.ac_waiting[j]
                         self.ac_waiting[j] = None  #No longer waiting
                         if aircraft:
@@ -69,6 +69,8 @@ class Simulation:
             if len(collision_risk)>0 and i.pos != 109:
                 logger.warning("Collision!")
                 self.state = Status.Failed_Collision
+            if i.start_time > self.time:
+                continue
             if i.connected_aircraft:
                 if i.connected_aircraft.direction:#arriving
                     if i.connected_aircraft.target_arrival_time < self.time:
@@ -85,15 +87,23 @@ class Simulation:
                     i.determine_route(self.current_active_routes,self.time,self.ground_control)
                     self.current_active_routes.append(ActiveRoute(self.time,i.pos,i.get_next_pos()))
                 else: #We are waiting
-                    self.tug_intersection.remove(i)
-                    self.tug_waiting.append(i)
+                    if i.pos == 109:
+                        i.determine_route(self.current_active_routes,self.time,self.ground_control)
+                        self.current_active_routes.append(ActiveRoute(self.time,i.pos,i.get_next_pos()))
+                    else:
+                        self.tug_intersection.remove(i)
+                        self.tug_waiting.append(i)
             else:
                 #add collision avoidance here TODO's
                 next_node = i.next_node_list.pop(0)
                 old_pos = i.pos
                 i.pos = next_node
                 self.tug_intersection.remove(i)
-                self.tug_travelling.append(TravellingVehicle(i,i.time_to_next_node,old_pos,i.pos))
+                if i.connected_aircraft:
+                    con_air = True
+                else:
+                    con_air = False
+                self.tug_travelling.append(TravellingVehicle(i,i.time_to_next_node,old_pos,i.pos,con_air))
 
 
     def _check_ac_waiting_time(self):

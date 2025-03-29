@@ -10,6 +10,7 @@ from src.ground_control import groundControl
 class Aircraft():
     name:str
     target:int #This implicitly holds direction, since its either a gate or a runway
+    departure_runway:int
     direction:bool #false = departing (travelling to runway) true = arriving
     target_arrival_time:int #When the aircraft must be at the target
     loading_time:int #How long the aircraft takes to load at the gate
@@ -21,7 +22,7 @@ class Schedule():
     estimated_time:int
     start_pos:int
     end_pos:int
-    landing:bool
+    dept_runway:int|None
 
 @dataclass
 class ActiveRoute():
@@ -34,23 +35,24 @@ class TowingVehicle():
     name:str
     pos:int#Assume all travel time takes the same number of mins (say 1) - can't assume this
     schedule:list[Schedule]
+    start_time:int #when the towing vehicle starts its route
     connected_aircraft:Aircraft|None
     time_to_next_node:int = 15 #seconds - Come back to this
     next_node_list = []
 
     def determine_route(self,known_routes:list[ActiveRoute],time:int,ground_control:groundControl):
         #We assume no collisions once pathing is started
-        active_route_pathing:list[list[int]] = []
+        active_route_pathing:dict[list[int]] = {}
         for i in known_routes:
             nodes = ground_control.determine_route(i.start_node,i.end_node,active_route_pathing)
             current_time = (time - i.start_time)//15 #the number of timesteps already taken on this route
             if current_time < len(nodes):
                 for index,val in enumerate(nodes[current_time:]):
-                    if active_route_pathing[index]:
+                    if index in active_route_pathing.keys():
                         active_route_pathing[index].append(val)
                     else:
                         active_route_pathing[index] = [val]
-        self.next_node_list = ground_control.determine_route((self.pos,self.get_next_pos(),active_route_pathing))
+        self.next_node_list = ground_control.determine_route(self.pos,self.get_next_pos(),active_route_pathing)
 
     def get_next_pos(self)->int:
         next_schedule = self.schedule[0]
@@ -65,6 +67,7 @@ class TravellingVehicle():
     remaining_time:int
     departure_node:int
     arrival_node:int
+    loaded:bool
 
 class Status(Enum):
     Running = 0

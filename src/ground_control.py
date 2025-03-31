@@ -15,7 +15,7 @@ class groundControl:
         x2, y2 = self.nodes[node2].x_pos, self.nodes[node2].y_pos
         return math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 
-    def determine_route(self, start_pos: int, end_pos: int,invalid_nodes:list) -> list[int]:
+    def determine_route(self, start_pos: int, end_pos: int,invalid_nodes:dict[int,list[int]]) -> list[int]:
         """Determine the route using A* pathfinding algorithm.
 
         Args:

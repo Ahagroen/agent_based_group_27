@@ -37,10 +37,11 @@ class TowingVehicle():
     connected_aircraft:Aircraft|None
     time_to_next_node:int = 15 #seconds - Come back to this
     next_node_list = []
+    done = False
 
     def determine_route(self,known_routes:list[ActiveRoute],time:int,ground_control:groundControl):
         #We assume no collisions once pathing is started
-        active_route_pathing:dict[list[int]] = {}
+        active_route_pathing:dict[int,list[int]] = {}
         for i in known_routes:
             nodes = ground_control.determine_route(i.start_node,i.end_node,active_route_pathing)
             current_time = (time - i.start_time)//15 #the number of timesteps already taken on this route
@@ -53,6 +54,8 @@ class TowingVehicle():
         self.next_node_list = ground_control.determine_route(self.pos,self.get_next_pos(),active_route_pathing)
 
     def get_next_pos(self)->int:
+        if len(self.schedule) == 0:
+            return 109
         next_schedule = self.schedule[0]
         if self.connected_aircraft:
             return next_schedule.end_pos

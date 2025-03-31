@@ -9,10 +9,10 @@ def Run_visualization(x_dim,y_dim,fps,run_time,ac_freq,taxi_margin,loading_time)
     InitWindow(x_dim,y_dim,b"AutoTaxi Simulation")
     SetTargetFPS(fps)
     airport = Airport("baseline_airport.json")
-    straightaway= LoadTexture(b"images\\taxiway_straight.png")
-    turns = LoadTexture(b"images\\taxiway_corner.png")
-    triple_intersection = LoadTexture(b"images\\taxiway_3way.png")
-    quad_intersection = LoadTexture(b"images\\taxiway_4way.png")
+    straightaway= LoadTexture(b"images/taxiway_straight.png")
+    turns = LoadTexture(b"images/taxiway_corner.png")
+    triple_intersection = LoadTexture(b"images/taxiway_3way.png")
+    quad_intersection = LoadTexture(b"images/taxiway_4way.png")
     unit_height = 45
     unit_width = 45
 

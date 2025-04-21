@@ -55,20 +55,22 @@ class TowingVehicle():
     start_time:int #when the towing vehicle starts its route
     connected_aircraft:Aircraft|None
     time_to_next_node:int = 15 #seconds - Come back to this
-    next_node_list = []
+    next_node_list = [] 
     done = False
 
     def determine_route(self,known_routes:list[ActiveRoute],time:int,ground_control:gc.groundControl):
         #We assume no collisions once pathing is started
         active_route_pathing:dict[int,list[int]] = {}
         for i in known_routes:
+            if i.start_time+30*60 < time:
+                continue
             nodes = ground_control.determine_route(i.start_node,i.end_node,active_route_pathing,i.start_time)
             for i in nodes:
                 if i[0] in active_route_pathing:
                     active_route_pathing[i[0]].append(i[1])
                 else:
                     active_route_pathing[i[0]] = [i[1]]
-        next_nodes = [x[0] for x in ground_control.determine_route(self.pos,self.get_next_pos(),active_route_pathing,time)]
+        next_nodes = ground_control.determine_route(self.pos,self.get_next_pos(),active_route_pathing,time)
         self.next_node_list = next_nodes
 
     def get_next_pos(self)->int:

@@ -49,7 +49,7 @@ class groundControl:
 
         while open_set:
             # Get the node with the lowest f-score
-            _, current_node,current_time = heapq.heappop(open_set)
+            _ , current_node,current_time = heapq.heappop(open_set)
 
             # If the goal is reached, reconstruct the path
             if current_node == end_pos:
@@ -61,21 +61,26 @@ class groundControl:
                 return path[::-1]  # Return reversed path from start to end
 
             # Explore neighbors
-            for neighbor in nodes[current_node].node.edges:
-                arrival_time = current_time+15
-                if any([x in nodes[neighbor].blocked_times for x in range(arrival_time-15,arrival_time+15)]):
-                    continue
-                temp_g_score = g_score[current_node] + heuristic(nodes,current_node, neighbor)
-
-                # If this path to neighbor is better update the records
-                if temp_g_score < g_score[neighbor]:
-                    came_from[neighbor] = (current_node,current_time)
-                    g_score[neighbor] = temp_g_score
-                    f_score[neighbor] = temp_g_score + heuristic(nodes,neighbor, end_pos)
+            found = False
+            while found != True:
+                for neighbor in nodes[current_node].node.edges:
+                    arrival_time = current_time+15
+                    if any([x in nodes[neighbor].blocked_times for x in range(arrival_time-30,arrival_time+30)]):
+                        continue
+                    temp_g_score = g_score[current_node] + heuristic(nodes,current_node, neighbor)
+                    found = True
+                    # If this path to neighbor is better update the records
+                    if temp_g_score < g_score[neighbor]:
+                        came_from[neighbor] = (current_node,current_time)
+                        g_score[neighbor] = temp_g_score
+                        f_score[neighbor] = temp_g_score + heuristic(nodes,neighbor, end_pos)
 
                     # Push updated neighbor into the open set
-                    heapq.heappush(open_set, (f_score[neighbor], neighbor, arrival_time))
-
+                        heapq.heappush(open_set, (f_score[neighbor], neighbor, arrival_time))
+                if not found:
+                    print("No Legal Paths")
+                    current_time = arrival_time
+     
         return []  # No path found, nodes might not be connected
 
 def heuristic(node_map, node1: int, node2: int) -> float:

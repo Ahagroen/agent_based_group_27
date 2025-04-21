@@ -7,7 +7,7 @@ from src.ground_control import groundControl
 
 def generate_schedule_tugs(airport:Airport,ac_schedule:list,ground_control:groundControl)->list:
     #So from ac_schedule, determine the mission, and the time taken to complete the mission (runway to gate)
-    num_tugs = 5
+    num_tugs = 7
     missions:list[list[Schedule]] = []
     for i in range(num_tugs):
         missions.append([])
@@ -38,20 +38,33 @@ def generate_schedule_tugs_2(airport:Airport,ac_schedule:list[Schedule],ground_c
             mission_times[i,j] = travel_times[j,i] = length
         travel_times[109,i] = len(ground_controller.determine_route(i,109,{},0))*edge_len
     for i in airport.arrival_runways:
+        for j in airport.arrival_runways:
+            if i == j:
+                continue
+            travel_times[j,i] = len(ground_controller.determine_route(i,j,{},0))*edge_len
         for j in airport.dept_runways:
             travel_times[j,i] = len(ground_controller.determine_route(i,j,{},0))*edge_len
+        for j in airport.gates:
+            travel_times[j,i] = len(ground_controller.determine_route(i,j,{},0))*edge_len
         travel_times[109,i] = len(ground_controller.determine_route(i,109,{},0))*edge_len
-
+    for i in airport.gates:
+        for j in airport.dept_runways:
+            travel_times[j,i] = len(ground_controller.determine_route(i,j,{},0))*edge_len
+        for j in airport.gates:
+            if i == j:
+                continue
+            travel_times[j,i] = len(ground_controller.determine_route(i,j,{},0))*edge_len
+        travel_times[109,i] = len(ground_controller.determine_route(i,109,{},0))*edge_len
     start_time = 0
-    times[0] = compute_row(ac_schedule, travel_times, start_time)
+    times[0] = compute_row(ac_schedule, travel_times, start_time,109)
     counter = 0
     for i in ac_schedule:#build the tabu
         counter += 1
-        times[counter] = compute_row(ac_schedule,travel_times,i.estimated_time+mission_times[i.start_pos,i.end_pos])    
+        times[counter] = compute_row(ac_schedule,travel_times,i.estimated_time+mission_times[i.start_pos,i.end_pos],i.end_pos)    
     missions:list[list[Schedule]] = []
     ac_schedule_len = len(ac_schedule)
     while max(times[0]) != 0:
-        data = dijkstra(times,ac_schedule_len)
+        data = route(times,ac_schedule_len)
         if not data:
             break
         times = remove_used(times,data)
@@ -72,47 +85,42 @@ def generate_schedule_tugs_2(airport:Airport,ac_schedule:list[Schedule],ground_c
         tugs.append(TowingVehicle(str(i),109,missions[i],start_time,None))
     return tugs
 
-def compute_row(ac_schedule, travel_times, start_time):
-    time_list = {0:0}
-    margin = 240
+def compute_row(ac_schedule, travel_times, start_time,start_node):
+    time_list = {}
+    margin = 1
     counter = 0
     for i in ac_schedule:
         counter += 1
-        if travel_times[109,i.start_pos]+start_time < i.estimated_time:#we can make it 
-            time_list[counter] = i.estimated_time-start_time-margin#margin handling? TODO
+        if start_node == i.start_pos:
+            if start_time+margin < i.estimated_time:
+                time_list[counter] = margin#margin handling? TODO
         else:
-            time_list[counter] = 0
+            if travel_times[start_node,i.start_pos]+start_time+margin < i.estimated_time:#we can make it 
+                time_list[counter] = travel_times[start_node,i.start_pos]+margin#margin handling? TODO
     return time_list
 
 
-def dijkstra(costs_table:dict,ac_schedule_len):
+def route(costs_table:dict,ac_schedule_len):
     dist = [0]*(ac_schedule_len+1)
     prev = [None]*(ac_schedule_len+1)
     unchecked = []
     for i in costs_table.keys():
         dist[i] = 9999999999
         prev[i] = None
-        unchecked.append(i)
     dist[0] = 0
+    unchecked.append(0)
     while unchecked:
-        best_next = None
-        min_val = 999999999
-        for test in unchecked:
-            if dist[test] < min_val:
-                min_val = dist[test]
-                best_next = test
-        unchecked.remove(best_next)
-        possible_connection = False
-        for mission in unchecked:
-            if costs_table[best_next][mission] != 0:
-                possible_connection = True
-                alt = dist[best_next]+costs_table[best_next][mission]
-                if alt < dist[mission]:
-                    dist[mission] = alt
-                    prev[mission] = best_next
-        if not possible_connection:
-            break
+        print(unchecked)
+        best_next = unchecked.pop(0)
+        print(costs_table[best_next].keys())
+        for mission in costs_table[best_next].keys():
+            alt = dist[best_next]+costs_table[best_next][mission]
+            if alt < dist[mission]:
+                dist[mission] = alt
+                prev[mission] = best_next
+                unchecked.append(mission)
     data = []
+    print(prev)
     for i in costs_table.keys():
         if prev[i] is not None:#filter out nodes that were not visited
             working = [i]

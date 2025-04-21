@@ -7,7 +7,7 @@ from src.ground_control import groundControl
 
 def generate_schedule_tugs(airport:Airport,ac_schedule:list,ground_control:groundControl)->list:
     #So from ac_schedule, determine the mission, and the time taken to complete the mission (runway to gate)
-    num_tugs = 2
+    num_tugs = 5
     missions:list[list[Schedule]] = []
     for i in range(num_tugs):
         missions.append([])
@@ -18,7 +18,6 @@ def generate_schedule_tugs(airport:Airport,ac_schedule:list,ground_control:groun
     tugs = []
     counter = 1
     for i in range(num_tugs):
-        print(missions[i])
         tugs.append(TowingVehicle(str(i),109,missions[i],counter*15,None))
         counter += 1
     return tugs
@@ -26,22 +25,22 @@ def generate_schedule_tugs(airport:Airport,ac_schedule:list,ground_control:groun
 
 def generate_schedule_tugs_2(airport:Airport,ac_schedule:list[Schedule],ground_controller:groundControl)->list:
     #So from ac_schedule, determine the mission, and the time taken to complete the mission (runway to gate)
-    times:dict[str,list] = {}#each row = start position, each column = end_position. None means its an invalid entry (or leave it empty?)
+    times:dict[int,dict[int,int]] = {}#each row = start position, each column = end_position. None means its an invalid entry (or leave it empty?)
     mission_times:dict[tuple,int] = {}# options are Arrivals-gates, gates-departures - Only routes an aircraft can take
     travel_times:dict[tuple,int] = {} #options are 109-arrivals, 109-gates, gates-arrivals (same as arrivals-gates), departures-arrivals, departures-gates(same as gates-departures)
     edge_len = 15
     for i in airport.gates:
         for j in airport.arrival_runways:
-            length = len(ground_controller.determine_route(i,j,[]))*edge_len #depends on length of the edges
+            length = len(ground_controller.determine_route(i,j,{},0))*edge_len #depends on length of the edges
             mission_times[j,i] = travel_times[i,j] = length
         for j in airport.dept_runways:
-            length = len(ground_controller.determine_route(i,j,[]))*edge_len #depends on length of the edges
+            length = len(ground_controller.determine_route(i,j,{},0))*edge_len #depends on length of the edges
             mission_times[i,j] = travel_times[j,i] = length
-        travel_times[109,i] = len(ground_controller.determine_route(i,109,[]))*edge_len
+        travel_times[109,i] = len(ground_controller.determine_route(i,109,{},0))*edge_len
     for i in airport.arrival_runways:
         for j in airport.dept_runways:
-            travel_times[j,i] = len(ground_controller.determine_route(i,j,[]))*edge_len
-        travel_times[109,i] = len(ground_controller.determine_route(i,109,[]))*edge_len
+            travel_times[j,i] = len(ground_controller.determine_route(i,j,{},0))*edge_len
+        travel_times[109,i] = len(ground_controller.determine_route(i,109,{},0))*edge_len
 
     start_time = 0
     times[0] = compute_row(ac_schedule, travel_times, start_time)
@@ -69,13 +68,13 @@ def generate_schedule_tugs_2(airport:Airport,ac_schedule:list[Schedule],ground_c
     tugs = []
     logger.info(f"Required Number of tugs:{len(missions)}")
     for i in range(len(missions)):
-        start_time = missions[i][0].estimated_time-travel_times[109,missions[i][0].start_pos]-120
+        start_time = missions[i][0].estimated_time-travel_times[109,missions[i][0].start_pos]-180
         tugs.append(TowingVehicle(str(i),109,missions[i],start_time,None))
     return tugs
 
 def compute_row(ac_schedule, travel_times, start_time):
     time_list = {0:0}
-    margin = 180
+    margin = 240
     counter = 0
     for i in ac_schedule:
         counter += 1

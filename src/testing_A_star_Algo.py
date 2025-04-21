@@ -30,10 +30,10 @@ nodes = {int(key): value for key, value in nodes.items()}
 print(nodes)
 
 # print(nodes["1"])
-gc = groundControl(nodes)
+gc = groundControl(nodes,1800)
 start = 38
 end = 98
-route = gc.determine_route(start, end)
+route = gc.determine_route(start, end,{},9)
 print("Test Route:", route)
 
 # Plotting the path

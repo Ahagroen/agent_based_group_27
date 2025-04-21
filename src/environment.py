@@ -79,7 +79,7 @@ class Airport():
         return x_less,y_less,x_greater,y_greater
  
 
-    def populate_waiting_dict(self)->dict[str,Aircraft|None]:
+    def populate_waiting_dict(self)->dict[int,Aircraft|None]:
         carry = {}
         for i in self.arrival_runways:
             carry[i] = None

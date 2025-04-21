@@ -3,18 +3,19 @@ from src.datatypes import ActiveRoute, Aircraft,TowingVehicle,Status,TravellingV
 from src.atc import ATC
 from src.ground_control import groundControl
 from src.environment import Airport
-from src.ants_v2 import generate_schedule_tugs_2
+from src.ants_v2 import generate_schedule_tugs
 class Simulation:
     def __init__(self,airport:Airport,max_time,ac_interval:int,taxi_margin:int,loading_margin:int):
         self.airport:Airport = airport
-        self.ground_control:groundControl = groundControl(airport.nodes)
+        self.ground_control:groundControl = groundControl(airport.nodes,max_time)
         self.atc:ATC = ATC(max_time,ac_interval,loading_margin,airport,self.ground_control)
         self.max_time:int = max_time
         self.taxi_margin = taxi_margin
-        self.ac_waiting:dict[str,Aircraft|None] = airport.populate_waiting_dict()#AC waiting at runway (arriving), or gate (departing)
+        self.ac_waiting:dict[int,Aircraft|None] = airport.populate_waiting_dict()#AC waiting at runway (arriving), or gate (departing)
         self.ac_loading:list[Aircraft] = []#AC that are currently loading - location is inside struct 
         self.tug_waiting:list[TowingVehicle] = [] #empty tugs
-        self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs_2(self.airport,self.atc.ac_schedule,self.ground_control) #full tugs - we might need to add travel down the line
+        self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs(self.airport,self.atc.ac_schedule,self.ground_control) #full tugs - we might need to add travel down the line
+        self.num_tugs = len(self.tug_intersection)
         self.tug_travelling:list[TravellingVehicle] = []
         self.current_active_routes:list[ActiveRoute] = []
         self.time:int = 0
@@ -91,6 +92,8 @@ class Simulation:
                     self.current_active_routes.append(ActiveRoute(self.time,i.pos,i.get_next_pos()))
                 else: #We are waiting
                     if i.pos == 109:
+                        if len(i.schedule) == 0:
+                            self.tug_intersection.remove(i)
                         i.determine_route(self.current_active_routes,self.time,self.ground_control)
                         self.current_active_routes.append(ActiveRoute(self.time,i.pos,i.get_next_pos()))
                     else:
@@ -121,6 +124,13 @@ class Simulation:
 
     def _check_tug_travelling(self):
         for i in self.tug_travelling:
+            for j in self.tug_travelling:
+                if i != j:
+                    if (i.departure_node == j.arrival_node and i.arrival_node == j.departure_node):
+                        logger.warning("Collision! on road")
+                        self.state = Status.Failed_Collision
+                        break
+        for i in self.tug_travelling:
             if i.remaining_time > 0:
                 i.remaining_time -=1
             else:
@@ -147,7 +157,7 @@ class Simulation:
         output["tugs_travelling"] = []
         for i in self.ac_waiting.keys():
             if self.ac_waiting[i]:
-                output["aircraft"].append(((self.ac_waiting[i]).name,i))
+                output["aircraft"].append((self.ac_waiting[i].name,i))
         for i in self.ac_loading:
             output["aircraft"].append((i.name,i.target))
         for i in self.tug_waiting:
@@ -167,4 +177,4 @@ def run_simulation(airport,run_time,ac_freq,taxi_margin,loading_time):
     while sim.state == Status.Running:
         sim.simulation_tick()
     logger.warning(f"Simulation Ended!\nreason: {sim.state}")
-    return sim.state
+    return sim.state,sim.num_tugs

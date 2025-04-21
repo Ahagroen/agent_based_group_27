@@ -1,10 +1,28 @@
 from dataclasses import dataclass
 from enum import Enum
 
-from src.ground_control import groundControl
+import src.ground_control as gc
 
 #This is a linked list basically, so each node of the airport connects to N other nodes with certain time costs, and only one vehicle is allowed to be in an edge at once
+class ImageType(Enum):
+    four_way_intersection = 0
+    three_way_intersection = 1
+    turn = 2
+    straight = 3
 
+
+@dataclass
+class Node():
+    edges:list
+    x_pos:int
+    y_pos:int
+    image_type:ImageType
+    orientation:int #0 for first
+
+@dataclass
+class NodePathfinding():
+    node:Node
+    blocked_times:list
 
 @dataclass
 class Aircraft():
@@ -14,6 +32,7 @@ class Aircraft():
     direction:bool #false = departing (travelling to runway) true = arriving
     max_travel_time:int #When the aircraft must be at the target
     loading_time:int #How long the aircraft takes to load at the gate
+    loading_completion_time:int = 0
 
 @dataclass
 class Schedule():
@@ -39,19 +58,18 @@ class TowingVehicle():
     next_node_list = []
     done = False
 
-    def determine_route(self,known_routes:list[ActiveRoute],time:int,ground_control:groundControl):
+    def determine_route(self,known_routes:list[ActiveRoute],time:int,ground_control:gc.groundControl):
         #We assume no collisions once pathing is started
         active_route_pathing:dict[int,list[int]] = {}
         for i in known_routes:
-            nodes = ground_control.determine_route(i.start_node,i.end_node,active_route_pathing)
-            current_time = (time - i.start_time)//15 #the number of timesteps already taken on this route
-            if current_time < len(nodes):
-                for index,val in enumerate(nodes[current_time:]):
-                    if index in active_route_pathing.keys():
-                        active_route_pathing[index].append(val)
-                    else:
-                        active_route_pathing[index] = [val]
-        self.next_node_list = ground_control.determine_route(self.pos,self.get_next_pos(),active_route_pathing)
+            nodes = ground_control.determine_route(i.start_node,i.end_node,active_route_pathing,i.start_time)
+            for i in nodes:
+                if i[0] in active_route_pathing:
+                    active_route_pathing[i[0]].append(i[1])
+                else:
+                    active_route_pathing[i[0]] = [i[1]]
+        next_nodes = [x[0] for x in ground_control.determine_route(self.pos,self.get_next_pos(),active_route_pathing,time)]
+        self.next_node_list = next_nodes
 
     def get_next_pos(self)->int:
         if len(self.schedule) == 0:
@@ -77,17 +95,6 @@ class Status(Enum):
     Failed_Collision = 3
     Failed_No_Landing_Space = 4
 
-class ImageType(Enum):
-    four_way_intersection = 0
-    three_way_intersection = 1
-    turn = 2
-    straight = 3
 
 
-@dataclass
-class Node():
-    edges:list
-    x_pos:int
-    y_pos:int
-    image_type:ImageType
-    orientation:int #0 for first 
+

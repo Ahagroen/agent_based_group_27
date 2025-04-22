@@ -32,7 +32,7 @@ print(nodes)
 # print(nodes["1"])
 gc = groundControl(nodes,1800)
 start = 38
-end = 98
+end = 10
 route = gc.determine_route(start, end,{},9)
 print("Test Route:", route)
 

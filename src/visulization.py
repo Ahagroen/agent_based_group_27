@@ -5,17 +5,23 @@ from src.environment import Airport
 from src.datatypes import ImageType, Status
 from loguru import logger
 
+def seconds_to_watch_format(total_seconds):
+    hours = total_seconds // 3600
+    minutes = (total_seconds % 3600) // 60
+    seconds = total_seconds % 60
+    return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+
+
 def Run_visualization(x_dim,y_dim,fps,run_time,ac_freq,taxi_margin,loading_time):
     InitWindow(x_dim,y_dim,b"AutoTaxi Simulation")
     SetTargetFPS(fps)
-    airport = Airport("baseline_airport.json")
-    straightaway= LoadTexture(b"images/taxiway_straight.png")
+    airport = Airport("airport_layout.json")
+    straightaway = LoadTexture(b"images/taxiway_straight.png")
     turns = LoadTexture(b"images/taxiway_corner.png")
     triple_intersection = LoadTexture(b"images/taxiway_3way.png")
     quad_intersection = LoadTexture(b"images/taxiway_4way.png")
-    unit_height = 45
-    unit_width = 45
-
+    unit_height = 50
+    unit_width = 50
 
     sim = Simulation(airport,run_time,ac_freq,taxi_margin,loading_time)
     baseline_gates = deepcopy(airport.gates)
@@ -34,13 +40,25 @@ def Run_visualization(x_dim,y_dim,fps,run_time,ac_freq,taxi_margin,loading_time)
             else:
                 match airport.nodes[i].image_type:
                     case ImageType.four_way_intersection:
-                        DrawTexturePro(quad_intersection,(0,0,quad_intersection.width,quad_intersection.height),(airport.nodes[i].x_pos,airport.nodes[i].y_pos,unit_width,unit_height),(unit_width/2,unit_height/2),airport.nodes[i].orientation,WHITE)
+                        DrawTexturePro(quad_intersection,
+                                       (0,0,quad_intersection.width,quad_intersection.height),
+                                       (airport.nodes[i].x_pos,airport.nodes[i].y_pos,unit_width,unit_height),
+                                       (unit_width/2,unit_height/2),airport.nodes[i].orientation,WHITE)
                     case ImageType.three_way_intersection:
-                        DrawTexturePro(triple_intersection,(0,0,triple_intersection.width,triple_intersection.height),(airport.nodes[i].x_pos,airport.nodes[i].y_pos,unit_width,unit_height),(unit_width/2,unit_height/2),-airport.nodes[i].orientation,WHITE)
+                        DrawTexturePro(triple_intersection,
+                                       (0,0,triple_intersection.width,triple_intersection.height),
+                                       (airport.nodes[i].x_pos,airport.nodes[i].y_pos,unit_width,unit_height),
+                                       (unit_width/2,unit_height/2),-airport.nodes[i].orientation,WHITE)
                     case ImageType.turn:
-                        DrawTexturePro(turns,(0,0,turns.width,turns.height),(airport.nodes[i].x_pos,airport.nodes[i].y_pos,unit_width,unit_height),(unit_width/2,unit_height/2),-airport.nodes[i].orientation,WHITE)
+                        DrawTexturePro(turns,
+                                       (0,0,turns.width,turns.height),
+                                       (airport.nodes[i].x_pos,airport.nodes[i].y_pos,unit_width,unit_height),
+                                       (unit_width/2,unit_height/2),-airport.nodes[i].orientation,WHITE)
                     case ImageType.straight:
-                        DrawTexturePro(straightaway,(0,0,straightaway.width,straightaway.height),(airport.nodes[i].x_pos,airport.nodes[i].y_pos,unit_width,unit_height),(unit_width/2,unit_height/2),airport.nodes[i].orientation,WHITE)
+                        DrawTexturePro(straightaway,
+                                       (0,0,straightaway.width,straightaway.height),
+                                       (airport.nodes[i].x_pos,airport.nodes[i].y_pos,unit_width,unit_height),
+                                       (unit_width/2,unit_height/2),airport.nodes[i].orientation,WHITE)
             positions = sim.position_list()
             for j in positions["aircraft"]:
                 DrawCircle(airport.nodes[str(j[1])].x_pos,airport.nodes[str(j[1])].y_pos,5,YELLOW)
@@ -69,7 +87,11 @@ def Run_visualization(x_dim,y_dim,fps,run_time,ac_freq,taxi_margin,loading_time)
                     DrawCircle(x_pos,y_pos,5,PINK)
                 else:
                     DrawCircle(x_pos,y_pos,5,BLUE)
-        DrawText(bytes(f"Current Timestep: {sim.time}","utf-8"),0,0,15,WHITE)
+
+        # DrawText(bytes(f"Current Timestep: {sim.time}","utf-8"),0,0,30,WHITE)
+        watch_string = seconds_to_watch_format(sim.time)
+        DrawText(bytes(f"Current Timestep: {watch_string}","utf-8"),0,0,20,WHITE)
+
         EndDrawing()
         if sim.state is not Status.Running:
             logger.warning(f"Simulation Ended!\nreason: {sim.state}")

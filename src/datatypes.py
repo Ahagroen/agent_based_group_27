@@ -27,7 +27,7 @@ class NodePathfinding():
 @dataclass
 class Aircraft():
     name:str
-    target:int #This implicitly holds direction, since its either a gate or a runway
+    target:int                          #This implicitly holds direction, since its either a gate or a runway
     departure_runway:int
     direction:bool #false = departing (travelling to runway) true = arriving
     max_travel_time:int #When the aircraft must be at the target

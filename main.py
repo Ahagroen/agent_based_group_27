@@ -18,7 +18,7 @@ def simulate_data(runs:int):
     print(f"num successes: {[x[0] for x in carry].count(Status.Success)}, percentage = {[x[0] for x in carry].count(Status.Success)/len(carry)}")
 
 def main():
-    Run_visualization(800,600,120,480*60,20*60,20*60,30*60)
+    Run_visualization(850,750,120,480*60,20*60,20*60,30*60)
     #simulate_data(100)
 
 if __name__ == "__main__":

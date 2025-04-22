@@ -2,25 +2,34 @@ from loguru import logger
 from src.environment import Airport
 from src.datatypes import Schedule, TowingVehicle
 from src.ground_control import groundControl
-
+from copy import deepcopy
 
 
 def generate_schedule_tugs(airport:Airport,ac_schedule:list,ground_control:groundControl)->list:
     #So from ac_schedule, determine the mission, and the time taken to complete the mission (runway to gate)
-    num_tugs = 7
-    missions:list[list[Schedule]] = []
-    for i in range(num_tugs):
-        missions.append([])
-    for i in range(len(ac_schedule)):
-        missions[i%num_tugs].append(ac_schedule[i]) #
-
-    #Build the tugs
     tugs = []
-    counter = 1
+    working_ac = deepcopy(ac_schedule)
+    margin = 350
+    edge_len = 15
+    while len(working_ac) > 0:
+        new_tug = []
+        next_schedule = working_ac.pop(0)
+        new_tug.append(next_schedule)
+        eligible = [x for x in working_ac if x.estimated_time > (next_schedule.estimated_time + len(ground_control.determine_route(next_schedule.start_pos,next_schedule.end_pos,{},0))*edge_len + 
+                                                                   len(ground_control.determine_route(next_schedule.end_pos,x.start_pos,{},0))*edge_len+margin)] 
+        while len(eligible) >0:
+            next_schedule = eligible.pop(0)
+            working_ac.remove(next_schedule)
+            new_tug.append(next_schedule)
+            eligible = [x for x in working_ac if x.estimated_time > (next_schedule.estimated_time + len(ground_control.determine_route(next_schedule.start_pos,next_schedule.end_pos,{},0))*edge_len + 
+                                                                      len(ground_control.determine_route(next_schedule.end_pos,x.start_pos,{},0))*edge_len+margin)] 
+        tugs.append(new_tug)
+    num_tugs = len(tugs)
+    carry_tugs = []
+    logger.info(f"Number of tugs: {num_tugs}")
     for i in range(num_tugs):
-        tugs.append(TowingVehicle(str(i),109,missions[i],counter*15,None))
-        counter += 1
-    return tugs
+        carry_tugs.append(TowingVehicle(str(i),109,tugs[i],tugs[i][0].estimated_time-180,None))
+    return carry_tugs
 
 
 def generate_schedule_tugs_2(airport:Airport,ac_schedule:list[Schedule],ground_controller:groundControl)->list:
@@ -86,7 +95,7 @@ def generate_schedule_tugs_2(airport:Airport,ac_schedule:list[Schedule],ground_c
     return tugs
 
 def compute_row(ac_schedule, travel_times, start_time,start_node):
-    time_list = {}
+    time_list = {0:travel_times[start_node,109]}
     margin = 1
     counter = 0
     for i in ac_schedule:
@@ -100,42 +109,8 @@ def compute_row(ac_schedule, travel_times, start_time,start_node):
     return time_list
 
 
-def route(costs_table:dict,ac_schedule_len):
-    dist = [0]*(ac_schedule_len+1)
-    prev = [None]*(ac_schedule_len+1)
-    unchecked = []
-    for i in costs_table.keys():
-        dist[i] = 9999999999
-        prev[i] = None
-    dist[0] = 0
-    unchecked.append(0)
-    while unchecked:
-        print(unchecked)
-        best_next = unchecked.pop(0)
-        print(costs_table[best_next].keys())
-        for mission in costs_table[best_next].keys():
-            alt = dist[best_next]+costs_table[best_next][mission]
-            if alt < dist[mission]:
-                dist[mission] = alt
-                prev[mission] = best_next
-                unchecked.append(mission)
-    data = []
-    print(prev)
-    for i in costs_table.keys():
-        if prev[i] is not None:#filter out nodes that were not visited
-            working = [i]
-            j = prev[i]
-            while prev[j]:
-                working.append(j)
-                j = prev[j]
-            data.append(working)
-    lengths = [len(x) for x in data]
-    if len(lengths) == 0:
-        return False
-    best = lengths.index(max(lengths))
-    return data[best]
-
-
+def naieve_route(costs_table:dict,ac_schedule_len):
+   pass 
 def remove_used(times:dict,used_nodes):
     for i in used_nodes:
         times.pop(i)

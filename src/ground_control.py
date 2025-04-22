@@ -31,6 +31,8 @@ class groundControl:
         Returns:
             list[int]: list of nodes to travel to
         """
+        if start_pos == end_pos:
+            return []
         # initialize open set (priority queue)
         nodes = self.create_current_network(invalid_nodes)
         open_set = []
@@ -62,7 +64,7 @@ class groundControl:
 
             # Explore neighbors
             found = False
-            while found != True:
+            while not found:
                 for neighbor in nodes[current_node].node.edges:
                     arrival_time = current_time+15
                     if any([x in nodes[neighbor].blocked_times for x in range(arrival_time-30,arrival_time+30)]):
@@ -78,8 +80,7 @@ class groundControl:
                     # Push updated neighbor into the open set
                         heapq.heappush(open_set, (f_score[neighbor], neighbor, arrival_time))
                 if not found:
-                    print("No Legal Paths")
-                    current_time = arrival_time
+                    current_time += 15
      
         return []  # No path found, nodes might not be connected
 

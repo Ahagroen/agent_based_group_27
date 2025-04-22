@@ -3,7 +3,7 @@ from src.datatypes import ActiveRoute, Aircraft,TowingVehicle,Status,TravellingV
 from src.atc import ATC
 from src.ground_control import groundControl
 from src.environment import Airport
-from src.ants_v2 import generate_schedule_tugs_2
+from src.ants_v2 import generate_schedule_tugs
 class Simulation:
     def __init__(self,airport:Airport,max_time,ac_interval:int,taxi_margin:int,loading_margin:int):
         self.airport:Airport = airport
@@ -14,7 +14,7 @@ class Simulation:
         self.ac_waiting:dict[int,Aircraft|None] = airport.populate_waiting_dict()#AC waiting at runway (arriving), or gate (departing)
         self.ac_loading:list[Aircraft] = []#AC that are currently loading - location is inside struct 
         self.tug_waiting:list[TowingVehicle] = [] #empty tugs
-        self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs_2(self.airport,self.atc.ac_schedule,self.ground_control) #full tugs - we might need to add travel down the line
+        self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs(self.airport,self.atc.ac_schedule,self.ground_control) #full tugs - we might need to add travel down the line
         self.num_tugs = len(self.tug_intersection)
         self.tug_travelling:list[TravellingVehicle] = []
         self.current_active_routes:list[ActiveRoute] = []
@@ -101,7 +101,6 @@ class Simulation:
             else:
                 #add collision avoidance here TODO's
                 if i.next_node_list[0][1] > self.time:
-                    print(f"waiting: {i.next_node_list[0][1]} of {self.time}")
                     continue
                 next_node = i.next_node_list.pop(0)[0]
                 old_pos = i.pos
@@ -129,10 +128,10 @@ class Simulation:
             for j in self.tug_travelling:
                 if i != j: 
                     if i.departure_node == j.arrival_node and i.arrival_node == j.departure_node and i.arrival_node != i.departure_node and j.arrival_node != j.departure_node:
-                        print(self.tug_travelling)
-                        logger.warning("Collision! Head On")
-                        self.state = Status.Failed_Collision
-                        break
+                        if i.vehicle.connected_aircraft or j.vehicle.connected_aircraft:
+                            logger.warning("Collision! Head On")
+                            self.state = Status.Failed_Collision
+                            break
         for i in self.tug_travelling:
             if i.remaining_time > 0:
                 i.remaining_time -=1

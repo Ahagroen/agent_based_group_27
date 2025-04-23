@@ -6,7 +6,7 @@ from src.environment import Airport
 from src.ants_v2 import generate_schedule_tugs
 from random import choice
 class Simulation:
-    def __init__(self,airport:Airport,max_time,ac_interval:int,taxi_margin:int,loading_margin:int):
+    def __init__(self,airport:Airport,max_time,ac_interval:int,taxi_margin:int,loading_margin:int,rng_seed:int=-1):
         self.airport:Airport = airport
         self.ground_control:groundControl = groundControl(airport.nodes,max_time)
         nominal_taxi = len(self.ground_control.determine_route(choice(self.airport.dept_runways),choice(self.airport.gates),{},0))*15
@@ -14,7 +14,7 @@ class Simulation:
             logger.warning(f"minimum taxi time is: {nominal_taxi}, current taxi time threshold is: {taxi_margin}")
         else:
             logger.info(f"minimum taxi time is: {nominal_taxi}, current taxi time threshold is: {taxi_margin}")
-        self.atc:ATC = ATC(max_time,ac_interval,loading_margin,airport,self.ground_control)
+        self.atc:ATC = ATC(max_time,ac_interval,loading_margin,airport,self.ground_control,rng_seed)
         self.max_time:int = max_time
         self.taxi_margin = taxi_margin
         self.ac_waiting:dict[int,Aircraft|None] = airport.populate_waiting_dict()#AC waiting at runway (arriving), or gate (departing)

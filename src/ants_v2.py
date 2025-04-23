@@ -28,6 +28,7 @@ def generate_schedule_tugs(airport:Airport,ac_schedule:list,ground_control:groun
     carry_tugs = []
     logger.info(f"Number of tugs: {num_tugs}")
     for i in range(num_tugs):
+        logger.debug(f"Tug schedule for tug {i}: {tugs[i]}")
         carry_tugs.append(TowingVehicle(str(i),109,tugs[i],tugs[i][0].estimated_time-180,None))
     return carry_tugs
 

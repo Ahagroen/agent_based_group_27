@@ -1,14 +1,19 @@
 from copy import deepcopy
-from random import random,choice
+from numpy import random
 from src.datatypes import Aircraft, Schedule
 from loguru import logger
-
+from random import choice,seed
 from src.environment import Airport
 from src.ground_control import groundControl
 
 class ATC():
-    def __init__(self,total_time:int,ac_pace:int,loading_time:int,airport:Airport,ground_control:groundControl):
+    def __init__(self,total_time:int,ac_pace:int,loading_time:int,airport:Airport,ground_control:groundControl,rng_seed:int):
         self.ac_pace = ac_pace
+        if rng_seed != -1:
+            self.random_norm = random.default_rng(rng_seed)
+            seed(rng_seed)
+        else:
+            self.random_norm = random.default_rng()
         self.next_ac_time = ac_pace+self.get_random_shift(self.ac_pace)
         self.gates_list:list = deepcopy(airport.gates)
         self.departure_runways = airport.dept_runways
@@ -19,7 +24,7 @@ class ATC():
         self.ac_schedule:list = self.populate_schedule(total_time,ground_control)
 
     def get_random_shift(self,base)->int:
-        return int(round(random()*(base/5) - (base/10))) #Uniformly distrobuted random noise +-10%
+        return int(round(self.random_norm.normal(0,0.05)*(base/5))) #normally distrobuted random noise +-10%
     
     def add_aircraft(self,current_time):
         if self.next_ac_time-current_time <=0:

@@ -10,6 +10,10 @@ class ImageType(Enum):
     turn = 2
     straight = 3
 
+class Schedule_Algo(Enum):
+    greedy = 0
+    vrp = 1
+    aco = 2
 
 @dataclass
 class Node():

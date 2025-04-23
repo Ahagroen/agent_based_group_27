@@ -112,6 +112,7 @@ def compute_row(ac_schedule, travel_times, start_time,start_node):
 
 def naieve_route(costs_table:dict,ac_schedule_len):
    pass 
+
 def remove_used(times:dict,used_nodes):
     for i in used_nodes:
         times.pop(i)

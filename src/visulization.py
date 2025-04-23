@@ -15,7 +15,7 @@ def seconds_to_watch_format(total_seconds):
 def Run_visualization(x_dim,y_dim,fps,run_time,ac_freq,taxi_margin,loading_time):
     InitWindow(x_dim,y_dim,b"AutoTaxi Simulation")
     SetTargetFPS(fps)
-    airport = Airport("airport_layout.json")
+    airport = Airport("airport_layout.json",(x_dim,y_dim))
     straightaway = LoadTexture(b"images/taxiway_straight.png")
     turns = LoadTexture(b"images/taxiway_corner.png")
     triple_intersection = LoadTexture(b"images/taxiway_3way.png")

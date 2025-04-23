@@ -1,12 +1,12 @@
 from loguru import logger
-from src.datatypes import ActiveRoute, Aircraft,TowingVehicle,Status,TravellingVehicle
+from src.datatypes import ActiveRoute, Aircraft, Schedule_Algo,TowingVehicle,Status,TravellingVehicle
 from src.atc import ATC
 from src.ground_control import groundControl
 from src.environment import Airport
 from src.ants_v2 import generate_schedule_tugs
 from random import choice
 class Simulation:
-    def __init__(self,airport:Airport,max_time,ac_interval:int,taxi_margin:int,loading_margin:int,rng_seed:int=-1):
+    def __init__(self,airport:Airport,max_time,ac_interval:int,taxi_margin:int,loading_margin:int, scheduler:Schedule_Algo,rng_seed:int=-1):
         self.airport:Airport = airport
         self.ground_control:groundControl = groundControl(airport.nodes,max_time)
         nominal_taxi = len(self.ground_control.determine_route(choice(self.airport.dept_runways),choice(self.airport.gates),{},0))*15
@@ -57,6 +57,10 @@ class Simulation:
     def _check_tug_waiting(self):
         """ Checks if a tug has an aircraft ready"""
         for i in self.tug_waiting:
+            if len(i.schedule) == 0:
+                print("Schedule is empty but waiting")
+                self.tug_waiting.remove(i)
+                continue
             if i.pos != i.schedule[0].start_pos:
                 logger.debug(f"{i.name} Went to the wrong place")
                 i.determine_route(self.current_active_routes,self.time,self.ground_control)
@@ -141,6 +145,9 @@ class Simulation:
     def _check_ac_waiting_time(self):
         for i in self.ac_waiting.keys():
             if self.ac_waiting[i]:
+                if i in self.airport.dept_runways:
+                    self.ac_waiting[i] = None
+                    continue
                 if self.ac_waiting[i].direction:# type: ignore #arriving
                     if self.ac_waiting[i].max_travel_time < self.time: # type: ignore
                         logger.debug(f"{self.time}: Aircraft {self.ac_waiting[i].name} at {i} waited too long!")
@@ -212,8 +219,8 @@ class Simulation:
              logger.debug(f"Tug {i.vehicle.name} is travelling between {i.departure_node} and {i.arrival_node}. remaining schedule: {i.vehicle.schedule}")           
 
 
-def run_simulation(airport,run_time,ac_freq,taxi_margin,loading_time):
-    sim = Simulation(airport,run_time,ac_freq,taxi_margin,loading_time)
+def run_simulation(airport,run_time,ac_freq,taxi_margin,loading_time,schedule_algo:Schedule_Algo,rng:int=-1):
+    sim = Simulation(airport,run_time,ac_freq,taxi_margin,loading_time,schedule_algo,rng)
     while sim.state == Status.Running:
         sim.simulation_tick()
     logger.warning(f"Simulation Ended!\nreason: {sim.state}")

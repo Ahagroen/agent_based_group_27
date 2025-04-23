@@ -30,11 +30,11 @@ class ATC():
                     gate = carry.end_pos
                     arr_runway = carry.start_pos
                     dept_runway = carry.dept_runway
+                    next_name = carry.name_ac
                     break
             loading_time = self.loading_margin
             self.loading_margin = self.base_loading_time + self.get_random_shift(self.base_loading_time)
-            self.next_aircraft_name += 1
-            return Aircraft(str(self.next_aircraft_name),gate,dept_runway,True,0,loading_time),arr_runway
+            return Aircraft(str(next_name),gate,dept_runway,True,0,loading_time),arr_runway
         else:
             return None
     def empty_gate(self,aircraft:Aircraft):
@@ -48,6 +48,7 @@ class ATC():
         gates = []
         working_gates_list = self.gates_list
         carry = 0
+        count_vics = 0
         while carry < total_time:
             for i in gates:
                 if i[1] < carry:
@@ -55,13 +56,15 @@ class ATC():
                     working_gates_list.append(i[0])
             carry+=self.ac_pace
             if len(working_gates_list) == 0:
+                logger.warning("Configuration is invalid")
                 continue
             gate = choice(working_gates_list)
             working_gates_list.remove(gate)
-            arr_runway = choice(self.arrival_runways)
+            arr_runway = self.arrival_runways[count_vics%len(self.arrival_runways)]
+            count_vics += 1
             taxi_time = len(gc.determine_route(gate,arr_runway,{},0))*15
             gates.append((gate,carry+taxi_time+self.loading_margin))
             dept_runway = choice(self.departure_runways)
-            output.append(Schedule(carry,arr_runway,gate,dept_runway))
-            output.append(Schedule(carry+taxi_time+self.loading_margin,gate,dept_runway,False))
+            output.append(Schedule(count_vics,carry,arr_runway,gate,dept_runway))
+            output.append(Schedule(count_vics,carry+taxi_time+self.loading_margin,gate,dept_runway,False))
         return output

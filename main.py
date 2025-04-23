@@ -13,7 +13,6 @@ def simulate_data(runs:int):
     airport = Airport("baseline_airport.json")
     carry = []
     for _ in range(runs):
-
         run_time = 8 * 60 * 60             # Length of simulation                           # [s]
         ac_freq = 10 * 60                  # Frequency of aircraft arrival                  # [s]
         taxi_margin = 20 * 60              # Time margin for aircraft to arrive at gate     # [s]

@@ -219,7 +219,7 @@ class Simulation:
              logger.debug(f"Tug {i.vehicle.name} is travelling between {i.departure_node} and {i.arrival_node}. remaining schedule: {i.vehicle.schedule}")           
 
 
-def run_simulation(airport,run_time,ac_freq,taxi_margin,loading_time,schedule_algo:Schedule_Algo,rng:int=-1):
+def run_simulation(airport,run_time,ac_freq,taxi_margin,loading_time,schedule_algo:Schedule_Algo,rng):
     sim = Simulation(airport,run_time,ac_freq,taxi_margin,loading_time,schedule_algo,rng)
     while sim.state == Status.Running:
         sim.simulation_tick()

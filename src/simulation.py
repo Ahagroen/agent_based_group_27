@@ -78,7 +78,7 @@ class Simulation:
                         self.ac_waiting[j] = None  #No longer waiting
                         if aircraft:
                             i.connected_aircraft = aircraft
-                            logger.debug(f"{self.time}: aircraft {i.connected_aircraft.name} picked up at {i.pos} by {i.name} going to {i.connected_aircraft.departure_runway if i.connected_aircraft.departure_runway else i.connected_aircraft.target}")
+                            logger.debug(f"{self.time}: Aircraft {i.connected_aircraft.name} picked up at {i.pos} by tug {i.name} going to {i.connected_aircraft.target if i.connected_aircraft.departure_runway else i.connected_aircraft.departure_runway}")
                         else:
                             raise RuntimeError
                         if len(i.schedule) != 0:
@@ -124,7 +124,7 @@ class Simulation:
                         i.determine_route(self.current_active_routes,self.time,self.ground_control)
                         self.current_active_routes.append(ActiveRoute(self.time,i.pos,i.get_next_pos()))
                     else:
-                        logger.debug(f"{self.time}: {i.name} arrived at {i.pos}. Waiting")
+                        logger.debug(f"{self.time}: tug {i.name} arrived at {i.pos}. Waiting")
                         self.tug_intersection.remove(i)
                         self.tug_waiting.append(i)
             else:

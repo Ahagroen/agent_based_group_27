@@ -12,7 +12,7 @@ def simulate_data(runs:int):
     logger.add("runlog.txt", mode="w", level="DEBUG")
     airport = Airport("baseline_airport.json")
     carry = []
-    for _ in range(runs):
+    for _ in range(1):
         result = run_simulation(airport,480*60,10*60,20*60,30*60,Schedule_Algo.greedy)
         carry.append(result)
     print(f"num successes: {[x[0] for x in carry].count(Status.Success)}, percentage = {[x[0] for x in carry].count(Status.Success)/len(carry)}")

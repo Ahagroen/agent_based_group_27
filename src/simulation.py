@@ -64,7 +64,6 @@ class Simulation:
         """ Checks if a tug has an aircraft ready"""
         for i in self.tug_waiting:
             if len(i.schedule) == 0:
-                print("Schedule is empty but waiting")
                 self.tug_waiting.remove(i)
                 continue
             if i.pos != i.schedule[0].start_pos:

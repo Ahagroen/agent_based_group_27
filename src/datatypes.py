@@ -36,6 +36,7 @@ class Aircraft():
 
 @dataclass
 class Schedule():
+    name_ac:int
     estimated_time:int
     start_pos:int
     end_pos:int

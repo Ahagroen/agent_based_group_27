@@ -9,7 +9,7 @@ def generate_schedule_tugs(airport:Airport,ac_schedule:list,ground_control:groun
     #So from ac_schedule, determine the mission, and the time taken to complete the mission (runway to gate)
     tugs = []
     working_ac = deepcopy(ac_schedule)
-    margin = 350
+    margin = 400
     edge_len = 15
     while len(working_ac) > 0:
         new_tug = []

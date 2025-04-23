@@ -1,0 +1,492 @@
+2025-04-23 09:13:52.645 | INFO     | src.simulation:__init__:16 - minimum taxi time is: 375, current taxi time threshold is: 1200
+2025-04-23 09:13:55.193 | INFO     | src.ants_v2:generate_schedule_tugs:29 - Number of tugs: 2
+2025-04-23 09:13:55.196 | DEBUG    | src.simulation:_add_new_aircraft:42 - 1260: Aircraft 1 arrived at 37
+2025-04-23 09:13:55.196 | DEBUG    | src.simulation:_check_tug_waiting:67 - 1310: aircraft 1 picked up at 37
+2025-04-23 09:13:55.198 | DEBUG    | src.simulation:_check_tug_intersection:98 - 1486: aircraft 1 started loading at 97
+2025-04-23 09:13:55.205 | DEBUG    | src.simulation:_add_new_aircraft:42 - 2343: Aircraft 2 arrived at 38
+2025-04-23 09:13:55.205 | DEBUG    | src.simulation:_check_tug_waiting:67 - 2478: aircraft 2 picked up at 38
+2025-04-23 09:13:55.210 | DEBUG    | src.simulation:_check_tug_intersection:98 - 2686: aircraft 2 started loading at 35
+2025-04-23 09:13:55.216 | DEBUG    | src.simulation:_check_loading:49 - 3177: Aircraft 1 completed loading at 97
+2025-04-23 09:13:55.216 | DEBUG    | src.simulation:_check_tug_waiting:67 - 3177: aircraft 1 picked up at 97
+2025-04-23 09:13:55.221 | DEBUG    | src.simulation:_check_tug_intersection:100 - 3513: aircraft 1 departing from 1
+2025-04-23 09:13:55.228 | DEBUG    | src.simulation:_add_new_aircraft:42 - 3622: Aircraft 3 arrived at 37
+2025-04-23 09:13:55.228 | DEBUG    | src.simulation:_check_tug_waiting:67 - 3622: aircraft 3 picked up at 37
+2025-04-23 09:13:55.236 | DEBUG    | src.simulation:_check_tug_intersection:98 - 3843: aircraft 3 started loading at 34
+2025-04-23 09:13:55.245 | DEBUG    | src.simulation:_check_loading:49 - 4626: Aircraft 2 completed loading at 35
+2025-04-23 09:13:55.246 | DEBUG    | src.simulation:_check_tug_waiting:67 - 4626: aircraft 2 picked up at 35
+2025-04-23 09:13:55.252 | DEBUG    | src.simulation:_add_new_aircraft:42 - 4740: Aircraft 4 arrived at 38
+2025-04-23 09:13:55.252 | DEBUG    | src.simulation:_check_tug_waiting:67 - 4740: aircraft 4 picked up at 38
+2025-04-23 09:13:55.260 | DEBUG    | src.simulation:_check_tug_intersection:98 - 4740: aircraft 4 started loading at 38
+2025-04-23 09:13:55.268 | DEBUG    | src.simulation:_check_tug_intersection:100 - 5026: aircraft 2 departing from 1
+2025-04-23 09:13:55.277 | DEBUG    | src.simulation:_check_loading:49 - 5730: Aircraft 3 completed loading at 34
+2025-04-23 09:13:55.277 | DEBUG    | src.simulation:_check_tug_waiting:67 - 5730: aircraft 3 picked up at 34
+2025-04-23 09:13:55.283 | DEBUG    | src.simulation:_add_new_aircraft:42 - 5829: Aircraft 5 arrived at 37
+2025-04-23 09:13:55.284 | DEBUG    | src.simulation:_check_tug_intersection:100 - 6098: aircraft 3 departing from 1
+2025-04-23 09:13:55.292 | DEBUG    | src.simulation:_check_loading:49 - 6661: Aircraft 4 completed loading at 36
+2025-04-23 09:13:55.292 | DEBUG    | src.simulation:_check_tug_waiting:67 - 6661: aircraft 4 picked up at 36
+2025-04-23 09:13:55.298 | DEBUG    | src.simulation:_add_new_aircraft:42 - 6926: Aircraft 6 arrived at 38
+2025-04-23 09:13:55.298 | DEBUG    | src.simulation:_check_tug_waiting:67 - 6926: aircraft 6 picked up at 38
+2025-04-23 09:13:55.304 | DEBUG    | src.simulation:_check_ac_waiting_time:134 - 7030: Aircraft 5 at 37 waited too long!
+2025-04-23 09:13:55.304 | DEBUG    | src.simulation:dump_state:200 - Tug 0 is travelling between 95 and 1. remaining schedule: [Schedule(name_ac=4, estimated_time=6716, start_pos=36, end_pos=1, dept_runway=False), Schedule(name_ac=5, estimated_time=7976, start_pos=98, end_pos=1, dept_runway=False), Schedule(name_ac=6, estimated_time=9056, start_pos=34, end_pos=1, dept_runway=False), Schedule(name_ac=7, estimated_time=10316, start_pos=35, end_pos=1, dept_runway=False), Schedule(name_ac=8, estimated_time=11516, start_pos=36, end_pos=1, dept_runway=False), Schedule(name_ac=9, estimated_time=12656, start_pos=97, end_pos=1, dept_runway=False), Schedule(name_ac=10, estimated_time=13886, start_pos=35, end_pos=2, dept_runway=False), Schedule(name_ac=11, estimated_time=15176, start_pos=98, end_pos=1, dept_runway=False), Schedule(name_ac=12, estimated_time=16286, start_pos=97, end_pos=1, dept_runway=False), Schedule(name_ac=13, estimated_time=17486, start_pos=34, end_pos=2, dept_runway=False), Schedule(name_ac=14, estimated_time=18686, start_pos=35, end_pos=2, dept_runway=False), Schedule(name_ac=15, estimated_time=19856, start_pos=97, end_pos=2, dept_runway=False), Schedule(name_ac=16, estimated_time=21146, start_pos=98, end_pos=2, dept_runway=False), Schedule(name_ac=17, estimated_time=22286, start_pos=34, end_pos=1, dept_runway=False), Schedule(name_ac=18, estimated_time=23486, start_pos=97, end_pos=1, dept_runway=False), Schedule(name_ac=19, estimated_time=24776, start_pos=98, end_pos=1, dept_runway=False), Schedule(name_ac=20, estimated_time=25856, start_pos=34, end_pos=1, dept_runway=False), Schedule(name_ac=21, estimated_time=27116, start_pos=35, end_pos=2, dept_runway=False), Schedule(name_ac=22, estimated_time=28346, start_pos=98, end_pos=1, dept_runway=False), Schedule(name_ac=23, estimated_time=29486, start_pos=34, end_pos=1, dept_runway=False), Schedule(name_ac=24, estimated_time=30716, start_pos=36, end_pos=1, dept_runway=False)]
+2025-04-23 09:13:55.304 | DEBUG    | src.simulation:dump_state:200 - Tug 1 is travelling between 75 and 25. remaining schedule: [Schedule(name_ac=5, estimated_time=6000, start_pos=37, end_pos=98, dept_runway=1), Schedule(name_ac=6, estimated_time=7200, start_pos=38, end_pos=34, dept_runway=1), Schedule(name_ac=7, estimated_time=8400, start_pos=37, end_pos=35, dept_runway=1), Schedule(name_ac=8, estimated_time=9600, start_pos=38, end_pos=36, dept_runway=1), Schedule(name_ac=9, estimated_time=10800, start_pos=37, end_pos=97, dept_runway=1), Schedule(name_ac=10, estimated_time=12000, start_pos=38, end_pos=35, dept_runway=2), Schedule(name_ac=11, estimated_time=13200, start_pos=37, end_pos=98, dept_runway=1), Schedule(name_ac=12, estimated_time=14400, start_pos=38, end_pos=97, dept_runway=1), Schedule(name_ac=13, estimated_time=15600, start_pos=37, end_pos=34, dept_runway=2), Schedule(name_ac=14, estimated_time=16800, start_pos=38, end_pos=35, dept_runway=2), Schedule(name_ac=15, estimated_time=18000, start_pos=37, end_pos=97, dept_runway=2), Schedule(name_ac=16, estimated_time=19200, start_pos=38, end_pos=98, dept_runway=2), Schedule(name_ac=17, estimated_time=20400, start_pos=37, end_pos=34, dept_runway=1), Schedule(name_ac=18, estimated_time=21600, start_pos=38, end_pos=97, dept_runway=1), Schedule(name_ac=19, estimated_time=22800, start_pos=37, end_pos=98, dept_runway=1), Schedule(name_ac=20, estimated_time=24000, start_pos=38, end_pos=34, dept_runway=1), Schedule(name_ac=21, estimated_time=25200, start_pos=37, end_pos=35, dept_runway=2), Schedule(name_ac=22, estimated_time=26400, start_pos=38, end_pos=98, dept_runway=1), Schedule(name_ac=23, estimated_time=27600, start_pos=37, end_pos=34, dept_runway=1), Schedule(name_ac=24, estimated_time=28800, start_pos=38, end_pos=36, dept_runway=1)]
+2025-04-23 09:13:55.304 | WARNING  | src.simulation:run_simulation:207 - Simulation Ended!
+reason: Status.Failed_Aircraft_Taxi_Time
+2025-04-23 09:13:55.305 | INFO     | src.simulation:__init__:16 - minimum taxi time is: 315, current taxi time threshold is: 1200
+2025-04-23 09:13:57.879 | INFO     | src.ants_v2:generate_schedule_tugs:29 - Number of tugs: 2
+2025-04-23 09:13:57.882 | DEBUG    | src.simulation:_add_new_aircraft:42 - 1307: Aircraft 1 arrived at 37
+2025-04-23 09:13:57.882 | DEBUG    | src.simulation:_check_tug_waiting:67 - 1310: aircraft 1 picked up at 37
+2025-04-23 09:13:57.885 | DEBUG    | src.simulation:_check_tug_intersection:98 - 1550: aircraft 1 started loading at 35
+2025-04-23 09:13:57.892 | DEBUG    | src.simulation:_add_new_aircraft:42 - 2611: Aircraft 2 arrived at 38
+2025-04-23 09:13:57.892 | DEBUG    | src.simulation:_check_tug_waiting:67 - 2611: aircraft 2 picked up at 38
+2025-04-23 09:13:57.897 | DEBUG    | src.simulation:_check_tug_intersection:98 - 2851: aircraft 2 started loading at 36
+2025-04-23 09:13:57.903 | DEBUG    | src.simulation:_check_loading:49 - 3412: Aircraft 1 completed loading at 35
+2025-04-23 09:13:57.903 | DEBUG    | src.simulation:_check_tug_waiting:67 - 3412: aircraft 1 picked up at 35
+2025-04-23 09:13:57.909 | DEBUG    | src.simulation:_add_new_aircraft:42 - 3728: Aircraft 3 arrived at 37
+2025-04-23 09:13:57.909 | DEBUG    | src.simulation:_check_tug_waiting:67 - 3728: aircraft 3 picked up at 37
+2025-04-23 09:13:57.916 | DEBUG    | src.simulation:_check_tug_intersection:100 - 3783: aircraft 1 departing from 2
+2025-04-23 09:13:57.924 | DEBUG    | src.simulation:_check_tug_intersection:98 - 4051: aircraft 3 started loading at 98
+2025-04-23 09:13:57.933 | DEBUG    | src.simulation:_check_loading:49 - 4771: Aircraft 2 completed loading at 36
+2025-04-23 09:13:57.933 | DEBUG    | src.simulation:_check_tug_waiting:67 - 4771: aircraft 2 picked up at 36
+2025-04-23 09:13:57.940 | DEBUG    | src.simulation:_add_new_aircraft:42 - 4959: Aircraft 4 arrived at 38
+2025-04-23 09:13:57.940 | DEBUG    | src.simulation:_check_tug_waiting:67 - 4959: aircraft 4 picked up at 38
+2025-04-23 09:13:57.948 | DEBUG    | src.simulation:_check_tug_intersection:100 - 5116: aircraft 2 departing from 2
+2025-04-23 09:13:57.957 | DEBUG    | src.simulation:_check_tug_intersection:98 - 5146: aircraft 4 started loading at 34
+2025-04-23 09:13:57.968 | DEBUG    | src.simulation:_check_loading:49 - 5677: Aircraft 3 completed loading at 98
+2025-04-23 09:13:57.968 | DEBUG    | src.simulation:_check_tug_waiting:67 - 5677: aircraft 3 picked up at 98
+2025-04-23 09:13:57.975 | DEBUG    | src.simulation:_check_tug_intersection:100 - 5981: aircraft 3 departing from 2
+2025-04-23 09:13:57.983 | DEBUG    | src.simulation:_add_new_aircraft:42 - 6174: Aircraft 5 arrived at 37
+2025-04-23 09:13:57.983 | DEBUG    | src.simulation:_check_tug_waiting:67 - 6174: aircraft 5 picked up at 37
+2025-04-23 09:13:57.992 | DEBUG    | src.simulation:_check_tug_intersection:98 - 6428: aircraft 5 started loading at 97
+2025-04-23 09:13:58.002 | DEBUG    | src.simulation:_check_loading:49 - 6850: Aircraft 4 completed loading at 34
+2025-04-23 09:13:58.002 | DEBUG    | src.simulation:_check_tug_waiting:67 - 6850: aircraft 4 picked up at 34
+2025-04-23 09:13:58.011 | DEBUG    | src.simulation:_check_tug_intersection:100 - 7218: aircraft 4 departing from 1
+2025-04-23 09:13:58.019 | DEBUG    | src.simulation:_add_new_aircraft:42 - 7461: Aircraft 6 arrived at 38
+2025-04-23 09:13:58.019 | DEBUG    | src.simulation:_check_tug_waiting:67 - 7461: aircraft 6 picked up at 38
+2025-04-23 09:13:58.028 | DEBUG    | src.simulation:_check_tug_intersection:98 - 7739: aircraft 6 started loading at 98
+2025-04-23 09:13:58.038 | DEBUG    | src.simulation:_check_loading:49 - 8358: Aircraft 5 completed loading at 97
+2025-04-23 09:13:58.038 | DEBUG    | src.simulation:_check_tug_waiting:67 - 8358: aircraft 5 picked up at 97
+2025-04-23 09:13:58.046 | DEBUG    | src.simulation:_check_tug_intersection:100 - 8694: aircraft 5 departing from 1
+2025-04-23 09:13:58.052 | DEBUG    | src.simulation:_add_new_aircraft:42 - 8773: Aircraft 7 arrived at 37
+2025-04-23 09:13:58.052 | DEBUG    | src.simulation:_check_tug_waiting:67 - 8773: aircraft 7 picked up at 37
+2025-04-23 09:13:58.060 | DEBUG    | src.simulation:_check_tug_intersection:98 - 9062: aircraft 7 started loading at 36
+2025-04-23 09:13:58.068 | DEBUG    | src.simulation:_check_loading:49 - 9415: Aircraft 6 completed loading at 98
+2025-04-23 09:13:58.068 | DEBUG    | src.simulation:_check_tug_waiting:67 - 9415: aircraft 6 picked up at 98
+2025-04-23 09:13:58.077 | DEBUG    | src.simulation:_check_tug_intersection:100 - 9751: aircraft 6 departing from 1
+2025-04-23 09:13:58.084 | DEBUG    | src.simulation:_add_new_aircraft:42 - 9899: Aircraft 8 arrived at 38
+2025-04-23 09:13:58.084 | DEBUG    | src.simulation:_check_tug_waiting:67 - 9899: aircraft 8 picked up at 38
+2025-04-23 09:13:58.094 | DEBUG    | src.simulation:_check_tug_intersection:98 - 10120: aircraft 8 started loading at 35
+2025-04-23 09:13:58.104 | DEBUG    | src.simulation:_check_loading:49 - 10686: Aircraft 7 completed loading at 36
+2025-04-23 09:13:58.104 | DEBUG    | src.simulation:_check_tug_waiting:67 - 10686: aircraft 7 picked up at 36
+2025-04-23 09:13:58.113 | DEBUG    | src.simulation:_check_tug_intersection:100 - 11054: aircraft 7 departing from 1
+2025-04-23 09:13:58.122 | DEBUG    | src.simulation:_add_new_aircraft:42 - 11101: Aircraft 9 arrived at 37
+2025-04-23 09:13:58.122 | DEBUG    | src.simulation:_check_tug_waiting:67 - 11101: aircraft 9 picked up at 37
+2025-04-23 09:13:58.135 | DEBUG    | src.simulation:_check_tug_intersection:98 - 11424: aircraft 9 started loading at 98
+2025-04-23 09:13:58.145 | DEBUG    | src.simulation:_check_loading:49 - 12091: Aircraft 8 completed loading at 35
+2025-04-23 09:13:58.145 | DEBUG    | src.simulation:_check_tug_waiting:67 - 12091: aircraft 8 picked up at 35
+2025-04-23 09:13:58.153 | DEBUG    | src.simulation:_add_new_aircraft:42 - 12254: Aircraft 10 arrived at 38
+2025-04-23 09:13:58.153 | DEBUG    | src.simulation:_check_tug_waiting:67 - 12254: aircraft 10 picked up at 38
+2025-04-23 09:13:58.163 | DEBUG    | src.simulation:_check_tug_intersection:98 - 12475: aircraft 10 started loading at 97
+2025-04-23 09:13:58.172 | DEBUG    | src.simulation:_check_tug_intersection:100 - 12505: aircraft 8 departing from 1
+2025-04-23 09:13:58.182 | DEBUG    | src.simulation:_check_loading:49 - 13196: Aircraft 9 completed loading at 98
+2025-04-23 09:13:58.183 | DEBUG    | src.simulation:_check_tug_waiting:67 - 13196: aircraft 9 picked up at 98
+2025-04-23 09:13:58.190 | DEBUG    | src.simulation:_check_tug_intersection:100 - 13532: aircraft 9 departing from 1
+2025-04-23 09:13:58.198 | DEBUG    | src.simulation:_add_new_aircraft:42 - 13553: Aircraft 11 arrived at 37
+2025-04-23 09:13:58.198 | DEBUG    | src.simulation:_check_tug_waiting:67 - 13553: aircraft 11 picked up at 37
+2025-04-23 09:13:58.207 | DEBUG    | src.simulation:_check_tug_intersection:98 - 13842: aircraft 11 started loading at 36
+2025-04-23 09:13:58.217 | DEBUG    | src.simulation:_check_loading:49 - 14303: Aircraft 10 completed loading at 97
+2025-04-23 09:13:58.217 | DEBUG    | src.simulation:_check_tug_waiting:67 - 14303: aircraft 10 picked up at 97
+2025-04-23 09:13:58.225 | DEBUG    | src.simulation:_check_tug_intersection:100 - 14639: aircraft 10 departing from 1
+2025-04-23 09:13:58.233 | DEBUG    | src.simulation:_add_new_aircraft:42 - 14750: Aircraft 12 arrived at 38
+2025-04-23 09:13:58.233 | DEBUG    | src.simulation:_check_tug_waiting:67 - 14750: aircraft 12 picked up at 38
+2025-04-23 09:13:58.243 | DEBUG    | src.simulation:_check_tug_intersection:98 - 15039: aircraft 12 started loading at 98
+2025-04-23 09:13:58.253 | DEBUG    | src.simulation:_check_loading:49 - 15680: Aircraft 11 completed loading at 36
+2025-04-23 09:13:58.253 | DEBUG    | src.simulation:_check_tug_waiting:67 - 15680: aircraft 11 picked up at 36
+2025-04-23 09:13:58.260 | DEBUG    | src.simulation:_add_new_aircraft:42 - 15969: Aircraft 13 arrived at 37
+2025-04-23 09:13:58.260 | DEBUG    | src.simulation:_check_tug_waiting:67 - 15969: aircraft 13 picked up at 37
+2025-04-23 09:13:58.268 | DEBUG    | src.simulation:_check_tug_intersection:100 - 16018: aircraft 11 departing from 2
+2025-04-23 09:13:58.277 | DEBUG    | src.simulation:_check_tug_intersection:98 - 16156: aircraft 13 started loading at 97
+2025-04-23 09:13:58.286 | DEBUG    | src.simulation:_check_loading:49 - 16685: Aircraft 12 completed loading at 98
+2025-04-23 09:13:58.286 | DEBUG    | src.simulation:_check_tug_waiting:67 - 16685: aircraft 12 picked up at 98
+2025-04-23 09:13:58.293 | DEBUG    | src.simulation:_check_tug_intersection:100 - 16989: aircraft 12 departing from 2
+2025-04-23 09:13:58.301 | DEBUG    | src.simulation:_add_new_aircraft:42 - 17213: Aircraft 14 arrived at 38
+2025-04-23 09:13:58.301 | DEBUG    | src.simulation:_check_tug_waiting:67 - 17213: aircraft 14 picked up at 38
+2025-04-23 09:13:58.310 | DEBUG    | src.simulation:_check_tug_intersection:98 - 17463: aircraft 14 started loading at 36
+2025-04-23 09:13:58.320 | DEBUG    | src.simulation:_check_loading:49 - 18008: Aircraft 13 completed loading at 97
+2025-04-23 09:13:58.320 | DEBUG    | src.simulation:_check_tug_waiting:67 - 18008: aircraft 13 picked up at 97
+2025-04-23 09:13:58.326 | DEBUG    | src.simulation:_add_new_aircraft:42 - 18326: Aircraft 15 arrived at 37
+2025-04-23 09:13:58.326 | DEBUG    | src.simulation:_check_tug_waiting:67 - 18326: aircraft 15 picked up at 37
+2025-04-23 09:13:58.334 | DEBUG    | src.simulation:_check_tug_intersection:100 - 18345: aircraft 13 departing from 1
+2025-04-23 09:13:58.344 | DEBUG    | src.simulation:_check_tug_intersection:98 - 18649: aircraft 15 started loading at 98
+2025-04-23 09:13:58.354 | DEBUG    | src.simulation:_check_loading:49 - 19128: Aircraft 14 completed loading at 36
+2025-04-23 09:13:58.354 | DEBUG    | src.simulation:_check_tug_waiting:67 - 19128: aircraft 14 picked up at 36
+2025-04-23 09:13:58.363 | DEBUG    | src.simulation:_check_tug_intersection:100 - 19496: aircraft 14 departing from 1
+2025-04-23 09:13:58.371 | DEBUG    | src.simulation:_add_new_aircraft:42 - 19514: Aircraft 16 arrived at 38
+2025-04-23 09:13:58.371 | DEBUG    | src.simulation:_check_tug_waiting:67 - 19514: aircraft 16 picked up at 38
+2025-04-23 09:13:58.380 | DEBUG    | src.simulation:_check_tug_intersection:98 - 19701: aircraft 16 started loading at 34
+2025-04-23 09:13:58.392 | DEBUG    | src.simulation:_check_loading:49 - 20466: Aircraft 15 completed loading at 98
+2025-04-23 09:13:58.392 | DEBUG    | src.simulation:_check_tug_waiting:67 - 20466: aircraft 15 picked up at 98
+2025-04-23 09:13:58.398 | DEBUG    | src.simulation:_add_new_aircraft:42 - 20632: Aircraft 17 arrived at 37
+2025-04-23 09:13:58.398 | DEBUG    | src.simulation:_check_tug_waiting:67 - 20632: aircraft 17 picked up at 37
+2025-04-23 09:13:58.405 | DEBUG    | src.simulation:_check_tug_intersection:100 - 20778: aircraft 15 departing from 2
+2025-04-23 09:13:58.414 | DEBUG    | src.simulation:_check_tug_intersection:98 - 20887: aircraft 17 started loading at 35
+2025-04-23 09:13:58.425 | DEBUG    | src.simulation:_check_loading:49 - 21360: Aircraft 16 completed loading at 34
+2025-04-23 09:13:58.425 | DEBUG    | src.simulation:_check_tug_waiting:67 - 21360: aircraft 16 picked up at 34
+2025-04-23 09:13:58.433 | DEBUG    | src.simulation:_check_tug_intersection:100 - 21760: aircraft 16 departing from 2
+2025-04-23 09:13:58.442 | DEBUG    | src.simulation:_add_new_aircraft:42 - 21855: Aircraft 18 arrived at 38
+2025-04-23 09:13:58.442 | DEBUG    | src.simulation:_check_tug_waiting:67 - 21855: aircraft 18 picked up at 38
+2025-04-23 09:13:58.452 | DEBUG    | src.simulation:_check_tug_intersection:98 - 22076: aircraft 18 started loading at 97
+2025-04-23 09:13:58.463 | DEBUG    | src.simulation:_check_loading:49 - 22689: Aircraft 17 completed loading at 35
+2025-04-23 09:13:58.463 | DEBUG    | src.simulation:_check_tug_waiting:67 - 22689: aircraft 17 picked up at 35
+2025-04-23 09:13:58.470 | DEBUG    | src.simulation:_add_new_aircraft:42 - 23012: Aircraft 19 arrived at 37
+2025-04-23 09:13:58.470 | DEBUG    | src.simulation:_check_tug_waiting:67 - 23012: aircraft 19 picked up at 37
+2025-04-23 09:13:58.479 | DEBUG    | src.simulation:_check_tug_intersection:100 - 23093: aircraft 17 departing from 1
+2025-04-23 09:13:58.488 | DEBUG    | src.simulation:_check_tug_intersection:98 - 23233: aircraft 19 started loading at 34
+2025-04-23 09:13:58.497 | DEBUG    | src.simulation:_check_loading:49 - 23956: Aircraft 18 completed loading at 97
+2025-04-23 09:13:58.497 | DEBUG    | src.simulation:_check_tug_waiting:67 - 23956: aircraft 18 picked up at 97
+2025-04-23 09:13:58.504 | DEBUG    | src.simulation:_add_new_aircraft:42 - 24315: Aircraft 20 arrived at 38
+2025-04-23 09:13:58.504 | DEBUG    | src.simulation:_check_tug_waiting:67 - 24315: aircraft 20 picked up at 38
+2025-04-23 09:13:58.511 | DEBUG    | src.simulation:_check_tug_intersection:100 - 24324: aircraft 18 departing from 2
+2025-04-23 09:13:58.521 | DEBUG    | src.simulation:_check_tug_intersection:98 - 24604: aircraft 20 started loading at 98
+2025-04-23 09:13:58.531 | DEBUG    | src.simulation:_check_loading:49 - 24885: Aircraft 19 completed loading at 34
+2025-04-23 09:13:58.531 | DEBUG    | src.simulation:_check_tug_waiting:67 - 24885: aircraft 19 picked up at 34
+2025-04-23 09:13:58.541 | DEBUG    | src.simulation:_check_tug_intersection:100 - 25256: aircraft 19 departing from 1
+2025-04-23 09:13:58.550 | DEBUG    | src.simulation:_add_new_aircraft:42 - 25578: Aircraft 21 arrived at 37
+2025-04-23 09:13:58.550 | DEBUG    | src.simulation:_check_tug_waiting:67 - 25578: aircraft 21 picked up at 37
+2025-04-23 09:13:58.560 | DEBUG    | src.simulation:_check_tug_intersection:98 - 25851: aircraft 21 started loading at 36
+2025-04-23 09:13:58.570 | DEBUG    | src.simulation:_check_loading:49 - 26231: Aircraft 20 completed loading at 98
+2025-04-23 09:13:58.570 | DEBUG    | src.simulation:_check_tug_waiting:67 - 26231: aircraft 20 picked up at 98
+2025-04-23 09:13:58.579 | DEBUG    | src.simulation:_check_tug_intersection:100 - 26567: aircraft 20 departing from 1
+2025-04-23 09:13:58.587 | DEBUG    | src.simulation:_add_new_aircraft:42 - 26875: Aircraft 22 arrived at 38
+2025-04-23 09:13:58.587 | DEBUG    | src.simulation:_check_tug_waiting:67 - 26875: aircraft 22 picked up at 38
+2025-04-23 09:13:58.595 | DEBUG    | src.simulation:_check_tug_intersection:98 - 27087: aircraft 22 started loading at 35
+2025-04-23 09:13:58.603 | DEBUG    | src.simulation:_check_loading:49 - 27473: Aircraft 21 completed loading at 36
+2025-04-23 09:13:58.603 | DEBUG    | src.simulation:_check_tug_waiting:67 - 27473: aircraft 21 picked up at 36
+2025-04-23 09:13:58.611 | DEBUG    | src.simulation:_check_tug_intersection:100 - 27809: aircraft 21 departing from 2
+2025-04-23 09:13:58.619 | DEBUG    | src.simulation:_add_new_aircraft:42 - 28082: Aircraft 23 arrived at 37
+2025-04-23 09:13:58.619 | DEBUG    | src.simulation:_check_tug_waiting:67 - 28082: aircraft 23 picked up at 37
+2025-04-23 09:13:58.627 | DEBUG    | src.simulation:_check_tug_intersection:98 - 28393: aircraft 23 started loading at 98
+2025-04-23 09:13:58.636 | WARNING  | src.simulation:run_simulation:207 - Simulation Ended!
+reason: Status.Success
+2025-04-23 09:13:58.637 | INFO     | src.simulation:__init__:16 - minimum taxi time is: 375, current taxi time threshold is: 1200
+2025-04-23 09:14:01.253 | INFO     | src.ants_v2:generate_schedule_tugs:29 - Number of tugs: 2
+2025-04-23 09:14:01.256 | DEBUG    | src.simulation:_add_new_aircraft:42 - 1130: Aircraft 1 arrived at 37
+2025-04-23 09:14:01.256 | DEBUG    | src.simulation:_check_tug_waiting:67 - 1310: aircraft 1 picked up at 37
+2025-04-23 09:14:01.259 | DEBUG    | src.simulation:_check_tug_intersection:98 - 1550: aircraft 1 started loading at 35
+2025-04-23 09:14:01.266 | DEBUG    | src.simulation:_add_new_aircraft:42 - 2347: Aircraft 2 arrived at 38
+2025-04-23 09:14:01.266 | DEBUG    | src.simulation:_check_tug_waiting:67 - 2478: aircraft 2 picked up at 38
+2025-04-23 09:14:01.272 | DEBUG    | src.simulation:_check_tug_intersection:98 - 2686: aircraft 2 started loading at 97
+2025-04-23 09:14:01.279 | DEBUG    | src.simulation:_check_loading:49 - 3516: Aircraft 1 completed loading at 35
+2025-04-23 09:14:01.279 | DEBUG    | src.simulation:_check_tug_waiting:67 - 3516: aircraft 1 picked up at 35
+2025-04-23 09:14:01.284 | DEBUG    | src.simulation:_add_new_aircraft:42 - 3610: Aircraft 3 arrived at 37
+2025-04-23 09:14:01.284 | DEBUG    | src.simulation:_check_tug_waiting:67 - 3610: aircraft 3 picked up at 37
+2025-04-23 09:14:01.291 | DEBUG    | src.simulation:_check_tug_intersection:98 - 3933: aircraft 3 started loading at 98
+2025-04-23 09:14:01.299 | DEBUG    | src.simulation:_check_tug_intersection:100 - 3935: aircraft 1 departing from 1
+2025-04-23 09:14:01.308 | DEBUG    | src.simulation:_check_loading:49 - 4545: Aircraft 2 completed loading at 97
+2025-04-23 09:14:01.308 | DEBUG    | src.simulation:_check_tug_waiting:67 - 4545: aircraft 2 picked up at 97
+2025-04-23 09:14:01.316 | DEBUG    | src.simulation:_add_new_aircraft:42 - 4861: Aircraft 4 arrived at 38
+2025-04-23 09:14:01.316 | DEBUG    | src.simulation:_check_tug_waiting:67 - 4861: aircraft 4 picked up at 38
+2025-04-23 09:14:01.324 | DEBUG    | src.simulation:_check_tug_intersection:100 - 4916: aircraft 2 departing from 2
+2025-04-23 09:14:01.333 | DEBUG    | src.simulation:_check_tug_intersection:98 - 5082: aircraft 4 started loading at 35
+2025-04-23 09:14:01.345 | DEBUG    | src.simulation:_check_loading:49 - 5845: Aircraft 3 completed loading at 98
+2025-04-23 09:14:01.345 | DEBUG    | src.simulation:_check_tug_waiting:67 - 5845: aircraft 3 picked up at 98
+2025-04-23 09:14:01.351 | DEBUG    | src.simulation:_add_new_aircraft:42 - 5954: Aircraft 5 arrived at 37
+2025-04-23 09:14:01.351 | DEBUG    | src.simulation:_check_tug_waiting:67 - 5954: aircraft 5 picked up at 37
+2025-04-23 09:14:01.359 | DEBUG    | src.simulation:_check_tug_intersection:100 - 6195: aircraft 3 departing from 1
+2025-04-23 09:14:01.369 | DEBUG    | src.simulation:_check_tug_intersection:98 - 6243: aircraft 5 started loading at 36
+2025-04-23 09:14:01.380 | DEBUG    | src.simulation:_check_loading:49 - 6959: Aircraft 4 completed loading at 35
+2025-04-23 09:14:01.380 | DEBUG    | src.simulation:_check_tug_waiting:67 - 6959: aircraft 4 picked up at 35
+2025-04-23 09:14:01.388 | DEBUG    | src.simulation:_add_new_aircraft:42 - 7267: Aircraft 6 arrived at 38
+2025-04-23 09:14:01.388 | DEBUG    | src.simulation:_check_tug_waiting:67 - 7267: aircraft 6 picked up at 38
+2025-04-23 09:14:01.397 | DEBUG    | src.simulation:_check_tug_intersection:100 - 7364: aircraft 4 departing from 1
+2025-04-23 09:14:01.408 | DEBUG    | src.simulation:_check_tug_intersection:98 - 7556: aircraft 6 started loading at 98
+2025-04-23 09:14:01.421 | DEBUG    | src.simulation:_check_loading:49 - 8136: Aircraft 5 completed loading at 36
+2025-04-23 09:14:01.421 | DEBUG    | src.simulation:_check_tug_waiting:67 - 8136: aircraft 5 picked up at 36
+2025-04-23 09:14:01.428 | DEBUG    | src.simulation:_add_new_aircraft:42 - 8373: Aircraft 7 arrived at 37
+2025-04-23 09:14:01.428 | DEBUG    | src.simulation:_check_tug_waiting:67 - 8373: aircraft 7 picked up at 37
+2025-04-23 09:14:01.437 | DEBUG    | src.simulation:_check_tug_intersection:100 - 8512: aircraft 5 departing from 1
+2025-04-23 09:14:01.446 | DEBUG    | src.simulation:_check_tug_intersection:98 - 8560: aircraft 7 started loading at 97
+2025-04-23 09:14:01.458 | DEBUG    | src.simulation:_check_loading:49 - 9258: Aircraft 6 completed loading at 98
+2025-04-23 09:14:01.458 | DEBUG    | src.simulation:_check_tug_waiting:67 - 9258: aircraft 6 picked up at 98
+2025-04-23 09:14:01.466 | DEBUG    | src.simulation:_check_tug_intersection:100 - 9562: aircraft 6 departing from 2
+2025-04-23 09:14:01.473 | DEBUG    | src.simulation:_add_new_aircraft:42 - 9649: Aircraft 8 arrived at 38
+2025-04-23 09:14:01.473 | DEBUG    | src.simulation:_check_tug_waiting:67 - 9649: aircraft 8 picked up at 38
+2025-04-23 09:14:01.482 | DEBUG    | src.simulation:_check_tug_intersection:98 - 9904: aircraft 8 started loading at 36
+2025-04-23 09:14:01.492 | DEBUG    | src.simulation:_check_loading:49 - 10537: Aircraft 7 completed loading at 97
+2025-04-23 09:14:01.492 | DEBUG    | src.simulation:_check_tug_waiting:67 - 10537: aircraft 7 picked up at 97
+2025-04-23 09:14:01.499 | DEBUG    | src.simulation:_add_new_aircraft:42 - 10859: Aircraft 9 arrived at 37
+2025-04-23 09:14:01.499 | DEBUG    | src.simulation:_check_tug_waiting:67 - 10859: aircraft 9 picked up at 37
+2025-04-23 09:14:01.507 | DEBUG    | src.simulation:_check_tug_intersection:100 - 10873: aircraft 7 departing from 1
+2025-04-23 09:14:01.517 | DEBUG    | src.simulation:_check_tug_intersection:98 - 11182: aircraft 9 started loading at 98
+2025-04-23 09:14:01.527 | DEBUG    | src.simulation:_check_loading:49 - 11710: Aircraft 8 completed loading at 36
+2025-04-23 09:14:01.527 | DEBUG    | src.simulation:_check_tug_waiting:67 - 11710: aircraft 8 picked up at 36
+2025-04-23 09:14:01.535 | DEBUG    | src.simulation:_check_tug_intersection:100 - 12078: aircraft 8 departing from 1
+2025-04-23 09:14:01.543 | DEBUG    | src.simulation:_add_new_aircraft:42 - 12149: Aircraft 10 arrived at 38
+2025-04-23 09:14:01.543 | DEBUG    | src.simulation:_check_tug_waiting:67 - 12149: aircraft 10 picked up at 38
+2025-04-23 09:14:01.552 | DEBUG    | src.simulation:_check_tug_intersection:98 - 12370: aircraft 10 started loading at 35
+2025-04-23 09:14:01.562 | DEBUG    | src.simulation:_check_loading:49 - 12889: Aircraft 9 completed loading at 98
+2025-04-23 09:14:01.562 | DEBUG    | src.simulation:_check_tug_waiting:67 - 12889: aircraft 9 picked up at 98
+2025-04-23 09:14:01.570 | DEBUG    | src.simulation:_check_tug_intersection:100 - 13225: aircraft 9 departing from 1
+2025-04-23 09:14:01.578 | DEBUG    | src.simulation:_add_new_aircraft:42 - 13377: Aircraft 11 arrived at 37
+2025-04-23 09:14:01.578 | DEBUG    | src.simulation:_check_tug_waiting:67 - 13377: aircraft 11 picked up at 37
+2025-04-23 09:14:01.589 | DEBUG    | src.simulation:_check_tug_intersection:98 - 13665: aircraft 11 started loading at 34
+2025-04-23 09:14:01.598 | DEBUG    | src.simulation:_check_loading:49 - 14135: Aircraft 10 completed loading at 35
+2025-04-23 09:14:01.598 | DEBUG    | src.simulation:_check_tug_waiting:67 - 14135: aircraft 10 picked up at 35
+2025-04-23 09:14:01.606 | DEBUG    | src.simulation:_check_tug_intersection:100 - 14503: aircraft 10 departing from 2
+2025-04-23 09:14:01.615 | DEBUG    | src.simulation:_add_new_aircraft:42 - 14609: Aircraft 12 arrived at 38
+2025-04-23 09:14:01.615 | DEBUG    | src.simulation:_check_tug_waiting:67 - 14609: aircraft 12 picked up at 38
+2025-04-23 09:14:01.626 | DEBUG    | src.simulation:_check_tug_intersection:98 - 14864: aircraft 12 started loading at 36
+2025-04-23 09:14:01.636 | DEBUG    | src.simulation:_check_loading:49 - 15600: Aircraft 11 completed loading at 34
+2025-04-23 09:14:01.636 | DEBUG    | src.simulation:_check_tug_waiting:67 - 15600: aircraft 11 picked up at 34
+2025-04-23 09:14:01.644 | DEBUG    | src.simulation:_add_new_aircraft:42 - 15780: Aircraft 13 arrived at 37
+2025-04-23 09:14:01.644 | DEBUG    | src.simulation:_check_tug_waiting:67 - 15780: aircraft 13 picked up at 37
+2025-04-23 09:14:01.653 | DEBUG    | src.simulation:_check_tug_intersection:98 - 15967: aircraft 13 started loading at 97
+2025-04-23 09:14:01.660 | DEBUG    | src.simulation:_check_tug_intersection:100 - 15979: aircraft 11 departing from 1
+2025-04-23 09:14:01.670 | DEBUG    | src.simulation:_check_loading:49 - 16486: Aircraft 12 completed loading at 36
+2025-04-23 09:14:01.670 | DEBUG    | src.simulation:_check_tug_waiting:67 - 16486: aircraft 12 picked up at 36
+2025-04-23 09:14:01.678 | DEBUG    | src.simulation:_check_tug_intersection:100 - 16822: aircraft 12 departing from 2
+2025-04-23 09:14:01.686 | DEBUG    | src.simulation:_add_new_aircraft:42 - 17071: Aircraft 14 arrived at 38
+2025-04-23 09:14:01.686 | DEBUG    | src.simulation:_check_tug_waiting:67 - 17071: aircraft 14 picked up at 38
+2025-04-23 09:14:01.695 | DEBUG    | src.simulation:_check_tug_intersection:98 - 17255: aircraft 14 started loading at 34
+2025-04-23 09:14:01.705 | DEBUG    | src.simulation:_check_loading:49 - 17854: Aircraft 13 completed loading at 97
+2025-04-23 09:14:01.705 | DEBUG    | src.simulation:_check_tug_waiting:67 - 17854: aircraft 13 picked up at 97
+2025-04-23 09:14:01.711 | DEBUG    | src.simulation:_check_tug_intersection:100 - 18190: aircraft 13 departing from 1
+2025-04-23 09:14:01.719 | DEBUG    | src.simulation:_add_new_aircraft:42 - 18262: Aircraft 15 arrived at 37
+2025-04-23 09:14:01.719 | DEBUG    | src.simulation:_check_tug_waiting:67 - 18262: aircraft 15 picked up at 37
+2025-04-23 09:14:01.728 | DEBUG    | src.simulation:_check_tug_intersection:98 - 18517: aircraft 15 started loading at 35
+2025-04-23 09:14:01.736 | DEBUG    | src.simulation:_check_loading:49 - 19081: Aircraft 14 completed loading at 34
+2025-04-23 09:14:01.737 | DEBUG    | src.simulation:_check_tug_waiting:67 - 19081: aircraft 14 picked up at 34
+2025-04-23 09:14:01.744 | DEBUG    | src.simulation:_check_tug_intersection:100 - 19481: aircraft 14 departing from 2
+2025-04-23 09:14:01.752 | DEBUG    | src.simulation:_add_new_aircraft:42 - 19538: Aircraft 16 arrived at 38
+2025-04-23 09:14:01.752 | DEBUG    | src.simulation:_check_tug_waiting:67 - 19538: aircraft 16 picked up at 38
+2025-04-23 09:14:01.763 | DEBUG    | src.simulation:_check_tug_intersection:98 - 19793: aircraft 16 started loading at 36
+2025-04-23 09:14:01.773 | DEBUG    | src.simulation:_check_loading:49 - 20262: Aircraft 15 completed loading at 35
+2025-04-23 09:14:01.773 | DEBUG    | src.simulation:_check_tug_waiting:67 - 20262: aircraft 15 picked up at 35
+2025-04-23 09:14:01.782 | DEBUG    | src.simulation:_check_tug_intersection:100 - 20630: aircraft 15 departing from 2
+2025-04-23 09:14:01.790 | DEBUG    | src.simulation:_add_new_aircraft:42 - 20747: Aircraft 17 arrived at 37
+2025-04-23 09:14:01.790 | DEBUG    | src.simulation:_check_tug_waiting:67 - 20747: aircraft 17 picked up at 37
+2025-04-23 09:14:01.801 | DEBUG    | src.simulation:_check_tug_intersection:98 - 20968: aircraft 17 started loading at 34
+2025-04-23 09:14:01.810 | DEBUG    | src.simulation:_check_loading:49 - 21526: Aircraft 16 completed loading at 36
+2025-04-23 09:14:01.810 | DEBUG    | src.simulation:_check_tug_waiting:67 - 21526: aircraft 16 picked up at 36
+2025-04-23 09:14:01.818 | DEBUG    | src.simulation:_check_tug_intersection:100 - 21894: aircraft 16 departing from 1
+2025-04-23 09:14:01.826 | DEBUG    | src.simulation:_add_new_aircraft:42 - 21906: Aircraft 18 arrived at 38
+2025-04-23 09:14:01.826 | DEBUG    | src.simulation:_check_tug_waiting:67 - 21906: aircraft 18 picked up at 38
+2025-04-23 09:14:01.835 | DEBUG    | src.simulation:_check_tug_intersection:98 - 22127: aircraft 18 started loading at 97
+2025-04-23 09:14:01.844 | DEBUG    | src.simulation:_check_loading:49 - 22906: Aircraft 17 completed loading at 34
+2025-04-23 09:14:01.844 | DEBUG    | src.simulation:_check_tug_waiting:67 - 22906: aircraft 17 picked up at 34
+2025-04-23 09:14:01.851 | DEBUG    | src.simulation:_add_new_aircraft:42 - 23083: Aircraft 19 arrived at 37
+2025-04-23 09:14:01.851 | DEBUG    | src.simulation:_check_tug_intersection:100 - 23306: aircraft 17 departing from 2
+2025-04-23 09:14:01.859 | DEBUG    | src.simulation:_check_loading:49 - 23815: Aircraft 18 completed loading at 97
+2025-04-23 09:14:01.859 | DEBUG    | src.simulation:_check_tug_waiting:67 - 23815: aircraft 18 picked up at 97
+2025-04-23 09:14:01.864 | DEBUG    | src.simulation:_check_tug_intersection:98 - 23991: aircraft 18 started loading at 36
+2025-04-23 09:14:01.870 | DEBUG    | src.simulation:_check_ac_waiting_time:134 - 24284: Aircraft 19 at 37 waited too long!
+2025-04-23 09:14:01.870 | DEBUG    | src.simulation:dump_state:196 - Tug 0 is waiting at 97. remaining schedule: [Schedule(name_ac=18, estimated_time=23761, start_pos=97, end_pos=1, dept_runway=False), Schedule(name_ac=19, estimated_time=25021, start_pos=36, end_pos=1, dept_runway=False), Schedule(name_ac=20, estimated_time=26131, start_pos=34, end_pos=1, dept_runway=False), Schedule(name_ac=21, estimated_time=27331, start_pos=97, end_pos=1, dept_runway=False), Schedule(name_ac=22, estimated_time=28591, start_pos=36, end_pos=1, dept_runway=False), Schedule(name_ac=23, estimated_time=29791, start_pos=35, end_pos=1, dept_runway=False), Schedule(name_ac=24, estimated_time=30961, start_pos=97, end_pos=1, dept_runway=False)]
+2025-04-23 09:14:01.870 | DEBUG    | src.simulation:dump_state:196 - Tug 1 is waiting at 38. remaining schedule: [Schedule(name_ac=20, estimated_time=24000, start_pos=38, end_pos=34, dept_runway=1), Schedule(name_ac=21, estimated_time=25200, start_pos=37, end_pos=97, dept_runway=1), Schedule(name_ac=22, estimated_time=26400, start_pos=38, end_pos=36, dept_runway=1), Schedule(name_ac=23, estimated_time=27600, start_pos=37, end_pos=35, dept_runway=1), Schedule(name_ac=24, estimated_time=28800, start_pos=38, end_pos=97, dept_runway=1)]
+2025-04-23 09:14:01.870 | WARNING  | src.simulation:run_simulation:207 - Simulation Ended!
+reason: Status.Failed_Aircraft_Taxi_Time
+2025-04-23 09:14:01.871 | INFO     | src.simulation:__init__:16 - minimum taxi time is: 315, current taxi time threshold is: 1200
+2025-04-23 09:14:04.504 | INFO     | src.ants_v2:generate_schedule_tugs:29 - Number of tugs: 2
+2025-04-23 09:14:04.507 | DEBUG    | src.simulation:_add_new_aircraft:42 - 1257: Aircraft 1 arrived at 37
+2025-04-23 09:14:04.507 | DEBUG    | src.simulation:_check_tug_waiting:67 - 1310: aircraft 1 picked up at 37
+2025-04-23 09:14:04.510 | DEBUG    | src.simulation:_check_tug_intersection:98 - 1582: aircraft 1 started loading at 36
+2025-04-23 09:14:04.518 | DEBUG    | src.simulation:_add_new_aircraft:42 - 2347: Aircraft 2 arrived at 38
+2025-04-23 09:14:04.518 | DEBUG    | src.simulation:_check_tug_waiting:67 - 2478: aircraft 2 picked up at 38
+2025-04-23 09:14:04.523 | DEBUG    | src.simulation:_check_tug_intersection:98 - 2654: aircraft 2 started loading at 34
+2025-04-23 09:14:04.530 | DEBUG    | src.simulation:_check_loading:49 - 3409: Aircraft 1 completed loading at 36
+2025-04-23 09:14:04.530 | DEBUG    | src.simulation:_check_tug_waiting:67 - 3409: aircraft 1 picked up at 36
+2025-04-23 09:14:04.535 | DEBUG    | src.simulation:_add_new_aircraft:42 - 3575: Aircraft 3 arrived at 37
+2025-04-23 09:14:04.535 | DEBUG    | src.simulation:_check_tug_waiting:67 - 3575: aircraft 3 picked up at 37
+2025-04-23 09:14:04.542 | DEBUG    | src.simulation:_check_tug_intersection:100 - 3755: aircraft 1 departing from 2
+2025-04-23 09:14:04.550 | DEBUG    | src.simulation:_check_tug_intersection:98 - 3898: aircraft 3 started loading at 98
+2025-04-23 09:14:04.560 | DEBUG    | src.simulation:_check_loading:49 - 4576: Aircraft 2 completed loading at 34
+2025-04-23 09:14:04.560 | DEBUG    | src.simulation:_check_tug_waiting:67 - 4576: aircraft 2 picked up at 34
+2025-04-23 09:14:04.568 | DEBUG    | src.simulation:_add_new_aircraft:42 - 4679: Aircraft 4 arrived at 38
+2025-04-23 09:14:04.568 | DEBUG    | src.simulation:_check_tug_waiting:67 - 4679: aircraft 4 picked up at 38
+2025-04-23 09:14:04.576 | DEBUG    | src.simulation:_check_tug_intersection:98 - 4679: aircraft 4 started loading at 38
+2025-04-23 09:14:04.586 | DEBUG    | src.simulation:_check_tug_intersection:100 - 4944: aircraft 2 departing from 1
+2025-04-23 09:14:04.597 | DEBUG    | src.simulation:_check_loading:49 - 5574: Aircraft 3 completed loading at 98
+2025-04-23 09:14:04.597 | DEBUG    | src.simulation:_check_tug_waiting:67 - 5574: aircraft 3 picked up at 98
+2025-04-23 09:14:04.604 | DEBUG    | src.simulation:_add_new_aircraft:42 - 5788: Aircraft 5 arrived at 37
+2025-04-23 09:14:04.604 | DEBUG    | src.simulation:_check_tug_intersection:100 - 5910: aircraft 3 departing from 1
+2025-04-23 09:14:04.612 | DEBUG    | src.simulation:_check_loading:49 - 6353: Aircraft 4 completed loading at 35
+2025-04-23 09:14:04.612 | DEBUG    | src.simulation:_check_tug_waiting:67 - 6353: aircraft 4 picked up at 35
+2025-04-23 09:14:04.622 | DEBUG    | src.simulation:_check_tug_intersection:100 - 6753: aircraft 4 departing from 1
+2025-04-23 09:14:04.629 | DEBUG    | src.simulation:_add_new_aircraft:42 - 6910: Aircraft 6 arrived at 38
+2025-04-23 09:14:04.629 | DEBUG    | src.simulation:_check_tug_waiting:67 - 6910: aircraft 6 picked up at 38
+2025-04-23 09:14:04.636 | DEBUG    | src.simulation:_check_ac_waiting_time:134 - 6989: Aircraft 5 at 37 waited too long!
+2025-04-23 09:14:04.636 | DEBUG    | src.simulation:dump_state:200 - Tug 1 is travelling between 63 and 19. remaining schedule: [Schedule(name_ac=5, estimated_time=6000, start_pos=37, end_pos=34, dept_runway=2), Schedule(name_ac=6, estimated_time=7200, start_pos=38, end_pos=97, dept_runway=2), Schedule(name_ac=7, estimated_time=8400, start_pos=37, end_pos=98, dept_runway=1), Schedule(name_ac=8, estimated_time=9600, start_pos=38, end_pos=34, dept_runway=1), Schedule(name_ac=9, estimated_time=10800, start_pos=37, end_pos=97, dept_runway=2), Schedule(name_ac=10, estimated_time=12000, start_pos=38, end_pos=98, dept_runway=1), Schedule(name_ac=11, estimated_time=13200, start_pos=37, end_pos=35, dept_runway=2), Schedule(name_ac=12, estimated_time=14400, start_pos=38, end_pos=34, dept_runway=2), Schedule(name_ac=13, estimated_time=15600, start_pos=37, end_pos=98, dept_runway=2), Schedule(name_ac=14, estimated_time=16800, start_pos=38, end_pos=97, dept_runway=2), Schedule(name_ac=15, estimated_time=18000, start_pos=37, end_pos=34, dept_runway=1), Schedule(name_ac=16, estimated_time=19200, start_pos=38, end_pos=36, dept_runway=2), Schedule(name_ac=17, estimated_time=20400, start_pos=37, end_pos=97, dept_runway=1), Schedule(name_ac=18, estimated_time=21600, start_pos=38, end_pos=34, dept_runway=2), Schedule(name_ac=19, estimated_time=22800, start_pos=37, end_pos=98, dept_runway=2), Schedule(name_ac=20, estimated_time=24000, start_pos=38, end_pos=35, dept_runway=1), Schedule(name_ac=21, estimated_time=25200, start_pos=37, end_pos=34, dept_runway=1), Schedule(name_ac=22, estimated_time=26400, start_pos=38, end_pos=97, dept_runway=2), Schedule(name_ac=23, estimated_time=27600, start_pos=37, end_pos=35, dept_runway=1), Schedule(name_ac=24, estimated_time=28800, start_pos=38, end_pos=34, dept_runway=1)]
+2025-04-23 09:14:04.636 | DEBUG    | src.simulation:dump_state:200 - Tug 0 is travelling between 103 and 104. remaining schedule: [Schedule(name_ac=5, estimated_time=8022, start_pos=34, end_pos=2, dept_runway=False), Schedule(name_ac=6, estimated_time=9222, start_pos=97, end_pos=2, dept_runway=False), Schedule(name_ac=7, estimated_time=10512, start_pos=98, end_pos=1, dept_runway=False), Schedule(name_ac=8, estimated_time=11592, start_pos=34, end_pos=1, dept_runway=False), Schedule(name_ac=9, estimated_time=12792, start_pos=97, end_pos=2, dept_runway=False), Schedule(name_ac=10, estimated_time=14082, start_pos=98, end_pos=1, dept_runway=False), Schedule(name_ac=11, estimated_time=15252, start_pos=35, end_pos=2, dept_runway=False), Schedule(name_ac=12, estimated_time=16392, start_pos=34, end_pos=2, dept_runway=False), Schedule(name_ac=13, estimated_time=17712, start_pos=98, end_pos=2, dept_runway=False), Schedule(name_ac=14, estimated_time=18822, start_pos=97, end_pos=2, dept_runway=False), Schedule(name_ac=15, estimated_time=20022, start_pos=34, end_pos=1, dept_runway=False), Schedule(name_ac=16, estimated_time=21252, start_pos=36, end_pos=2, dept_runway=False), Schedule(name_ac=17, estimated_time=22392, start_pos=97, end_pos=1, dept_runway=False), Schedule(name_ac=18, estimated_time=23592, start_pos=34, end_pos=2, dept_runway=False), Schedule(name_ac=19, estimated_time=24912, start_pos=98, end_pos=2, dept_runway=False), Schedule(name_ac=20, estimated_time=26022, start_pos=35, end_pos=1, dept_runway=False), Schedule(name_ac=21, estimated_time=27222, start_pos=34, end_pos=1, dept_runway=False), Schedule(name_ac=22, estimated_time=28422, start_pos=97, end_pos=2, dept_runway=False), Schedule(name_ac=23, estimated_time=29652, start_pos=35, end_pos=1, dept_runway=False), Schedule(name_ac=24, estimated_time=30792, start_pos=34, end_pos=1, dept_runway=False)]
+2025-04-23 09:14:04.636 | WARNING  | src.simulation:run_simulation:207 - Simulation Ended!
+reason: Status.Failed_Aircraft_Taxi_Time
+2025-04-23 09:14:04.638 | INFO     | src.simulation:__init__:16 - minimum taxi time is: 315, current taxi time threshold is: 1200
+2025-04-23 09:14:07.222 | INFO     | src.ants_v2:generate_schedule_tugs:29 - Number of tugs: 2
+2025-04-23 09:14:07.225 | DEBUG    | src.simulation:_add_new_aircraft:42 - 1278: Aircraft 1 arrived at 37
+2025-04-23 09:14:07.225 | DEBUG    | src.simulation:_check_tug_waiting:67 - 1310: aircraft 1 picked up at 37
+2025-04-23 09:14:07.227 | DEBUG    | src.simulation:_check_tug_intersection:98 - 1486: aircraft 1 started loading at 97
+2025-04-23 09:14:07.234 | DEBUG    | src.simulation:_add_new_aircraft:42 - 2455: Aircraft 2 arrived at 38
+2025-04-23 09:14:07.234 | DEBUG    | src.simulation:_check_tug_waiting:67 - 2478: aircraft 2 picked up at 38
+2025-04-23 09:14:07.240 | DEBUG    | src.simulation:_check_tug_intersection:98 - 2750: aircraft 2 started loading at 98
+2025-04-23 09:14:07.247 | DEBUG    | src.simulation:_check_loading:49 - 3305: Aircraft 1 completed loading at 97
+2025-04-23 09:14:07.247 | DEBUG    | src.simulation:_check_tug_waiting:67 - 3305: aircraft 1 picked up at 97
+2025-04-23 09:14:07.253 | DEBUG    | src.simulation:_check_tug_intersection:100 - 3641: aircraft 1 departing from 1
+2025-04-23 09:14:07.259 | DEBUG    | src.simulation:_add_new_aircraft:42 - 3770: Aircraft 3 arrived at 37
+2025-04-23 09:14:07.259 | DEBUG    | src.simulation:_check_tug_waiting:67 - 3770: aircraft 3 picked up at 37
+2025-04-23 09:14:07.267 | DEBUG    | src.simulation:_check_tug_intersection:98 - 4024: aircraft 3 started loading at 35
+2025-04-23 09:14:07.275 | DEBUG    | src.simulation:_check_loading:49 - 4448: Aircraft 2 completed loading at 98
+2025-04-23 09:14:07.275 | DEBUG    | src.simulation:_check_tug_waiting:67 - 4448: aircraft 2 picked up at 98
+2025-04-23 09:14:07.283 | DEBUG    | src.simulation:_check_tug_intersection:100 - 4752: aircraft 2 departing from 2
+2025-04-23 09:14:07.291 | DEBUG    | src.simulation:_add_new_aircraft:42 - 5002: Aircraft 4 arrived at 38
+2025-04-23 09:14:07.291 | DEBUG    | src.simulation:_check_tug_waiting:67 - 5002: aircraft 4 picked up at 38
+2025-04-23 09:14:07.299 | DEBUG    | src.simulation:_check_tug_intersection:98 - 5186: aircraft 4 started loading at 34
+2025-04-23 09:14:07.308 | DEBUG    | src.simulation:_check_loading:49 - 5904: Aircraft 3 completed loading at 35
+2025-04-23 09:14:07.308 | DEBUG    | src.simulation:_check_tug_waiting:67 - 5904: aircraft 3 picked up at 35
+2025-04-23 09:14:07.315 | DEBUG    | src.simulation:_add_new_aircraft:42 - 6281: Aircraft 5 arrived at 37
+2025-04-23 09:14:07.315 | DEBUG    | src.simulation:_check_tug_waiting:67 - 6281: aircraft 5 picked up at 37
+2025-04-23 09:14:07.322 | DEBUG    | src.simulation:_check_tug_intersection:100 - 6305: aircraft 3 departing from 1
+2025-04-23 09:14:07.330 | DEBUG    | src.simulation:_check_tug_intersection:98 - 6570: aircraft 5 started loading at 36
+2025-04-23 09:14:07.339 | DEBUG    | src.simulation:_check_loading:49 - 7094: Aircraft 4 completed loading at 34
+2025-04-23 09:14:07.339 | DEBUG    | src.simulation:_check_tug_waiting:67 - 7094: aircraft 4 picked up at 34
+2025-04-23 09:14:07.346 | DEBUG    | src.simulation:_check_tug_intersection:100 - 7462: aircraft 4 departing from 1
+2025-04-23 09:14:07.355 | DEBUG    | src.simulation:_add_new_aircraft:42 - 7494: Aircraft 6 arrived at 38
+2025-04-23 09:14:07.355 | DEBUG    | src.simulation:_check_tug_waiting:67 - 7494: aircraft 6 picked up at 38
+2025-04-23 09:14:07.366 | DEBUG    | src.simulation:_check_tug_intersection:98 - 8044: aircraft 6 started loading at 98
+2025-04-23 09:14:07.376 | DEBUG    | src.simulation:_check_loading:49 - 8287: Aircraft 5 completed loading at 36
+2025-04-23 09:14:07.377 | DEBUG    | src.simulation:_check_tug_waiting:67 - 8287: aircraft 5 picked up at 36
+2025-04-23 09:14:07.386 | DEBUG    | src.simulation:_check_tug_intersection:100 - 8659: aircraft 5 departing from 1
+2025-04-23 09:14:07.395 | DEBUG    | src.simulation:_add_new_aircraft:42 - 8799: Aircraft 7 arrived at 37
+2025-04-23 09:14:07.395 | DEBUG    | src.simulation:_check_tug_waiting:67 - 8799: aircraft 7 picked up at 37
+2025-04-23 09:14:07.405 | DEBUG    | src.simulation:_check_tug_intersection:98 - 9052: aircraft 7 started loading at 35
+2025-04-23 09:14:07.416 | DEBUG    | src.simulation:_add_new_aircraft:42 - 9899: Aircraft 8 arrived at 38
+2025-04-23 09:14:07.416 | DEBUG    | src.simulation:_check_tug_waiting:67 - 9899: aircraft 8 picked up at 38
+2025-04-23 09:14:07.422 | DEBUG    | src.simulation:_check_loading:49 - 9935: Aircraft 6 completed loading at 98
+2025-04-23 09:14:07.422 | DEBUG    | src.simulation:_check_tug_waiting:67 - 9935: aircraft 6 picked up at 98
+2025-04-23 09:14:07.429 | DEBUG    | src.simulation:_check_tug_intersection:98 - 10083: aircraft 8 started loading at 34
+2025-04-23 09:14:07.438 | DEBUG    | src.simulation:_check_tug_intersection:100 - 10292: aircraft 6 departing from 1
+2025-04-23 09:14:07.448 | DEBUG    | src.simulation:_check_loading:49 - 10992: Aircraft 7 completed loading at 35
+2025-04-23 09:14:07.448 | DEBUG    | src.simulation:_check_tug_waiting:67 - 10992: aircraft 7 picked up at 35
+2025-04-23 09:14:07.455 | DEBUG    | src.simulation:_add_new_aircraft:42 - 11150: Aircraft 9 arrived at 37
+2025-04-23 09:14:07.455 | DEBUG    | src.simulation:_check_tug_waiting:67 - 11150: aircraft 9 picked up at 37
+2025-04-23 09:14:07.464 | DEBUG    | src.simulation:_check_tug_intersection:100 - 11373: aircraft 7 departing from 2
+2025-04-23 09:14:07.474 | DEBUG    | src.simulation:_check_tug_intersection:98 - 11473: aircraft 9 started loading at 98
+2025-04-23 09:14:07.486 | DEBUG    | src.simulation:_check_loading:49 - 12059: Aircraft 8 completed loading at 34
+2025-04-23 09:14:07.486 | DEBUG    | src.simulation:_check_tug_waiting:67 - 12059: aircraft 8 picked up at 34
+2025-04-23 09:14:07.496 | DEBUG    | src.simulation:_add_new_aircraft:42 - 12284: Aircraft 10 arrived at 38
+2025-04-23 09:14:07.496 | DEBUG    | src.simulation:_check_tug_waiting:67 - 12284: aircraft 10 picked up at 38
+2025-04-23 09:14:07.505 | DEBUG    | src.simulation:_check_tug_intersection:100 - 12435: aircraft 8 departing from 1
+2025-04-23 09:14:07.515 | DEBUG    | src.simulation:_check_tug_intersection:98 - 12505: aircraft 10 started loading at 97
+2025-04-23 09:14:07.527 | DEBUG    | src.simulation:_check_loading:49 - 13119: Aircraft 9 completed loading at 98
+2025-04-23 09:14:07.527 | DEBUG    | src.simulation:_check_tug_waiting:67 - 13119: aircraft 9 picked up at 98
+2025-04-23 09:14:07.536 | DEBUG    | src.simulation:_add_new_aircraft:42 - 13399: Aircraft 11 arrived at 37
+2025-04-23 09:14:07.536 | DEBUG    | src.simulation:_check_tug_waiting:67 - 13399: aircraft 11 picked up at 37
+2025-04-23 09:14:07.543 | DEBUG    | src.simulation:_check_tug_intersection:100 - 13458: aircraft 9 departing from 1
+2025-04-23 09:14:07.552 | DEBUG    | src.simulation:_check_tug_intersection:98 - 13620: aircraft 11 started loading at 34
+2025-04-23 09:14:07.562 | DEBUG    | src.simulation:_check_loading:49 - 14189: Aircraft 10 completed loading at 97
+2025-04-23 09:14:07.562 | DEBUG    | src.simulation:_check_tug_waiting:67 - 14189: aircraft 10 picked up at 97
+2025-04-23 09:14:07.570 | DEBUG    | src.simulation:_check_tug_intersection:100 - 14525: aircraft 10 departing from 1
+2025-04-23 09:14:07.577 | DEBUG    | src.simulation:_add_new_aircraft:42 - 14552: Aircraft 12 arrived at 38
+2025-04-23 09:14:07.577 | DEBUG    | src.simulation:_check_tug_waiting:67 - 14552: aircraft 12 picked up at 38
+2025-04-23 09:14:07.586 | DEBUG    | src.simulation:_check_tug_intersection:98 - 14807: aircraft 12 started loading at 36
+2025-04-23 09:14:07.596 | DEBUG    | src.simulation:_check_loading:49 - 15252: Aircraft 11 completed loading at 34
+2025-04-23 09:14:07.596 | DEBUG    | src.simulation:_check_tug_waiting:67 - 15252: aircraft 11 picked up at 34
+2025-04-23 09:14:07.606 | DEBUG    | src.simulation:_check_tug_intersection:100 - 15652: aircraft 11 departing from 2
+2025-04-23 09:14:07.614 | DEBUG    | src.simulation:_add_new_aircraft:42 - 15795: Aircraft 13 arrived at 37
+2025-04-23 09:14:07.614 | DEBUG    | src.simulation:_check_tug_waiting:67 - 15795: aircraft 13 picked up at 37
+2025-04-23 09:14:07.624 | DEBUG    | src.simulation:_check_tug_intersection:98 - 16112: aircraft 13 started loading at 98
+2025-04-23 09:14:07.635 | DEBUG    | src.simulation:_check_loading:49 - 16778: Aircraft 12 completed loading at 36
+2025-04-23 09:14:07.635 | DEBUG    | src.simulation:_check_tug_waiting:67 - 16778: aircraft 12 picked up at 36
+2025-04-23 09:14:07.643 | DEBUG    | src.simulation:_add_new_aircraft:42 - 17012: Aircraft 14 arrived at 38
+2025-04-23 09:14:07.643 | DEBUG    | src.simulation:_check_tug_waiting:67 - 17012: aircraft 14 picked up at 38
+2025-04-23 09:14:07.651 | DEBUG    | src.simulation:_check_tug_intersection:100 - 17120: aircraft 12 departing from 2
+2025-04-23 09:14:07.659 | DEBUG    | src.simulation:_check_tug_intersection:98 - 17199: aircraft 14 started loading at 34
+2025-04-23 09:14:07.668 | DEBUG    | src.simulation:_check_loading:49 - 17962: Aircraft 13 completed loading at 98
+2025-04-23 09:14:07.668 | DEBUG    | src.simulation:_check_tug_waiting:67 - 17962: aircraft 13 picked up at 98
+2025-04-23 09:14:07.675 | DEBUG    | src.simulation:_add_new_aircraft:42 - 18252: Aircraft 15 arrived at 37
+2025-04-23 09:14:07.675 | DEBUG    | src.simulation:_check_tug_waiting:67 - 18252: aircraft 15 picked up at 37
+2025-04-23 09:14:07.682 | DEBUG    | src.simulation:_check_tug_intersection:100 - 18300: aircraft 13 departing from 1
+2025-04-23 09:14:07.691 | DEBUG    | src.simulation:_check_tug_intersection:98 - 18541: aircraft 15 started loading at 36
+2025-04-23 09:14:07.701 | DEBUG    | src.simulation:_check_loading:49 - 18915: Aircraft 14 completed loading at 34
+2025-04-23 09:14:07.702 | DEBUG    | src.simulation:_check_tug_waiting:67 - 18915: aircraft 14 picked up at 34
+2025-04-23 09:14:07.711 | DEBUG    | src.simulation:_check_tug_intersection:100 - 19283: aircraft 14 departing from 1
+2025-04-23 09:14:07.719 | DEBUG    | src.simulation:_add_new_aircraft:42 - 19351: Aircraft 16 arrived at 38
+2025-04-23 09:14:07.719 | DEBUG    | src.simulation:_check_tug_waiting:67 - 19351: aircraft 16 picked up at 38
+2025-04-23 09:14:07.730 | DEBUG    | src.simulation:_check_tug_intersection:98 - 19898: aircraft 16 started loading at 98
+2025-04-23 09:14:07.741 | DEBUG    | src.simulation:_check_loading:49 - 20397: Aircraft 15 completed loading at 36
+2025-04-23 09:14:07.741 | DEBUG    | src.simulation:_check_tug_waiting:67 - 20397: aircraft 15 picked up at 36
+2025-04-23 09:14:07.748 | DEBUG    | src.simulation:_add_new_aircraft:42 - 20490: Aircraft 17 arrived at 37
+2025-04-23 09:14:07.748 | DEBUG    | src.simulation:_check_tug_waiting:67 - 20490: aircraft 17 picked up at 37
+2025-04-23 09:14:07.757 | DEBUG    | src.simulation:_check_tug_intersection:98 - 20677: aircraft 17 started loading at 97
+2025-04-23 09:14:07.767 | DEBUG    | src.simulation:_check_tug_intersection:100 - 20782: aircraft 15 departing from 1
+2025-04-23 09:14:07.779 | DEBUG    | src.simulation:_check_loading:49 - 21616: Aircraft 16 completed loading at 98
+2025-04-23 09:14:07.779 | DEBUG    | src.simulation:_check_tug_waiting:67 - 21616: aircraft 16 picked up at 98
+2025-04-23 09:14:07.787 | DEBUG    | src.simulation:_add_new_aircraft:42 - 21801: Aircraft 18 arrived at 38
+2025-04-23 09:14:07.787 | DEBUG    | src.simulation:_check_tug_waiting:67 - 21801: aircraft 18 picked up at 38
+2025-04-23 09:14:07.794 | DEBUG    | src.simulation:_check_tug_intersection:100 - 21927: aircraft 16 departing from 2
+2025-04-23 09:14:07.803 | DEBUG    | src.simulation:_check_tug_intersection:98 - 22022: aircraft 18 started loading at 35
+2025-04-23 09:14:07.813 | DEBUG    | src.simulation:_check_loading:49 - 22475: Aircraft 17 completed loading at 97
+2025-04-23 09:14:07.813 | DEBUG    | src.simulation:_check_tug_waiting:67 - 22475: aircraft 17 picked up at 97
+2025-04-23 09:14:07.822 | DEBUG    | src.simulation:_check_tug_intersection:100 - 22843: aircraft 17 departing from 2
+2025-04-23 09:14:07.829 | DEBUG    | src.simulation:_add_new_aircraft:42 - 22895: Aircraft 19 arrived at 37
+2025-04-23 09:14:07.830 | DEBUG    | src.simulation:_check_tug_waiting:67 - 22895: aircraft 19 picked up at 37
+2025-04-23 09:14:07.839 | DEBUG    | src.simulation:_check_tug_intersection:98 - 23218: aircraft 19 started loading at 98
+2025-04-23 09:14:07.850 | DEBUG    | src.simulation:_check_loading:49 - 23803: Aircraft 18 completed loading at 35
+2025-04-23 09:14:07.850 | DEBUG    | src.simulation:_check_tug_waiting:67 - 23803: aircraft 18 picked up at 35
+2025-04-23 09:14:07.859 | DEBUG    | src.simulation:_add_new_aircraft:42 - 24005: Aircraft 20 arrived at 38
+2025-04-23 09:14:07.859 | DEBUG    | src.simulation:_check_tug_waiting:67 - 24005: aircraft 20 picked up at 38
+2025-04-23 09:14:07.868 | DEBUG    | src.simulation:_check_tug_intersection:100 - 24181: aircraft 18 departing from 2
+2025-04-23 09:14:07.877 | DEBUG    | src.simulation:_check_tug_intersection:98 - 24226: aircraft 20 started loading at 97
+2025-04-23 09:14:07.889 | DEBUG    | src.simulation:_check_loading:49 - 25064: Aircraft 19 completed loading at 98
+2025-04-23 09:14:07.889 | DEBUG    | src.simulation:_check_tug_waiting:67 - 25064: aircraft 19 picked up at 98
+2025-04-23 09:14:07.895 | DEBUG    | src.simulation:_add_new_aircraft:42 - 25094: Aircraft 21 arrived at 37
+2025-04-23 09:14:07.895 | DEBUG    | src.simulation:_check_tug_waiting:67 - 25094: aircraft 21 picked up at 37
+2025-04-23 09:14:07.902 | DEBUG    | src.simulation:_check_tug_intersection:98 - 25349: aircraft 21 started loading at 35
+2025-04-23 09:14:07.910 | DEBUG    | src.simulation:_check_tug_intersection:100 - 25419: aircraft 19 departing from 1
+2025-04-23 09:14:07.920 | DEBUG    | src.simulation:_check_loading:49 - 26034: Aircraft 20 completed loading at 97
+2025-04-23 09:14:07.920 | DEBUG    | src.simulation:_check_tug_waiting:67 - 26034: aircraft 20 picked up at 97
+2025-04-23 09:14:07.927 | DEBUG    | src.simulation:_add_new_aircraft:42 - 26358: Aircraft 22 arrived at 38
+2025-04-23 09:14:07.927 | DEBUG    | src.simulation:_check_tug_waiting:67 - 26358: aircraft 22 picked up at 38
+2025-04-23 09:14:07.934 | DEBUG    | src.simulation:_check_tug_intersection:100 - 26404: aircraft 20 departing from 2
+2025-04-23 09:14:07.944 | DEBUG    | src.simulation:_check_tug_intersection:98 - 26613: aircraft 22 started loading at 36
+2025-04-23 09:14:07.955 | DEBUG    | src.simulation:_check_loading:49 - 27131: Aircraft 21 completed loading at 35
+2025-04-23 09:14:07.955 | DEBUG    | src.simulation:_check_tug_waiting:67 - 27131: aircraft 21 picked up at 35
+2025-04-23 09:14:07.965 | DEBUG    | src.simulation:_check_tug_intersection:100 - 27499: aircraft 21 departing from 2
+2025-04-23 09:14:07.973 | DEBUG    | src.simulation:_add_new_aircraft:42 - 27660: Aircraft 23 arrived at 37
+2025-04-23 09:14:07.973 | DEBUG    | src.simulation:_check_tug_waiting:67 - 27660: aircraft 23 picked up at 37
+2025-04-23 09:14:07.984 | DEBUG    | src.simulation:_check_tug_intersection:98 - 27976: aircraft 23 started loading at 98
+2025-04-23 09:14:07.994 | DEBUG    | src.simulation:_check_loading:49 - 28551: Aircraft 22 completed loading at 36
+2025-04-23 09:14:07.994 | DEBUG    | src.simulation:_check_tug_waiting:67 - 28551: aircraft 22 picked up at 36
+2025-04-23 09:14:08.002 | WARNING  | src.simulation:run_simulation:207 - Simulation Ended!
+reason: Status.Success
+2025-04-23 09:14:08.003 | INFO     | src.simulation:__init__:16 - minimum taxi time is: 345, current taxi time threshold is: 1200
+2025-04-23 09:14:10.577 | INFO     | src.ants_v2:generate_schedule_tugs:29 - Number of tugs: 2
+2025-04-23 09:14:10.580 | DEBUG    | src.simulation:_add_new_aircraft:42 - 1156: Aircraft 1 arrived at 37
+2025-04-23 09:14:10.580 | DEBUG    | src.simulation:_check_tug_waiting:67 - 1310: aircraft 1 picked up at 37
+2025-04-23 09:14:10.583 | DEBUG    | src.simulation:_check_tug_intersection:98 - 1518: aircraft 1 started loading at 34
+2025-04-23 09:14:10.589 | DEBUG    | src.simulation:_add_new_aircraft:42 - 2238: Aircraft 2 arrived at 38
+2025-04-23 09:14:10.590 | DEBUG    | src.simulation:_check_tug_waiting:67 - 2478: aircraft 2 picked up at 38
+2025-04-23 09:14:10.595 | DEBUG    | src.simulation:_check_tug_intersection:98 - 2686: aircraft 2 started loading at 35
+2025-04-23 09:14:10.601 | DEBUG    | src.simulation:_check_loading:49 - 3252: Aircraft 1 completed loading at 34
+2025-04-23 09:14:10.601 | DEBUG    | src.simulation:_check_tug_waiting:67 - 3252: aircraft 1 picked up at 34
+2025-04-23 09:14:10.607 | DEBUG    | src.simulation:_add_new_aircraft:42 - 3414: Aircraft 3 arrived at 37
+2025-04-23 09:14:10.607 | DEBUG    | src.simulation:_check_tug_waiting:67 - 3414: aircraft 3 picked up at 37
+2025-04-23 09:14:10.614 | DEBUG    | src.simulation:_check_tug_intersection:100 - 3632: aircraft 1 departing from 1
+2025-04-23 09:14:10.622 | DEBUG    | src.simulation:_check_tug_intersection:98 - 3737: aircraft 3 started loading at 98
+2025-04-23 09:14:10.633 | DEBUG    | src.simulation:_check_loading:49 - 4566: Aircraft 2 completed loading at 35
+2025-04-23 09:14:10.633 | DEBUG    | src.simulation:_check_tug_waiting:67 - 4566: aircraft 2 picked up at 35
+2025-04-23 09:14:10.641 | DEBUG    | src.simulation:_add_new_aircraft:42 - 4659: Aircraft 4 arrived at 38
+2025-04-23 09:14:10.641 | DEBUG    | src.simulation:_check_tug_waiting:67 - 4659: aircraft 4 picked up at 38
+2025-04-23 09:14:10.650 | DEBUG    | src.simulation:_check_tug_intersection:98 - 4659: aircraft 4 started loading at 38
+2025-04-23 09:14:10.660 | DEBUG    | src.simulation:_check_tug_intersection:100 - 4966: aircraft 2 departing from 1
+2025-04-23 09:14:10.671 | DEBUG    | src.simulation:_check_loading:49 - 5715: Aircraft 3 completed loading at 98
+2025-04-23 09:14:10.671 | DEBUG    | src.simulation:_check_tug_waiting:67 - 5715: aircraft 3 picked up at 98
+2025-04-23 09:14:10.677 | DEBUG    | src.simulation:_add_new_aircraft:42 - 5774: Aircraft 5 arrived at 37
+2025-04-23 09:14:10.678 | DEBUG    | src.simulation:_check_tug_intersection:100 - 6051: aircraft 3 departing from 1
+2025-04-23 09:14:10.685 | DEBUG    | src.simulation:_check_loading:49 - 6341: Aircraft 4 completed loading at 97
+2025-04-23 09:14:10.685 | DEBUG    | src.simulation:_check_tug_waiting:67 - 6389: aircraft 4 picked up at 97
+2025-04-23 09:14:10.692 | DEBUG    | src.simulation:_check_tug_intersection:100 - 6725: aircraft 4 departing from 1
+2025-04-23 09:14:10.699 | DEBUG    | src.simulation:_add_new_aircraft:42 - 6865: Aircraft 6 arrived at 38
+2025-04-23 09:14:10.699 | DEBUG    | src.simulation:_check_tug_waiting:67 - 6865: aircraft 6 picked up at 38
+2025-04-23 09:14:10.706 | DEBUG    | src.simulation:_check_ac_waiting_time:134 - 6975: Aircraft 5 at 37 waited too long!
+2025-04-23 09:14:10.706 | DEBUG    | src.simulation:dump_state:200 - Tug 1 is travelling between 75 and 25. remaining schedule: [Schedule(name_ac=5, estimated_time=6000, start_pos=37, end_pos=35, dept_runway=1), Schedule(name_ac=6, estimated_time=7200, start_pos=38, end_pos=98, dept_runway=2), Schedule(name_ac=7, estimated_time=8400, start_pos=37, end_pos=97, dept_runway=1), Schedule(name_ac=8, estimated_time=9600, start_pos=38, end_pos=35, dept_runway=2), Schedule(name_ac=9, estimated_time=10800, start_pos=37, end_pos=34, dept_runway=2), Schedule(name_ac=10, estimated_time=12000, start_pos=38, end_pos=97, dept_runway=2), Schedule(name_ac=11, estimated_time=13200, start_pos=37, end_pos=35, dept_runway=2), Schedule(name_ac=12, estimated_time=14400, start_pos=38, end_pos=34, dept_runway=2), Schedule(name_ac=13, estimated_time=15600, start_pos=37, end_pos=97, dept_runway=2), Schedule(name_ac=14, estimated_time=16800, start_pos=38, end_pos=36, dept_runway=2), Schedule(name_ac=15, estimated_time=18000, start_pos=37, end_pos=34, dept_runway=1), Schedule(name_ac=16, estimated_time=19200, start_pos=38, end_pos=97, dept_runway=1), Schedule(name_ac=17, estimated_time=20400, start_pos=37, end_pos=98, dept_runway=2), Schedule(name_ac=18, estimated_time=21600, start_pos=38, end_pos=36, dept_runway=2), Schedule(name_ac=19, estimated_time=22800, start_pos=37, end_pos=97, dept_runway=1), Schedule(name_ac=20, estimated_time=24000, start_pos=38, end_pos=98, dept_runway=2), Schedule(name_ac=21, estimated_time=25200, start_pos=37, end_pos=34, dept_runway=2), Schedule(name_ac=22, estimated_time=26400, start_pos=38, end_pos=97, dept_runway=1), Schedule(name_ac=23, estimated_time=27600, start_pos=37, end_pos=35, dept_runway=1), Schedule(name_ac=24, estimated_time=28800, start_pos=38, end_pos=98, dept_runway=2)]
+2025-04-23 09:14:10.706 | DEBUG    | src.simulation:dump_state:200 - Tug 0 is travelling between 104 and 105. remaining schedule: [Schedule(name_ac=5, estimated_time=7959, start_pos=35, end_pos=1, dept_runway=False), Schedule(name_ac=6, estimated_time=9189, start_pos=98, end_pos=2, dept_runway=False), Schedule(name_ac=7, estimated_time=10299, start_pos=97, end_pos=1, dept_runway=False), Schedule(name_ac=8, estimated_time=11529, start_pos=35, end_pos=2, dept_runway=False), Schedule(name_ac=9, estimated_time=12729, start_pos=34, end_pos=2, dept_runway=False), Schedule(name_ac=10, estimated_time=13929, start_pos=97, end_pos=2, dept_runway=False), Schedule(name_ac=11, estimated_time=15159, start_pos=35, end_pos=2, dept_runway=False), Schedule(name_ac=12, estimated_time=16299, start_pos=34, end_pos=2, dept_runway=False), Schedule(name_ac=13, estimated_time=17499, start_pos=97, end_pos=2, dept_runway=False), Schedule(name_ac=14, estimated_time=18759, start_pos=36, end_pos=2, dept_runway=False), Schedule(name_ac=15, estimated_time=19929, start_pos=34, end_pos=1, dept_runway=False), Schedule(name_ac=16, estimated_time=21129, start_pos=97, end_pos=1, dept_runway=False), Schedule(name_ac=17, estimated_time=22419, start_pos=98, end_pos=2, dept_runway=False), Schedule(name_ac=18, estimated_time=23559, start_pos=36, end_pos=2, dept_runway=False), Schedule(name_ac=19, estimated_time=24699, start_pos=97, end_pos=1, dept_runway=False), Schedule(name_ac=20, estimated_time=25989, start_pos=98, end_pos=2, dept_runway=False), Schedule(name_ac=21, estimated_time=27129, start_pos=34, end_pos=2, dept_runway=False), Schedule(name_ac=22, estimated_time=28329, start_pos=97, end_pos=1, dept_runway=False), Schedule(name_ac=23, estimated_time=29559, start_pos=35, end_pos=1, dept_runway=False), Schedule(name_ac=24, estimated_time=30789, start_pos=98, end_pos=2, dept_runway=False)]
+2025-04-23 09:14:10.706 | WARNING  | src.simulation:run_simulation:207 - Simulation Ended!
+reason: Status.Failed_Aircraft_Taxi_Time
+2025-04-23 09:14:10.708 | INFO     | src.simulation:__init__:16 - minimum taxi time is: 375, current taxi time threshold is: 1200

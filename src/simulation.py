@@ -144,6 +144,7 @@ class Simulation:
                         self.tug_waiting.append(i)
             else:
                 #add collision avoidance here TODO's
+                logger.debug(f"{self.time} - {i.name} is currently at {i.pos}. Next position: {i.next_node_list[0][0]} at {i.next_node_list[0][1]}")
                 if i.next_node_list[0][1] > self.time:
                     continue
                 next_node = i.next_node_list.pop(0)[0]

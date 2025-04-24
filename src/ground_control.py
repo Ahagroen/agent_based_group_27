@@ -66,7 +66,7 @@ class groundControl:
             while not found:
                 for neighbor in nodes[current_node].node.edges:
                     arrival_time = current_time+15
-                    if any([x in nodes[neighbor].blocked_times for x in range(arrival_time-30,arrival_time+30)]):
+                    if any([x in nodes[neighbor].blocked_times for x in range(arrival_time-45,arrival_time+45)]):
                         continue
                     temp_g_score = g_score[current_node] + heuristic(nodes,current_node, neighbor) 
                     # If this path to neighbor is better update the records

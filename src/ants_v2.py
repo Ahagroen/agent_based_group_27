@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from os import wait
 from random import choices, seed
 from loguru import logger
 from src.environment import Airport

@@ -25,8 +25,8 @@ def simulate_data(runs:int):
         ac_freq = 10 * 60                  # Frequency of aircraft arrival                  # [s]
         taxi_margin = 20 * 60              # Time margin for aircraft to arrive at gate     # [s]
         loading_time = 30 * 60             # Time spent by aircraft at gate                 # [s]
-        scheduler = Schedule_Algo.aco   # Time of algorith used to manage tug schedule   # [-]
-        rng_seed = 42                      # Seed used to generate random variables         # [-]
+        scheduler = Schedule_Algo.aco      # Time of algorith used to manage tug schedule   # [-]
+        rng_seed = -1                      # Seed used to generate random variables         # [-]
 
         result = run_simulation(airport, run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)
         carry.append(result)
@@ -45,17 +45,17 @@ def main():
     ac_freq = 10 * 60                  # Frequency of aircraft arrival                  # [s]
     taxi_margin = 20 * 60              # Time margin for aircraft to arrive at gate     # [s]
     loading_time = 30 * 60             # Time spent by aircraft at gate                 # [s]
-    scheduler = Schedule_Algo.greedy   # Time of algorith used to manage tug schedule   # [-]
-    rng_seed = 42                      # Seed used to generate random variables         # [-]
+    scheduler = Schedule_Algo.naive   # Time of algorith used to manage tug schedule   # [-]
+    rng_seed = - 1                     # Seed used to generate random variables         # [-]
 
     # Run Simulations or Visualization
     # --------------------------------
 
     # Visualization
-    # Run_visualization(x_dim, y_dim, fps, run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)
+    Run_visualization(x_dim, y_dim, fps, run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)
 
     # Simulation
-    simulate_data(5)
+    # simulate_data(5)
 
 if __name__ == "__main__":
     main()

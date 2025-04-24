@@ -110,9 +110,9 @@ class Simulation:
                     if i.pos not in self.airport.dept_runways: #The aircraft has arrived at the departure runway
                         i.connected_aircraft.loading_completion_time = self.time + i.connected_aircraft.loading_time
                         self.ac_loading.append(i.connected_aircraft)
-                        logger.debug(f"{self.time}: aircraft {i.connected_aircraft.name} started loading at {i.pos}")
+                        logger.debug(f"{self.time}: Aircraft {i.connected_aircraft.name} started loading at {i.pos}")
                     else:
-                        logger.debug(f"{self.time}: aircraft {i.connected_aircraft.name} departing from {i.pos}")
+                        logger.debug(f"{self.time}: Aircraft {i.connected_aircraft.name} departing from {i.pos}")
                     i.connected_aircraft = None
                     i.schedule.pop(0)
                     i.determine_route(self.current_active_routes,self.time,self.ground_control)

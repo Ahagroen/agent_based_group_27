@@ -10,8 +10,6 @@ class Airport():
             node_map = data["nodes"]
             updated_node_map = {}
             for i in node_map.keys():
-                # We need to add 75 for some reason
-                #This might need to be extracted into a method
                 x_pos = int(((node_map[i]["x_pos"])/(window_dims[0]/100))*window_dims[0])
                 y_pos = window_dims[1] - int(((node_map[i]["y_pos"])/(window_dims[1]/100))*window_dims[1])
                 if len(node_map[i]["edges"]) == 4:

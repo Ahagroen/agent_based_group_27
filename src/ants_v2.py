@@ -67,7 +67,6 @@ def generate_schedule_tugs_2(airport:Airport,ac_schedule:list[Schedule],ground_c
             if i == j:
                 continue
             travel_times[j,i] = len(ground_controller.determine_route(i,j,{},0))*edge_len
-        travel_times[109,i] = len(ground_controller.determine_route(i,109,{},0))*edge_len
     start_time = 0
     costs = {}
     times[0] = compute_row(ac_schedule, travel_times, start_time,109)
@@ -212,14 +211,17 @@ def generate_schedule_tugs_3(airport:Airport,ac_schedule:list[Schedule],ground_c
     class tug_carry:
         missions:list
         last_finish_time:int = 0
+        last_node:int = 109
     tug_list = [tug_carry([])]
     for i in ac_schedule:
-        eligible = [x for x in tug_list if x.last_finish_time+margin < i.estimated_time]
+        eligible = [x for x in tug_list if x.last_finish_time+len(ground_controller.determine_route(x.last_node,i.start_pos,{},0))*15+margin < i.estimated_time]
+        eligible.sort(key=lambda x: x.last_finish_time)
         if len(eligible) > 0:
             eligible[0].missions.append(i)
             eligible[0].last_finish_time = i.estimated_time + len(ground_controller.determine_route(i.start_pos,i.end_pos,{},0))*15
+            eligible[0].last_node = i.end_pos
         else:
-            tug_list.append(tug_carry([i],i.estimated_time + len(ground_controller.determine_route(i.start_pos,i.end_pos,{},0))*15))
+            tug_list.append(tug_carry([i],i.estimated_time + len(ground_controller.determine_route(i.start_pos,i.end_pos,{},0))*15,i.end_pos))
     schedules = [x.missions for x in tug_list]
     tugs = []
     logger.info(f"Required Number of tugs:{len(schedules)}")

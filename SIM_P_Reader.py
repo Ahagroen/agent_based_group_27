@@ -85,7 +85,7 @@ def parse_multiple_runs(path):
     with open(path) as f:
         current_run = []
         for line in f:
-            if "=== STARTING RUN" in line:
+            if "=== STARTING SIM RUN" in line:
                 if current_run:
                     stats = parse_single_run(current_run)
                     results.append(stats)
@@ -95,6 +95,7 @@ def parse_multiple_runs(path):
             stats = parse_single_run(current_run)
             results.append(stats)
 
+    """
     # Print results
     for i, r in enumerate(results):
         print(f"\n--- Simulation Run {i} ---")
@@ -104,9 +105,8 @@ def parse_multiple_runs(path):
         print(f"4) Avg taxi time arrival    : {r['avg_taxi_arr']:.2f} s")
         print(f"5) Avg taxi time departure  : {r['avg_taxi_dep']:.2f} s")
         print(f"6) Tug utilization rate     : {r['util_pct']:.1f}%")
+    """
 
     return results
 
-# Run as script
-if __name__ == "__main__":
-    parse_multiple_runs("runlog.txt")
+

@@ -3,7 +3,7 @@ from random import choices, seed
 from loguru import logger
 from src.environment import Airport
 from src.datatypes import Schedule, TowingVehicle
-from src.genetic import genetic_algorithm
+from src.genetic import find_min_tugs, genetic_algorithm, merge_tug_assignments
 from src.ground_control import groundControl
 from copy import deepcopy
 
@@ -250,21 +250,33 @@ def generate_schedule_tugs_4(airport:Airport,ac_schedule:list[Schedule],ground_c
         jobs.append((start_time, end_time))
     
     #here genetic algorithm
-    best_assignment, tug_count = genetic_algorithm(jobs)
 
+    #best_assignment, tug_count = genetic_algorithm(jobs)
+
+    #clean_assignment, final_tugs = merge_tug_assignments(best_assignment, jobs)
+
+    best_assignment, min_tugs = find_min_tugs(jobs, pop_size=60, generations=500)
+    #logger.debug(f"Best feasible schedule uses {min_tugs} tugs.")
+    #print(f"\nBest feasible schedule uses {min_tugs} tugs.")
+    #print(best_assignment)
     #now convert back final best assignment output (which is best chromosome):
     #->what output format do we want? e.g. [[1,3,4,5], [2,6,5,8]], so list of lists of missions per tug
     #maximum = max(best_assignment) # or just use tug_count instead of maximum?
 
     missions_list = []
-    for j in range (0, tug_count): #j is tug index
+    #for j in range (0, min_tugs): #j is tug index
+    for j in set(best_assignment):
         missions_indiv = []
         for i in range(len(best_assignment)): #i is index from best_assignment
             if j==best_assignment[i]:
                 missions_indiv.append(ac_schedule[i])
         missions_list.append(missions_indiv)
-    print(missions_list)
+    for i in missions_list:
+        if len(i) == 0:
+            #print(i)
+            missions_list.remove(i)
 
+    #print(missions_list)
     tugs = []
     logger.info(f"Required Number of tugs:{len(missions_list)}")
     for i in range(len(missions_list)):

@@ -4,6 +4,7 @@ from random import choices, seed
 from loguru import logger
 from src.environment import Airport
 from src.datatypes import Schedule, TowingVehicle
+from src.genetic import genetic_algorithm
 from src.ground_control import groundControl
 from copy import deepcopy
 
@@ -239,5 +240,37 @@ def remove_used(times:dict,used_nodes):
 
     # initial_options:list = costs_table[0]
     # best_choice = initial_options.index(min([i for i in initial_options if i != 0]))#find the index of the smallest non-zero cost
+
+def generate_schedule_tugs_4(airport:Airport,ac_schedule:list[Schedule],ground_controller:groundControl)->list:
+    jobs = []
+    ac_schedule.sort(key=lambda x: x.estimated_time)
+    for i in ac_schedule:
+        start_time = i.estimated_time
+        end_time = start_time + len(ground_controller.determine_route(i.start_pos, i.end_pos, {}, 0))*15
+        #determine_route(self, start_pos: int, end_pos: int,invalid_nodes:dict[int,list[int]],start_time:int) -> list[tuple[int,int]]:
+        jobs.append((start_time, end_time))
+    
+    #here genetic algorithm
+    best_assignment, tug_count = genetic_algorithm(jobs)
+
+    #now convert back final best assignment output (which is best chromosome):
+    #->what output format do we want? e.g. [[1,3,4,5], [2,6,5,8]], so list of lists of missions per tug
+    #maximum = max(best_assignment) # or just use tug_count instead of maximum?
+
+    missions_list = []
+    for j in range (0, tug_count): #j is tug index
+        missions_indiv = []
+        for i in range(len(best_assignment)): #i is index from best_assignment
+            if j==best_assignment[i]:
+                missions_indiv.append(ac_schedule[i])
+        missions_list.append(missions_indiv)
+    print(missions_list)
+
+    tugs = []
+    logger.info(f"Required Number of tugs:{len(missions_list)}")
+    for i in range(len(missions_list)):
+        start_time = missions_list[i][0].estimated_time-len(ground_controller.determine_route(109,missions_list[i][0].start_pos,{},0))*15-180
+        tugs.append(TowingVehicle(str(i),109,missions_list[i],start_time,None))
+    return tugs
 
 

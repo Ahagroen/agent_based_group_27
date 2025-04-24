@@ -3,7 +3,7 @@ from src.datatypes import ActiveRoute, Aircraft, Schedule_Algo,TowingVehicle,Sta
 from src.atc import ATC
 from src.ground_control import groundControl
 from src.environment import Airport
-from src.ants_v2 import generate_schedule_tugs,generate_schedule_tugs_2,generate_schedule_tugs_3
+from src.ants_v2 import generate_schedule_tugs,generate_schedule_tugs_2,generate_schedule_tugs_3, generate_schedule_tugs_4
 from random import choice
 class Simulation:
     def __init__(self,airport:Airport,max_time,ac_interval:int,taxi_margin:int,loading_margin:int, scheduler:Schedule_Algo,rng_seed:int=-1):
@@ -27,6 +27,8 @@ class Simulation:
                 self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs_2(self.airport,self.atc.ac_schedule,self.ground_control)
             case Schedule_Algo.greedy:
                 self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs_3(self.airport,self.atc.ac_schedule,self.ground_control)
+            case Schedule_Algo.genetic:
+                self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs_4(self.airport,self.atc.ac_schedule,self.ground_control)
         self.num_tugs = len(self.tug_intersection)
         self.tug_travelling:list[TravellingVehicle] = []
         self.current_active_routes:list[ActiveRoute] = []

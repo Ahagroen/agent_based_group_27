@@ -14,6 +14,7 @@ class Schedule_Algo(Enum):
     naive = 0
     greedy = 1
     aco = 2
+    genetic = 3
 
 @dataclass
 class Node():

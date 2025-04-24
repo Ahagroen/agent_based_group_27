@@ -21,11 +21,11 @@ class Simulation:
         self.ac_loading:list[Aircraft] = []#AC that are currently loading - location is inside struct 
         self.tug_waiting:list[TowingVehicle] = [] #empty tugs
         match scheduler:
-            case Schedule_Algo.greedy: 
+            case Schedule_Algo.naive: 
                 self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs(self.airport,self.atc.ac_schedule,self.ground_control) #full tugs - we might need to add travel down the line
             case Schedule_Algo.aco:
                 self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs_2(self.airport,self.atc.ac_schedule,self.ground_control)
-            case Schedule_Algo.vrp:
+            case Schedule_Algo.greedy:
                 self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs_3(self.airport,self.atc.ac_schedule,self.ground_control)
         self.num_tugs = len(self.tug_intersection)
         self.tug_travelling:list[TravellingVehicle] = []

@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from random import choices, seed
 from loguru import logger
 from src.environment import Airport
@@ -205,8 +206,20 @@ def compute_row(ac_schedule, travel_times, start_time,start_node):
     return time_list
 
 def generate_schedule_tugs_3(airport:Airport,ac_schedule:list[Schedule],ground_controller:groundControl)->list:
-   pass 
-
+    margin = 180
+    @dataclass
+    class tug_carry:
+        missions:list
+        last_finish_time:int = 0
+    tug_list = [tug_carry([])]
+    for i in ac_schedule:
+        eligible = [x for x in tug_list if x.last_finish_time < i.estimated_time]
+        if len(eligible) > 0:
+            eligible[0].missions.append(i)
+            eligible[0].last_finish_time = i.estimated_time + len(ground_controller.determine_route(i.start_pos,i.end_pos,{},0))*15+margin
+        else:
+            tug_list.append(tug_carry([i],i.estimated_time + len(ground_controller.determine_route(i.start_pos,i.end_pos,{},0))*15+margin))
+    return [x.missions for x in tug_list]
 def remove_used(times:dict,used_nodes):
     for i in used_nodes:
         times.pop(i)

@@ -11,8 +11,8 @@ class ImageType(Enum):
     straight = 3
 
 class Schedule_Algo(Enum):
-    greedy = 0
-    vrp = 1
+    naive = 0
+    greedy = 1
     aco = 2
 
 @dataclass

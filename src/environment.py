@@ -2,7 +2,7 @@ import json
 
 from src.datatypes import Aircraft, Node,ImageType
 class Airport():
-    def __init__(self,airport_file,window_dims:tuple[int,int] = (750,650)):
+    def __init__(self,airport_file,window_dims):
         self._load_airport_data(airport_file,window_dims)
     def _load_airport_data(self,airport_file,window_dims:tuple[int,int]):
         with open(airport_file,"r") as fs:
@@ -10,10 +10,8 @@ class Airport():
             node_map = data["nodes"]
             updated_node_map = {}
             for i in node_map.keys():
-                # We need to add 75 for some reason
-                #This might need to be extracted into a method
-                x_pos = int(((node_map[i]["x_pos"])/7.5)*window_dims[0] - 75 + 100/2)
-                y_pos = window_dims[1] - int(((node_map[i]["y_pos"])/6.5)*window_dims[1] - 75 - 100/2)
+                x_pos = int(((node_map[i]["x_pos"])/(window_dims[0]/100))*window_dims[0])
+                y_pos = window_dims[1] - int(((node_map[i]["y_pos"])/(window_dims[1]/100))*window_dims[1])
                 if len(node_map[i]["edges"]) == 4:
                     image_type = ImageType.four_way_intersection
                     orientation = 0
@@ -88,4 +86,7 @@ class Airport():
         for i in self.gates:
             carry[i] = None
         return carry
+
+
+
 

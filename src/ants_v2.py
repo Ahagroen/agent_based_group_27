@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+from random import choices, seed
 from loguru import logger
 from src.environment import Airport
 from src.datatypes import Schedule, TowingVehicle
@@ -33,9 +35,9 @@ def generate_schedule_tugs(airport:Airport,ac_schedule:list,ground_control:groun
     return carry_tugs
 
 
-def generate_schedule_tugs_2(airport:Airport,ac_schedule:list[Schedule],ground_controller:groundControl)->list:
+def generate_schedule_tugs_2(airport:Airport,ac_schedule:list[Schedule],ground_controller:groundControl,num_cycles:int=10,num_ants:int=250,Q:int=1,rho=0.2)->list:
     #So from ac_schedule, determine the mission, and the time taken to complete the mission (runway to gate)
-    times:dict[int,dict[int,int]] = {}#each row = start position, each column = end_position. None means its an invalid entry (or leave it empty?)
+    times:dict[int,list[int]] = {}#each row = start position, each column = end_position. None means its an invalid entry (or leave it empty?)
     mission_times:dict[tuple,int] = {}# options are Arrivals-gates, gates-departures - Only routes an aircraft can take
     travel_times:dict[tuple,int] = {} #options are 109-arrivals, 109-gates, gates-arrivals (same as arrivals-gates), departures-arrivals, departures-gates(same as gates-departures)
     edge_len = 15
@@ -66,53 +68,158 @@ def generate_schedule_tugs_2(airport:Airport,ac_schedule:list[Schedule],ground_c
             travel_times[j,i] = len(ground_controller.determine_route(i,j,{},0))*edge_len
         travel_times[109,i] = len(ground_controller.determine_route(i,109,{},0))*edge_len
     start_time = 0
+    costs = {}
     times[0] = compute_row(ac_schedule, travel_times, start_time,109)
+    costs[0] = compute_costs(ac_schedule, start_time)
     counter = 0
     for i in ac_schedule:#build the tabu
         counter += 1
-        times[counter] = compute_row(ac_schedule,travel_times,i.estimated_time+mission_times[i.start_pos,i.end_pos],i.end_pos)    
-    missions:list[list[Schedule]] = []
-    ac_schedule_len = len(ac_schedule)
-    while max(times[0]) != 0:
-        data = route(times,ac_schedule_len)
-        if not data:
-            break
-        times = remove_used(times,data)
-        mission_data = [ac_schedule[i-1] for i in data]
-        mission_data.reverse()
-        missions.append(mission_data)
+        times[counter] = compute_row(ac_schedule,travel_times,i.estimated_time+mission_times[i.start_pos,i.end_pos],i.end_pos)  
+        costs[counter] = compute_costs(ac_schedule, i.estimated_time+mission_times[i.start_pos,i.end_pos])
+    num_tugs,schedule_nodes = populate_aco(times,costs,num_cycles,num_ants,Q,rho)
+    schedules = []
+    for i in schedule_nodes:
+        schedule_i = []
+        for j in i:
+            schedule_i.append(ac_schedule[j-1])
+        schedules.append(schedule_i)
 
-    #Ok so basically: compute the time taken for gate-arrival runway and gate-departure runway in the ideal case (both directions are the same)
+
+
     #Then you have a known travel time.
     #We know when each AC sched ule starts, so our graph is a directed graph connecting each mission with the next. Since we know 
     #which gate the AC is going to, we can model all possible paths. Best to do this on paper I think
     #So the matrix looks like a triangle, with 
     #Build the tugs
     tugs = []
-    logger.info(f"Required Number of tugs:{len(missions)}")
-    for i in range(len(missions)):
-        start_time = missions[i][0].estimated_time-travel_times[109,missions[i][0].start_pos]-180
-        tugs.append(TowingVehicle(str(i),109,missions[i],start_time,None))
+    logger.info(f"Required Number of tugs:{num_tugs}")
+    for i in range(len(schedules)):
+        start_time = schedules[i][0].estimated_time-travel_times[109,schedules[i][0].start_pos]-180
+        tugs.append(TowingVehicle(str(i),109,schedules[i],start_time,None))
     return tugs
 
+def populate_aco(connections_list, cost_dict, num_cycles,num_ants,Q,rho,rand_seed:int=-1)->tuple[int,list]:
+    pheremones_dict = {}
+    for i in connections_list.keys():
+        pheremones_dict[i] = {}
+        for j in connections_list[i]:
+            pheremones_dict[i][j] = 0
+    base_pheremones_dict = deepcopy(pheremones_dict)
+    for i in pheremones_dict.keys():
+        for j in pheremones_dict[i].keys():
+            pheremones_dict[i][j] = 1
+    if rand_seed != -1:
+        seed(rand_seed)
+    class Ant():
+        def __init__(self,pheremones):
+            self.position = 0
+            self.options = deepcopy(pheremones)
+            self.nodes_list = []
+            self.trips_list = []
+            self.already_visited = []
+            self.alive = True
+        def go_to_next(self):
+            options = list(set(self.options[self.position].keys()) - set(self.already_visited)) 
+            if len(options) == 0:
+                self.already_visited = self.already_visited + self.nodes_list
+                if self.position == 0:
+                     self.alive = False
+                     return
+                else:
+                    self.trips_list.append(self.nodes_list)
+                    self.position = 0
+                    self.nodes_list = []
+                return 
+            else:
+                pheremones_list = [self.options[self.position][x] for x in options]
+                choice = choices(options,weights=pheremones_list)[0]
+                self.nodes_list.append(choice)
+                self.position = choice
+
+        def return_performance(self)->tuple[int,list]:
+            num_tugs = len(self.trips_list)
+            used_nodes = []
+            for i in self.trips_list:
+                used_nodes.append((0,i[0]))
+                for j in range(1,len(i)):
+                    used_nodes.append((i[j-1],i[j]))
+            return num_tugs,used_nodes
+
+
+    for run in range(num_cycles):
+        ants_list = []
+        for _ in range(num_ants):
+            ants_list.append(Ant(pheremones_dict))
+        while any([x.alive for x in ants_list]):
+            for ant in ants_list:
+                if ant.alive:
+                    ant.go_to_next()
+        updating = deepcopy(base_pheremones_dict)
+        for ant in ants_list:
+            num_tugs,edges = ant.return_performance()
+            delta_ph = Q/(num_tugs*100)
+            for i in edges:
+                updating[i[0]][i[1]] += delta_ph 
+        for i in pheremones_dict.keys():
+            for j in pheremones_dict[i].keys():
+                pheremones_dict[i][j] = (1-rho)*pheremones_dict[i][j] + updating[i][j]/cost_dict[i][j]
+
+    return compute_ideal(pheremones_dict)
+def compute_ideal(pheremone)->tuple[int,list]:
+    tug_missions = []
+    used_nodes = []
+    while len(used_nodes) < len(pheremone.keys())-1:
+        start_node = 0
+        current_mission = []
+        while len(pheremone[start_node]) > 0:
+            eligible = [x for x in pheremone[start_node].keys() if x not in used_nodes]
+            if len(eligible) == 0:
+                break
+            next_node = max(eligible, key=lambda x: pheremone[start_node][x])
+            used_nodes.append(next_node)
+            current_mission.append(next_node)
+            start_node = next_node
+        tug_missions.append(current_mission)
+    return len(tug_missions),tug_missions
+
+def compute_costs(ac_schedule, start_time):
+    data = {}
+    counter = 0
+    for i in ac_schedule:
+        counter += 1
+        if start_time<i.estimated_time:
+            data[counter] = i.estimated_time-start_time #the wait time between missions
+    return data
+
 def compute_row(ac_schedule, travel_times, start_time,start_node):
-    time_list = {0:travel_times[start_node,109]}
+    time_list = []
     margin = 1
     counter = 0
     for i in ac_schedule:
         counter += 1
         if start_node == i.start_pos:
             if start_time+margin < i.estimated_time:
-                time_list[counter] = margin#margin handling? TODO
+                time_list.append(counter)#margin handling? TODO
         else:
             if travel_times[start_node,i.start_pos]+start_time+margin < i.estimated_time:#we can make it 
-                time_list[counter] = travel_times[start_node,i.start_pos]+margin#margin handling? TODO
+                time_list.append(counter)
     return time_list
 
-
-def naieve_route(costs_table:dict,ac_schedule_len):
-   pass 
-
+def generate_schedule_tugs_3(airport:Airport,ac_schedule:list[Schedule],ground_controller:groundControl)->list:
+    margin = 180
+    @dataclass
+    class tug_carry:
+        missions:list
+        last_finish_time:int = 0
+    tug_list = [tug_carry([])]
+    for i in ac_schedule:
+        eligible = [x for x in tug_list if x.last_finish_time < i.estimated_time]
+        if len(eligible) > 0:
+            eligible[0].missions.append(i)
+            eligible[0].last_finish_time = i.estimated_time + len(ground_controller.determine_route(i.start_pos,i.end_pos,{},0))*15+margin
+        else:
+            tug_list.append(tug_carry([i],i.estimated_time + len(ground_controller.determine_route(i.start_pos,i.end_pos,{},0))*15+margin))
+    return [x.missions for x in tug_list]
 def remove_used(times:dict,used_nodes):
     for i in used_nodes:
         times.pop(i)

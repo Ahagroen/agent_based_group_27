@@ -12,7 +12,7 @@ def seconds_to_watch_format(total_seconds):
     return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
 
 
-def Run_visualization(x_dim,y_dim,fps,run_time,ac_freq,taxi_margin,loading_time):
+def Run_visualization(x_dim,y_dim,fps,run_time,ac_freq,taxi_margin,loading_time, scheduler, rng_seed):
     InitWindow(x_dim,y_dim,b"AutoTaxi Simulation")
     SetTargetFPS(fps)
     airport = Airport("airport_layout.json",(x_dim,y_dim))
@@ -23,7 +23,7 @@ def Run_visualization(x_dim,y_dim,fps,run_time,ac_freq,taxi_margin,loading_time)
     unit_height = 50
     unit_width = 50
 
-    sim = Simulation(airport,run_time,ac_freq,taxi_margin,loading_time)
+    sim = Simulation(airport,run_time,ac_freq,taxi_margin,loading_time, scheduler, rng_seed)
     baseline_gates = deepcopy(airport.gates)
     while not WindowShouldClose():
         BeginDrawing()

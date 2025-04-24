@@ -60,7 +60,7 @@ class TowingVehicle():
     schedule:list[Schedule]
     start_time:int #when the towing vehicle starts its route
     connected_aircraft:Aircraft|None
-    time_to_next_node:int = 15 #seconds - Come back to this
+    time_to_next_node:int = 13 #seconds - Come back to this
     next_node_list = [] 
     done = False
 

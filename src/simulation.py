@@ -97,7 +97,7 @@ class Simulation:
         """
         for i in self.tug_intersection:
             collision_risk = [x for x in self.tug_intersection if x is not i and x.pos == i.pos]
-            if len(collision_risk)>0 and i.pos != 109:
+            if len(collision_risk)>0 and i.pos != 109 and i.pos not in self.airport.gates and i.pos not in self.airport.dept_runways and i.pos not in self.airport.arrival_runways:
                 logger.warning(f"{self.time}: Collision!")
                 self.state = Status.Failed_Collision
                 self.dump_state()

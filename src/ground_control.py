@@ -62,23 +62,18 @@ class groundControl:
                 return path[::-1]  # Return reversed path from start to end
 
             # Explore neighbors
-            found = False
-            while not found:
-                for neighbor in nodes[current_node].node.edges:
-                    arrival_time = current_time+15
-                    if any([x in nodes[neighbor].blocked_times for x in range(arrival_time-45,arrival_time+45)]):
-                        continue
-                    temp_g_score = g_score[current_node] + heuristic(nodes,current_node, neighbor) 
+            for neighbor in nodes[current_node].node.edges:
+                arrival_time = current_time+15
+                if any([x in nodes[neighbor].blocked_times for x in range(arrival_time-45,arrival_time+45)]):
+                    continue
+                temp_g_score = g_score[current_node] + heuristic(nodes,current_node, neighbor) 
                     # If this path to neighbor is better update the records
-                    found = True
-                    if temp_g_score < g_score[neighbor]:
-                        came_from[neighbor] = (current_node,current_time)
-                        g_score[neighbor] = temp_g_score
-                        f_score[neighbor] = temp_g_score + heuristic(nodes,neighbor, end_pos)
+                if temp_g_score < g_score[neighbor]:
+                    came_from[neighbor] = (current_node,current_time)
+                    g_score[neighbor] = temp_g_score
+                    f_score[neighbor] = temp_g_score + heuristic(nodes,neighbor, end_pos)
                         # Push updated neighbor into the open set                    
-                        heapq.heappush(open_set, (f_score[neighbor], neighbor, arrival_time))
-                if not found:
-                    current_time += 15
+                    heapq.heappush(open_set, (f_score[neighbor], neighbor, arrival_time))
         logger.debug(f"No paths found, data:{start_pos,end_pos,start_time,invalid_nodes}")
         return self.determine_route(start_pos,end_pos,invalid_nodes,start_time+15)
 

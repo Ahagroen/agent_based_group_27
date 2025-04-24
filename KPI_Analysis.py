@@ -85,7 +85,7 @@ def parse_multiple_runs(path):
     with open(path) as f:
         current_run = []
         for line in f:
-            if "=== STARTING RUN" in line:
+            if "=== STARTING SIM RUN" in line:
                 if current_run:
                     stats = parse_single_run(current_run)
                     results.append(stats)

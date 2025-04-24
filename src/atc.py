@@ -24,7 +24,7 @@ class ATC():
         self.ac_schedule:list = self.populate_schedule(total_time,ground_control)
 
     def get_random_shift(self,base)->int:
-        return int(round(self.random_norm.normal(0,0.05)*(base/5))) #normally distrobuted random noise +-10%
+        return int(round(self.random_norm.normal(0,0.05)*(base))) #normally distrobuted random noise +-10%
     
     def add_aircraft(self,current_time):
         if self.next_ac_time-current_time <=0:

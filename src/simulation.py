@@ -69,7 +69,7 @@ class Simulation:
                 self.tug_waiting.remove(i)
                 continue
             if i.pos != i.schedule[0].start_pos:
-                logger.debug(f"{i.name} Went to the wrong place")
+                logger.debug(f"{i.name} Went to the wrong place - {i.schedule}")
                 i.determine_route(self.current_active_routes,self.time,self.ground_control)
                 self.current_active_routes.append(ActiveRoute(self.time,i.pos,i.get_next_pos()))
                 self.tug_waiting.remove(i)
@@ -80,7 +80,6 @@ class Simulation:
                     if self.ac_waiting[j] is not None:
                         aircraft = self.ac_waiting[j]
                         if str(aircraft.name) != str(i.schedule[0].name_ac):
-                            logger.debug(f"wrong name {aircraft.name}, {i.schedule[0].name_ac}")
                             continue
                         self.ac_waiting[j] = None  #No longer waiting
                         if aircraft:
@@ -88,11 +87,8 @@ class Simulation:
                             logger.debug(f"{self.time}: Aircraft {i.connected_aircraft.name} picked up at {i.pos} by tug {i.name} going to {i.connected_aircraft.target if i.connected_aircraft.departure_runway else i.connected_aircraft.departure_runway}")
                         else:
                             raise RuntimeError
-                        if len(i.schedule) != 0:
-                            i.determine_route(self.current_active_routes,self.time,self.ground_control)
-                            self.current_active_routes.append(ActiveRoute(self.time,i.pos,i.get_next_pos()))
-                            self.tug_waiting.remove(i)
-                            self.tug_intersection.append(i)
+                        self.tug_waiting.remove(i)
+                        self.tug_intersection.append(i)
 
 
 
@@ -114,21 +110,33 @@ class Simulation:
                     self.dump_state()
             if len(i.next_node_list) == 0: #we have arrived at our destination
                 if i.connected_aircraft:
-                    if i.pos not in self.airport.dept_runways: #The aircraft has arrived at the departure runway
+                    if i.pos != i.connected_aircraft.target:
+                        i.determine_route(self.current_active_routes,self.time,self.ground_control)
+                        logger.debug(f"path for tug {i.name} to {i.get_next_pos()}: {i.next_node_list}")
+                        self.current_active_routes.append(ActiveRoute(self.time,i.pos,i.get_next_pos()))
+                        continue
+                    elif i.pos in self.airport.gates: #The aircraft has arrived at the departure runway
                         i.connected_aircraft.loading_completion_time = self.time + i.connected_aircraft.loading_time
                         self.ac_loading.append(i.connected_aircraft)
                         logger.debug(f"{self.time}: Aircraft {i.connected_aircraft.name} started loading at {i.pos}")
-                    else:
+                    elif i.pos in self.airport.dept_runways:
                         logger.debug(f"{self.time}: Aircraft {i.connected_aircraft.name} departing from {i.pos}")
+                    else:
+                        logger.critical(f"{self.time}: Aircraft {i.connected_aircraft.name} is being dropped off in the wrong place (currently at {i.pos})!!!")
+                        self.dump_state()
+                        self.state = Status.Failed_Aircraft_Taxi_Time
                     i.connected_aircraft = None
                     i.schedule.pop(0)
                     i.determine_route(self.current_active_routes,self.time,self.ground_control)
+                    logger.debug(f"path for tug {i.name}: {i.next_node_list}")
+
                     self.current_active_routes.append(ActiveRoute(self.time,i.pos,i.get_next_pos()))
                 else: #We are waiting
                     if i.pos == 109:
                         if len(i.schedule) == 0:
                             self.tug_intersection.remove(i)
                         i.determine_route(self.current_active_routes,self.time,self.ground_control)
+                        logger.debug(f"path for tug {i.name}: {i.next_node_list}")
                         self.current_active_routes.append(ActiveRoute(self.time,i.pos,i.get_next_pos()))
                     else:
                         logger.debug(f"{self.time}: tug {i.name} arrived at {i.pos}. Waiting")

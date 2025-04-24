@@ -3,6 +3,7 @@ import math
 from typing import Any
 from copy import deepcopy
 import src.datatypes as dt
+from loguru import logger
 class groundControl:
     def __init__(self, nodes,total_time:int):
         # convert dictionary keys from strings to integers
@@ -32,15 +33,15 @@ class groundControl:
             list[int]: list of nodes to travel to
         """
         if start_pos == end_pos:
+            logger.debug("Start pos is end pos")
             return []
         # initialize open set (priority queue)
         nodes = self.create_current_network(invalid_nodes)
         open_set = []
         heapq.heappush(open_set, (0, start_pos,start_time))
-
+        
         # Dictionary to store the best previous node for each visited node
         came_from = {}
-
         # Dictionary to store the cost from start to each node (g-score)
         g_score = {node: float('inf') for node in nodes}
         g_score[start_pos] = 0
@@ -48,11 +49,9 @@ class groundControl:
         # Dictionary to store estimated total cost (f-score = g-score + heuristic)
         f_score = {node: float('inf') for node in nodes}
         f_score[start_pos] = heuristic(nodes,start_pos, end_pos)
-
         while open_set:
             # Get the node with the lowest f-score
             _ , current_node,current_time = heapq.heappop(open_set)
-
             # If the goal is reached, reconstruct the path
             if current_node == end_pos:
                 path = []
@@ -69,20 +68,19 @@ class groundControl:
                     arrival_time = current_time+15
                     if any([x in nodes[neighbor].blocked_times for x in range(arrival_time-30,arrival_time+30)]):
                         continue
-                    temp_g_score = g_score[current_node] + heuristic(nodes,current_node, neighbor)
-                    found = True
+                    temp_g_score = g_score[current_node] + heuristic(nodes,current_node, neighbor) 
                     # If this path to neighbor is better update the records
+                    found = True
                     if temp_g_score < g_score[neighbor]:
                         came_from[neighbor] = (current_node,current_time)
                         g_score[neighbor] = temp_g_score
                         f_score[neighbor] = temp_g_score + heuristic(nodes,neighbor, end_pos)
-
-                    # Push updated neighbor into the open set
+                        # Push updated neighbor into the open set                    
                         heapq.heappush(open_set, (f_score[neighbor], neighbor, arrival_time))
                 if not found:
                     current_time += 15
-     
-        return []  # No path found, nodes might not be connected
+        logger.debug(f"No paths found, data:{start_pos,end_pos,start_time,invalid_nodes}")
+        return self.determine_route(start_pos,end_pos,invalid_nodes,start_time+15)
 
 def heuristic(node_map, node1: int, node2: int) -> float:
         """Calculate Euclidean distance heuristic."""

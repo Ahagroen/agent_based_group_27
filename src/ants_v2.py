@@ -218,7 +218,7 @@ def generate_schedule_tugs_3(airport:Airport,ac_schedule:list[Schedule],ground_c
     for i in airport.arrival_runways:
         for j in airport.arrival_runways:
             if i == j:
-                continue
+                travel_times[j,i] = 0
             travel_times[j,i] = len(ground_controller.determine_route(i,j,{},0))*edge_len
         for j in airport.dept_runways:
             travel_times[j,i] = len(ground_controller.determine_route(i,j,{},0))*edge_len
@@ -230,7 +230,7 @@ def generate_schedule_tugs_3(airport:Airport,ac_schedule:list[Schedule],ground_c
             travel_times[j,i] = len(ground_controller.determine_route(i,j,{},0))*edge_len
         for j in airport.gates:
             if i == j:
-                continue
+                travel_times[j,i] = 0
             travel_times[j,i] = len(ground_controller.determine_route(i,j,{},0))*edge_len
     for i in airport.dept_runways:
         for j in airport.gates:

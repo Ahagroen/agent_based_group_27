@@ -193,7 +193,7 @@ def compute_costs(ac_schedule, start_time):
 
 def compute_row(ac_schedule, travel_times, start_time,start_node):
     time_list = []
-    margin = 1
+    margin = 180
     counter = 0
     for i in ac_schedule:
         counter += 1

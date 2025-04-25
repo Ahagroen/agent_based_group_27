@@ -71,24 +71,26 @@ def main():
 
     # Simulation Inputs
     # -----------------
-    x_dim = 900                        # Width of window                                # [Pixels]
-    y_dim = 780                        # Height of window                               # [Pixels]
-    fps = 120                          # Frames per second                              # [-]
-    run_time = 6 * 60 * 60             # Length of simulation                           # [s]
-    ac_freq = 10 * 60                  # Frequency of aircraft arrival                  # [s]
-    taxi_margin = 20 * 60              # Time margin for aircraft to arrive at gate     # [s]
-    loading_time = 30 * 60             # Time spent by aircraft at gate                 # [s]
-    scheduler = Schedule_Algo.greedy   # Time of algorith used to manage tug schedule   # [-]
-    rng_seed = - 1                     # Seed used to generate random variables         # [-]
+    x_dim = 900                        # Width of window                                    # [Pixels]
+    y_dim = 780                        # Height of window                                   # [Pixels]
+    fps = 300                          # Frames per second                                  # [-]
+    run_time = 6 * 60 * 60             # Length of simulation                               # [s]
+    ac_freq = 8 * 60                   # Frequency of aircraft arrival                      # [s]
+    taxi_margin = 30 * 60              # Time margin for aircraft to be moved from A to B   # [s]
+    loading_time = 30 * 60             # Time spent by aircraft at gate                     # [s]
+    scheduler = Schedule_Algo.aco      # Time of algorith used to manage tug schedule       # [-]
+    rng_seed = - 1                     # Seed used to generate random variables             # [-]
 
     # Run Simulations or Visualization
     # --------------------------------
 
     # Visualization
+    # Run_visualization(x_dim, y_dim, fps, run_time,840,2340,1080, Schedule_Algo.greedy, rng_seed)
     # Run_visualization(x_dim, y_dim, fps, run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)
 
     # Simulation
-    simulate_data_single_run(run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)
+    # simulate_data_single_run(run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)
+    simulate_data_single_run(run_time,2400,1800,2700,Schedule_Algo.greedy, rng_seed)
 
 
 

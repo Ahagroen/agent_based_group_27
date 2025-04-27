@@ -123,7 +123,7 @@ def merge_tug_assignments(chromosome, jobs):
 def find_min_tugs(jobs, pop_size=50, generations=300):
     best_solution = None
 
-    for t in range(len(jobs)//4 + 1,1,-1):
+    for t in range(len(jobs)//2 + 1,1,-1):
         #print(f"\n🔍 Trying with max_tugs = {t}")
         best, used = genetic_algorithm(jobs, max_tugs=t, pop_size=pop_size, generations=generations)
 

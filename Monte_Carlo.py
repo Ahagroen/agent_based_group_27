@@ -22,9 +22,10 @@ columns = [
 df = pd.DataFrame(columns=columns)
 
 # Define the ranges globally or pass them in
-i_range = np.arange(20, 40+10, 10)
-j_range = np.arange(10, 20+5, 5)
-k_range = np.arange(40, 60+10, 10)
+i_range = np.arange(8, 9, 1)
+j_range = np.arange(20, 21, 1)
+k_range = np.arange(26, 27, 1)
+n_runs = 10
 
 def get_progress(i, j, k):
     i_index = np.where(i_range == i)[0][0]
@@ -46,60 +47,61 @@ def get_progress(i, j, k):
 for i in i_range:
     for j in j_range:
         for k in k_range:
+            for l in range(n_runs):
 
-            try:
-                run_time = 6 * 60 * 60            # Length of simulation                           # [s]
-                ac_freq = i * 60                  # Frequency of aircraft arrival                  # [s]
-                taxi_margin = j * 60              # Time margin for aircraft to move from A to B   # [s]
-                loading_time = k * 60             # Time spent by aircraft at gate                 # [s]
-                scheduler = Schedule_Algo.greedy  # Time of algorith used to manage tug schedule   # [-]
-                rng_seed = - 1                    # Seed used to generate random variables         # [-]
+                try:
+                    run_time = 6 * 60 * 60            # Length of simulation                           # [s]
+                    ac_freq = i * 60                  # Frequency of aircraft arrival                  # [s]
+                    taxi_margin = j * 60              # Time margin for aircraft to move from A to B   # [s]
+                    loading_time = k * 60             # Time spent by aircraft at gate                 # [s]
+                    scheduler = Schedule_Algo.greedy  # Time of algorith used to manage tug schedule   # [-]
+                    rng_seed = - 1                    # Seed used to generate random variables         # [-]
 
-                min_tugs,\
-                util_pct_tugs,\
-                avg_iddle_t_per_ac,\
-                avg_taxi_t_per_ac,\
-                simulation_end_result = simulate_data_single_run(run_time,
-                                                                ac_freq,
-                                                                taxi_margin,
-                                                                loading_time,
-                                                                scheduler,
-                                                                rng_seed)
+                    min_tugs,\
+                    util_pct_tugs,\
+                    avg_iddle_t_per_ac,\
+                    avg_taxi_t_per_ac,\
+                    simulation_end_result = simulate_data_single_run(run_time,
+                                                                    ac_freq,
+                                                                    taxi_margin,
+                                                                    loading_time,
+                                                                    scheduler,
+                                                                    rng_seed)
 
-                new_data = {
-                    "ac_freq": ac_freq,
-                    "taxi_margin": taxi_margin,
-                    "loading_time": loading_time,
-                    "scheduler": str(Schedule_Algo.greedy),
-                    "min_tugs": min_tugs,
-                    "util_pct_tugs": util_pct_tugs,
-                    "avg_iddle_t_per_ac": avg_iddle_t_per_ac,
-                    "avg_taxi_t_per_ac": avg_taxi_t_per_ac,
-                    "simulation_end_result": simulation_end_result
-                }
+                    new_data = {
+                        "ac_freq": ac_freq,
+                        "taxi_margin": taxi_margin,
+                        "loading_time": loading_time,
+                        "scheduler": str(Schedule_Algo.greedy),
+                        "min_tugs": min_tugs,
+                        "util_pct_tugs": util_pct_tugs,
+                        "avg_iddle_t_per_ac": avg_iddle_t_per_ac,
+                        "avg_taxi_t_per_ac": avg_taxi_t_per_ac,
+                        "simulation_end_result": simulation_end_result
+                    }
 
-                df.loc[len(df)] = new_data
+                    df.loc[len(df)] = new_data
 
-            except Exception:
+                except Exception:
 
 
-                new_data = {
-                    "ac_freq": ac_freq,
-                    "taxi_margin": taxi_margin,
-                    "loading_time": loading_time,
-                    "scheduler": str(scheduler),
-                    "min_tugs": None,
-                    "util_pct_tugs": None,
-                    "avg_iddle_t_per_ac": None,
-                    "avg_taxi_t_per_ac": None,
-                    "simulation_end_result": simulation_end_result
-                }
+                    new_data = {
+                        "ac_freq": ac_freq,
+                        "taxi_margin": taxi_margin,
+                        "loading_time": loading_time,
+                        "scheduler": str(scheduler),
+                        "min_tugs": None,
+                        "util_pct_tugs": None,
+                        "avg_iddle_t_per_ac": None,
+                        "avg_taxi_t_per_ac": None,
+                        "simulation_end_result": simulation_end_result
+                    }
 
-                df.loc[len(df)] = new_data
+                    df.loc[len(df)] = new_data
 
-            print("")
-            get_progress(i, j, k)
-            print(i, j, k)
+                print("")
+                get_progress(i, j, k)
+                print(i, j, k)
 
 # Save DataFrame to a .txt file with tab-separated values
 df.to_csv("MonteCarlo.txt", sep=",", index=False)

@@ -1,0 +1,11 @@
+ac_freq,taxi_margin,loading_time,scheduler,min_tugs,util_pct_tugs,avg_iddle_t_per_ac,avg_taxi_t_per_ac,simulation_end_result
+600,855.0,1800,Schedule_Algo.greedy,3,29.35604248397283,0.0,565.1354838709677,Status.Success
+600,855.0,1800,Schedule_Algo.greedy,3,29.82065963185539,0.0,570.1821428571428,Status.Success
+600,855.0,1800,Schedule_Algo.greedy,3,29.04536862003781,0.0,565.8304147465437,Status.Success
+600,855.0,1800,Schedule_Algo.greedy,3,29.799204424792787,0.0,566.6928571428572,Status.Success
+600,855.0,1800,Schedule_Algo.greedy,3,30.099738029858287,1.6111111111111112,568.9201388888889,Status.Success
+600,855.0,1800,Schedule_Algo.greedy,4,22.195585093757416,0.0,573.6534562211981,Status.Success
+600,855.0,1800,Schedule_Algo.greedy,3,29.31908155186065,0.0,558.2446428571428,Status.Success
+600,855.0,1800,Schedule_Algo.greedy,3,29.39154947421766,0.0,570.5668202764977,Status.Success
+600,855.0,1800,Schedule_Algo.greedy,3,28.842277651801464,0.0,562.7907834101383,Status.Success
+600,855.0,1800,Schedule_Algo.greedy,3,28.49495378898808,0.0,555.7400921658987,Status.Success

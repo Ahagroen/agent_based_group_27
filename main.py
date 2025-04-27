@@ -18,17 +18,29 @@ def simulate_data_multiple_runs(runs, run_time, ac_freq, taxi_margin, loading_ti
     window_dims = (x_dim, y_dim)
 
     airport = Airport("baseline_airport.json", window_dims)
-    carry = []
+
     for i in range(runs):
-
         logger.info(f"=== STARTING SIM RUN {i} ===")
-        result = run_simulation(airport, run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)
-        carry.append(result)
+        run_simulation(airport, run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)
+        print(f"SIM RUN: {i+1}/{runs}")
 
-    # print(f"num successes: {[x[0] for x in carry].count(Status.Success)},"
-    #       f" percentage = {[x[0] for x in carry].count(Status.Success)/len(carry)}")
+    results = parse_multiple_runs("runlog.txt")
 
-    return parse_multiple_runs("runlog.txt")
+    for item in results:
+        item["run_time"] = run_time
+        item["ac_freq"] = ac_freq
+        item["taxi_margin"] = taxi_margin
+        item["loading_time"] = loading_time
+        item["scheduler"] = str(scheduler)
+        item["rng_seed"] = rng_seed
+
+    succesfull_sim_str = "Status.Success"
+    n_successes = str([item['simulation_end_result'] for item in results].count(succesfull_sim_str)) + "/" + str(runs)
+    per_successes = float([item['simulation_end_result'] for item in results].count(succesfull_sim_str)/len(results))
+    print(f"SIM RUN SUCCESS: {n_successes}, {per_successes*100}%")
+
+
+    return (results, n_successes, per_successes)
 
 def simulate_data_single_run(run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed):
 
@@ -67,9 +79,9 @@ def main():
     y_dim = 780                        # Height of window                                   # [Pixels]
     fps = 240                          # Frames per second                                  # [-]
     run_time = 6 * 60 * 60             # Length of simulation                               # [s]
-    ac_freq = 20 * 60                  # Frequency of aircraft arrival                      # [s]  20, 30, 40
-    taxi_margin = 7 * 60               # Time margin for aircraft to be moved from A to B   # [s]  10, 15, 20
-    loading_time = 40 * 60             # Time spent by aircraft at gate                     # [s]  40, 50, 60
+    ac_freq = 10 * 60                  # Frequency of aircraft arrival                      # [s]  20, 30, 40
+    taxi_margin = 15 * 60              # Time margin for aircraft to be moved from A to B   # [s]  10, 15, 20
+    loading_time = 30 * 60             # Time spent by aircraft at gate                     # [s]  40, 50, 60
     scheduler = Schedule_Algo.greedy   # Time of algorith used to manage tug schedule       # [-]
     rng_seed = - 1                     # Seed used to generate random variables             # [-]
 
@@ -77,13 +89,11 @@ def main():
     # --------------------------------
 
     # Visualization
-    # Run_visualization(x_dim, y_dim, fps, run_time,840,2340,1080, Schedule_Algo.greedy, rng_seed)
     # Run_visualization(x_dim, y_dim, fps, run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)
 
     # Simulation
-    print(simulate_data_single_run(run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed))
-    # simulate_data_single_run(run_time,2400,1800,2700,Schedule_Algo.greedy, rng_seed)
-
+    # print(simulate_data_single_run(run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed))
+    simulate_data_multiple_runs(3, run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)
 
 
 if __name__ == "__main__":

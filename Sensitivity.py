@@ -1,10 +1,11 @@
 import numpy as np
 import scipy.stats as stats
 import math
-from main import simulate_data_single_run
+from main import simulate_data_single_run, simulate_data_multiple_runs
 from src.datatypes import Schedule_Algo, Status
 import pandas as pd
 from Min_N_SIM import estimate_required_runs
+import os
 
 
 # =======================================
@@ -13,8 +14,7 @@ from Min_N_SIM import estimate_required_runs
 
 def mean_outputs(data, min_runs_ac_freq_min):
     run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed = data
-
-    run_n = 1
+    runs = min_runs_ac_freq_min
 
     # Define the columns
     # ------------------
@@ -26,7 +26,7 @@ def mean_outputs(data, min_runs_ac_freq_min):
         "min_tugs",              # Minimum number of tugs needed                  # [-]
         "util_pct_tugs",         # Tug utilization percentage                     # [%]
         "avg_iddle_t_per_ac",    # Average idle time per aircraft                 # [-]
-        "avg_taxi_t_per_ac",      # Average taxi time per aircraft                # [-]
+        "avg_taxi_t_per_ac",     # Average taxi time per aircraft                # [-]
         "simulation_end_result"  # Reason for ending simulation                   # [-]
     ]
 
@@ -34,48 +34,28 @@ def mean_outputs(data, min_runs_ac_freq_min):
     # ----------------------------------------------------
     df = pd.DataFrame(columns=columns)
 
-    for i in range(min_runs_ac_freq_min):
+    # Simulate multiple runs
+    results = simulate_data_multiple_runs(runs, run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)
 
-        try:
-            r1, r2, r3, r4, r5 = simulate_data_single_run(run_time,
-                                                          ac_freq,
-                                                          taxi_margin,
-                                                          loading_time,
-                                                          scheduler,
-                                                          rng_seed)
+    # Iterate through each result
+    for result in results[0]:
 
-            new_data = {"ac_freq": ac_freq,
-                        "taxi_margin": taxi_margin,
-                        "loading_time": loading_time,
-                        "scheduler": str(Schedule_Algo.greedy),
-                        "min_tugs": r1,
-                        "util_pct_tugs": r2,
-                        "avg_iddle_t_per_ac": r3,
-                        "avg_taxi_t_per_ac": r4,
-                        "simulation_end_result": r5}
+        new_data = {
+            "ac_freq": result["ac_freq"],
+            "taxi_margin": result["taxi_margin"],
+            "loading_time": result["loading_time"],
+            "scheduler": result["scheduler"],
+            "min_tugs": result["min_tugs"],
+            "util_pct_tugs": result["util_pct_tugs"],
+            "avg_iddle_t_per_ac": result["avg_iddle_t_per_ac"],
+            "avg_taxi_t_per_ac": result["avg_taxi_t_per_ac"],
+            "simulation_end_result": result["simulation_end_result"]
+        }
 
-            df.loc[len(df)] = new_data
+        # Append the new data as a new row to the DataFrame
+        df.loc[len(df)] = new_data
 
-        except Exception:
-
-            new_data = {
-                "ac_freq": ac_freq,
-                "taxi_margin": taxi_margin,
-                "loading_time": loading_time,
-                "scheduler": str(scheduler),
-                "min_tugs": None,
-                "util_pct_tugs": None,
-                "avg_iddle_t_per_ac": None,
-                "avg_taxi_t_per_ac": None,
-                "simulation_end_result": r5
-            }
-
-            df.loc[len(df)] = new_data
-
-        finally:
-            print(run_n)
-            run_n += 1
-
+    # Calculate the means for the relevant columns
     mean_results = {
         "mean_min_tugs": df["min_tugs"].mean(),
         "mean_util_pct_tugs": df["util_pct_tugs"].mean(),
@@ -84,6 +64,69 @@ def mean_outputs(data, min_runs_ac_freq_min):
     }
 
     return mean_results
+
+
+
+import os
+
+def mean_outputs_backup(data, min_runs_ac_freq_min, save_file="simulation_progress.txt", force_new_run=False):
+    run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed = data
+    runs = min_runs_ac_freq_min
+
+    columns = [
+        "ac_freq", "taxi_margin", "loading_time", "scheduler", "min_tugs",
+        "util_pct_tugs", "avg_iddle_t_per_ac", "avg_taxi_t_per_ac", "simulation_end_result"
+    ]
+
+    # If force_new_run is True, delete the old save if it exists
+    if force_new_run and os.path.exists(save_file):
+        os.remove(save_file)
+        print(f"Deleted existing file {save_file}. Starting fresh.")
+
+    # Try loading existing partial data
+    if os.path.exists(save_file):
+        df = pd.read_csv(save_file)
+        print(f"Loaded existing progress from {save_file}")
+    else:
+        df = pd.DataFrame(columns=columns)
+
+    # Simulate remaining runs
+    already_done_runs = len(df)
+    runs_left = runs - already_done_runs
+    print(f"Already completed runs: {already_done_runs}. Runs left: {runs_left}.")
+
+    if runs_left <= 0:
+        print("All runs already completed. Using saved data.")
+    else:
+        results = simulate_data_multiple_runs(runs_left, run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)
+
+        # Save after each run
+        for result in results[0]:
+            new_data = {
+                "ac_freq": result["ac_freq"],
+                "taxi_margin": result["taxi_margin"],
+                "loading_time": result["loading_time"],
+                "scheduler": result["scheduler"],
+                "min_tugs": result["min_tugs"],
+                "util_pct_tugs": result["util_pct_tugs"],
+                "avg_iddle_t_per_ac": result["avg_iddle_t_per_ac"],
+                "avg_taxi_t_per_ac": result["avg_taxi_t_per_ac"],
+                "simulation_end_result": result["simulation_end_result"]
+            }
+            df.loc[len(df)] = new_data
+            df.to_csv(save_file, index=False)   # Save after each new run!
+
+    # Calculate means
+    mean_results = {
+        "mean_min_tugs": df["min_tugs"].mean(),
+        "mean_util_pct_tugs": df["util_pct_tugs"].mean(),
+        "mean_avg_iddle_t_per_ac": df["avg_iddle_t_per_ac"].mean(),
+        "mean_avg_taxi_t_per_ac": df["avg_taxi_t_per_ac"].mean(),
+    }
+
+    return mean_results
+
+
 
 # ============================================================
 # STEP 1 - Set Baseline Simulation Inputs & Range of Variation
@@ -95,15 +138,15 @@ x_dim = 900                          # Width of window                          
 y_dim = 780                          # Height of window                                   # [Pixels]
 fps = 240                            # Frames per second                                  # [-]
 run_time = 6 * 60 * 60               # Length of simulation                               # [s]
-ac_freq = 30 * 60                    # Frequency of aircraft arrival                      # [s]  20, 30, 40
-taxi_margin = 15 * 60                # Time margin for aircraft to be moved from A to B   # [s]  10, 15, 20
-loading_time = 50 * 60               # Time spent by aircraft at gate                     # [s]  40, 50, 60
+ac_freq = 10 * 60                    # Frequency of aircraft arrival                      # [s]  10
+taxi_margin = 15 * 60                # Time margin for aircraft to be moved from A to B   # [s]  15
+loading_time = 30 * 60               # Time spent by aircraft at gate                     # [s]  30
 scheduler = Schedule_Algo.greedy     # Time of algorith used to manage tug schedule       # [-]
 rng_seed = - 1                       # Seed used to generate random variables             # [-]
 
 # Variation Range
 # ---------------
-Var_Range = 0.1
+Var_Range = 0.05
 
 Range_ac_freq = [ac_freq*(1-Var_Range), ac_freq, ac_freq*(1+Var_Range)]
 Range_taxi_margin = [taxi_margin*(1-Var_Range), taxi_margin, taxi_margin*(1+Var_Range)]
@@ -118,7 +161,7 @@ Range_loading_time = [loading_time*(1-Var_Range), loading_time, loading_time*(1+
 margin_of_error = 5               # desired half-width
 alpha = 0.05                      # for 95% CI
 initial_runs = 100
-hardcoded_n_runs = 1
+hardcoded_n_runs = 10
 
 # ac_freq
 # -------
@@ -140,9 +183,10 @@ print(f"Minimum number of runs for min_runs_ac_freq_mid: {min_runs_ac_freq_mid}"
 print(f"Minimum number of runs for min_runs_ac_freq_max: {min_runs_ac_freq_max}")
 print(f"")
 
-mean_results_1 = mean_outputs(sim_input_1, min_runs_ac_freq_min)
-mean_results_2 = mean_outputs(sim_input_2, min_runs_ac_freq_mid)
-mean_results_3 = mean_outputs(sim_input_2, min_runs_ac_freq_max)
+mean_results_1 = mean_outputs_backup(sim_input_1, min_runs_ac_freq_min, save_file="progress_sim_input_1.txt", force_new_run=False)
+mean_results_2 = mean_outputs_backup(sim_input_2, min_runs_ac_freq_mid, save_file="progress_sim_input_2.txt", force_new_run=False)
+mean_results_3 = mean_outputs_backup(sim_input_3, min_runs_ac_freq_max, save_file="progress_sim_input_3.txt", force_new_run=False)
+
 
 # taxi_margin
 # -----------
@@ -164,9 +208,9 @@ print(f"Minimum number of runs for min_runs_taxi_margin_mid: {min_runs_taxi_marg
 print(f"Minimum number of runs for min_runs_taxi_margin_max: {min_runs_taxi_margin_max}")
 print(f"")
 
-mean_results_4 = mean_outputs(sim_input_4, min_runs_taxi_margin_min)
-mean_results_5 = mean_outputs(sim_input_5, min_runs_taxi_margin_mid)
-mean_results_6 = mean_outputs(sim_input_6, min_runs_taxi_margin_max)
+mean_results_4 = mean_outputs_backup(sim_input_4, min_runs_taxi_margin_min, save_file="progress_sim_input_4.txt", force_new_run=False)
+mean_results_5 = mean_outputs_backup(sim_input_5, min_runs_taxi_margin_mid, save_file="progress_sim_input_5.txt", force_new_run=False)
+mean_results_6 = mean_outputs_backup(sim_input_6, min_runs_taxi_margin_max, save_file="progress_sim_input_6.txt", force_new_run=False)
 
 # loading_time
 # ------------
@@ -188,9 +232,13 @@ print(f"Minimum number of runs for min_runs_loading_time_mid: {min_runs_loading_
 print(f"Minimum number of runs for min_runs_loading_time_max: {min_runs_loading_time_max}")
 print(f"")
 
-mean_results_7 = mean_outputs(sim_input_7, min_runs_loading_time_min)
-mean_results_8 = mean_outputs(sim_input_8, min_runs_loading_time_mid)
-mean_results_9 = mean_outputs(sim_input_9, min_runs_loading_time_max)
+mean_results_7 = mean_outputs_backup(sim_input_7, min_runs_loading_time_min, save_file="progress_sim_input_7.txt", force_new_run=False)
+mean_results_8 = mean_outputs_backup(sim_input_8, min_runs_loading_time_mid, save_file="progress_sim_input_8.txt", force_new_run=False)
+mean_results_9 = mean_outputs_backup(sim_input_9, min_runs_loading_time_max, save_file="progress_sim_input_9.txt", force_new_run=False)
+
+# mean_results_7 = mean_outputs(sim_input_7, min_runs_loading_time_min)
+# mean_results_8 = mean_outputs(sim_input_8, min_runs_loading_time_mid)
+# mean_results_9 = mean_outputs(sim_input_9, min_runs_loading_time_max)
 
 
 # ================================
@@ -294,37 +342,42 @@ loading_time_vs_avg_taxi_t_per_ac =  calculate_S(loading_time,
 # Print Sensitivity Results
 # -------------------------
 
-# List of (name, value) pairs
-sensitivities = [
-    ("S_ac_freq_vs_min_tugs",              S_ac_freq_vs_min_tugs),
-    ("S_ac_freq_vs_util_pct_tugs",          S_ac_freq_vs_util_pct_tugs),
-    ("S_ac_freq_vs_avg_iddle_t_per_ac",     S_ac_freq_vs_avg_iddle_t_per_ac),
-    ("S_ac_freq_vs_avg_taxi_t_per_ac",      S_ac_freq_vs_avg_taxi_t_per_ac),
+# Print Sensitivity Results
+# -------------------------
 
-    ("S_taxi_margin_vs_min_tugs",           S_taxi_margin_vs_min_tugs),
-    ("S_taxi_margin_vs_util_pct_tugs",      S_taxi_margin_vs_util_pct_tugs),
-    ("S_taxi_margin_vs_avg_iddle_t_per_ac", S_taxi_margin_vs_avg_iddle_t_per_ac),
-    ("S_taxi_margin_vs_avg_taxi_t_per_ac",  S_taxi_margin_vs_avg_taxi_t_per_ac),
+# Print the headers
+print("")
+print("{:<40} {:<10} {:<10}".format('Metric', 'S-', 'S+'))
+print("------------------------------------------------------------")
 
-    ("loading_time_vs_min_tugs",            loading_time_vs_min_tugs),
-    ("loading_time_vs_util_pct_tugs",       loading_time_vs_util_pct_tugs),
-    ("loading_time_vs_avg_iddle_t_per_ac",  loading_time_vs_avg_iddle_t_per_ac),
-    ("loading_time_vs_avg_taxi_t_per_ac",   loading_time_vs_avg_taxi_t_per_ac),
-]
+# Print each sensitivity result explicitly
+print("{:<40} {:<10} {:<10}".format("S_ac_freq_vs_min_tugs:",
+                                    round(S_ac_freq_vs_min_tugs[0], 2), round(S_ac_freq_vs_min_tugs[1], 2)))
+print("{:<40} {:<10} {:<10}".format("S_ac_freq_vs_util_pct_tugs:",
+                                    round(S_ac_freq_vs_util_pct_tugs[0], 2), round(S_ac_freq_vs_util_pct_tugs[1], 2)))
+print("{:<40} {:<10} {:<10}".format("S_ac_freq_vs_avg_iddle_t_per_ac:",
+                                    round(S_ac_freq_vs_avg_iddle_t_per_ac[0], 2), round(S_ac_freq_vs_avg_iddle_t_per_ac[1], 2)))
+print("{:<40} {:<10} {:<10}".format("S_ac_freq_vs_avg_taxi_t_per_ac:",
+                                    round(S_ac_freq_vs_avg_taxi_t_per_ac[0], 2), round(S_ac_freq_vs_avg_taxi_t_per_ac[1], 2)))
 
-# Convert to a DataFrame
-df = pd.DataFrame(sensitivities, columns=["Metric", "Values"])
+print("{:<40} {:<10} {:<10}".format("S_taxi_margin_vs_min_tugs:",
+                                    round(S_taxi_margin_vs_min_tugs[0], 2), round(S_taxi_margin_vs_min_tugs[1], 2)))
+print("{:<40} {:<10} {:<10}".format("S_taxi_margin_vs_util_pct_tugs:",
+                                    round(S_taxi_margin_vs_util_pct_tugs[0], 2), round(S_taxi_margin_vs_util_pct_tugs[1], 2)))
+print("{:<40} {:<10} {:<10}".format("S_taxi_margin_vs_avg_iddle_t_per_ac:",
+                                    round(S_taxi_margin_vs_avg_iddle_t_per_ac[0], 2), round(S_taxi_margin_vs_avg_iddle_t_per_ac[1], 2)))
+print("{:<40} {:<10} {:<10}".format("S_taxi_margin_vs_avg_taxi_t_per_ac:",
+                                    round(S_taxi_margin_vs_avg_taxi_t_per_ac[0], 2), round(S_taxi_margin_vs_avg_taxi_t_per_ac[1], 2)))
 
-# Expand 'Values' into two separate columns for S- and S+
-df[['S-', 'S+']] = pd.DataFrame(df['Values'].tolist(), index=df.index)
-
-# Round the S- and S+ values to 2 decimal places
-df[['S-', 'S+']] = df[['S-', 'S+']].round(2)
-
-# Center-align the text and print the DataFrame
-pd.set_option('display.colheader_justify', 'center')  # Center column headers
-print(df[['Metric', 'S-', 'S+']].to_string(index=False, justify='left'))
-
+print("{:<40} {:<10} {:<10}".format("loading_time_vs_min_tugs:",
+                                    round(loading_time_vs_min_tugs[0], 2), round(loading_time_vs_min_tugs[1], 2)))
+print("{:<40} {:<10} {:<10}".format("loading_time_vs_util_pct_tugs:",
+                                    round(loading_time_vs_util_pct_tugs[0], 2), round(loading_time_vs_util_pct_tugs[1], 2)))
+print("{:<40} {:<10} {:<10}".format("loading_time_vs_avg_iddle_t_per_ac:",
+                                    round(loading_time_vs_avg_iddle_t_per_ac[0], 2), round(loading_time_vs_avg_iddle_t_per_ac[1], 2)))
+print("{:<40} {:<10} {:<10}".format("loading_time_vs_avg_taxi_t_per_ac:",
+                                    round(loading_time_vs_avg_taxi_t_per_ac[0], 2), round(loading_time_vs_avg_taxi_t_per_ac[1], 2)))
+print("")
 
 # Miscelaneous
 # ------------

@@ -97,7 +97,7 @@ def parse_single_run(lines):
         "avg_taxi_arr": mean(taxis_arr) if taxis_arr else float("nan"),
         "avg_taxi_dep": mean(taxis_dep) if taxis_dep else float("nan"),
         "util_pct":     util * 100,
-        "status":       sim_status
+        "status":       str(sim_status)
     }
 
 def parse_multiple_runs(path):
@@ -115,9 +115,11 @@ def parse_multiple_runs(path):
             stats = parse_single_run(current_run)
             results.append(stats)
 
-    """
+    clean_results = []
+
     # Print results
     for i, r in enumerate(results):
+        """
         print(f"\n--- Simulation Run {i} ---")
         print(f"1) Min tugs required        : {r['min_tugs']}")
         print(f"2) Avg waiting arrival      : {r['avg_wait_arr']:.2f} s")
@@ -125,8 +127,19 @@ def parse_multiple_runs(path):
         print(f"4) Avg taxi time arrival    : {r['avg_taxi_arr']:.2f} s")
         print(f"5) Avg taxi time departure  : {r['avg_taxi_dep']:.2f} s")
         print(f"6) Tug utilization rate     : {r['util_pct']:.1f}%")
-    """
+        """
 
-    return results
+        clean_result_dict = {
+            "min_tugs": r['min_tugs'],                                    # Minimum number of tugs needed    # [-]
+            "util_pct_tugs": r['util_pct'],                               # Tug utilization percentage       # [%]
+            "avg_iddle_t_per_ac": r['avg_wait_arr'] + r['avg_wait_dep'],   # Average idle time per aircraft   # [s]
+            "avg_taxi_t_per_ac": r['avg_taxi_arr'] + r['avg_taxi_dep'],   # Average taxi time per aircraft   # [s]
+            "simulation_end_result": r['status']                          # Reason for ending simulation     # [-]
+        }
+
+        clean_results.append(clean_result_dict)
+
+    return clean_results
+
 
 

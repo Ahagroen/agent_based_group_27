@@ -352,8 +352,11 @@ def generate_schedule_tugs_4(airport:Airport,ac_schedule:list[Schedule],ground_c
     #best_assignment, tug_count = genetic_algorithm(jobs)
 
     #clean_assignment, final_tugs = merge_tug_assignments(best_assignment, jobs)
-
-    best_assignment, min_tugs = find_min_tugs(jobs, pop_size=60, generations=500)
+    value = find_min_tugs(jobs, pop_size=30, generations=300)
+    if value:
+        best_assignment, min_tugs = value
+    else:
+        raise RuntimeError
     #logger.debug(f"Best feasible schedule uses {min_tugs} tugs.")
     #print(f"\nBest feasible schedule uses {min_tugs} tugs.")
     #print(best_assignment)

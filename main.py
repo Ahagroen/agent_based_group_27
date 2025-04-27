@@ -7,7 +7,7 @@ from loguru import logger
 import sys
 
 
-def simulate_data_multiple_runs(runs, run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed):
+def simulate_data_multiple_runs(runs, run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed,inc_rng=False):
 
     logger.remove()
     logger.add(sys.stderr, level="SUCCESS")
@@ -21,7 +21,11 @@ def simulate_data_multiple_runs(runs, run_time, ac_freq, taxi_margin, loading_ti
 
     for i in range(runs):
         logger.info(f"=== STARTING SIM RUN {i} ===")
-        run_simulation(airport, run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)
+        if inc_rng:
+            new_rng = rng_seed + i
+        else:
+            new_rng = rng_seed
+        run_simulation(airport, run_time, ac_freq, taxi_margin, loading_time, scheduler, new_rng)
         print(f"SIM RUN: {i+1}/{runs}")
 
     results = parse_multiple_runs("runlog.txt")
@@ -40,7 +44,7 @@ def simulate_data_multiple_runs(runs, run_time, ac_freq, taxi_margin, loading_ti
     print(f"SIM RUN SUCCESS: {n_successes}, {per_successes*100}%")
 
 
-    return (results, n_successes, per_successes)
+    return results
 
 def simulate_data_single_run(run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed):
 
@@ -52,8 +56,8 @@ def simulate_data_single_run(run_time, ac_freq, taxi_margin, loading_time, sched
     y_dim = 780  # Height of window
     window_dims = (x_dim, y_dim)
 
-    data = simulate_data_multiple_runs(1, run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)[0]
-
+    simulate_data_multiple_runs(1, run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)[0]
+    data=parse_single_run() 
     min_tugs = data['min_tugs']
     util_pct_tugs = data['util_pct']
     avg_iddle_t_per_ac = data['avg_wait_arr'] + data['avg_wait_dep']
@@ -82,8 +86,8 @@ def main():
     ac_freq = 10 * 60                  # Frequency of aircraft arrival                      # [s]  20, 30, 40
     taxi_margin = 15 * 60              # Time margin for aircraft to be moved from A to B   # [s]  10, 15, 20
     loading_time = 30 * 60             # Time spent by aircraft at gate                     # [s]  40, 50, 60
-    scheduler = Schedule_Algo.greedy   # Time of algorith used to manage tug schedule       # [-]
-    rng_seed = - 1                     # Seed used to generate random variables             # [-]
+    scheduler = Schedule_Algo.genetic   # Time of algorith used to manage tug schedule       # [-]
+    rng_seed = 42+12                     # Seed used to generate random variables             # [-]
 
     # Run Simulations or Visualization
     # --------------------------------
@@ -93,7 +97,7 @@ def main():
 
     # Simulation
     # print(simulate_data_single_run(run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed))
-    simulate_data_multiple_runs(3, run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)
+    simulate_data_multiple_runs(1, run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)
 
 
 if __name__ == "__main__":

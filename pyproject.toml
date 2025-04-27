@@ -6,7 +6,10 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "loguru>=0.7.3",
+    "matplotlib>=3.10.1",
     "numpy>=2.2.5",
+    "pandas>=2.2.3",
     "raylib>=5.5.0.2",
+    "scipy>=1.15.2",
 ]
 

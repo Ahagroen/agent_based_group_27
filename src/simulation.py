@@ -28,6 +28,7 @@ class Simulation:
         self.max_time:int = max_time
         self.taxi_margin = taxi_margin
         self.ac_waiting:dict[int,Aircraft|None] = airport.populate_waiting_dict()#AC waiting at runway (arriving), or gate (departing)
+        self.state:Status = Status.Running
         self.ac_loading:list[Aircraft] = []#AC that are currently loading - location is inside struct 
         self.tug_waiting:list[TowingVehicle] = [] #empty tugs
         match scheduler:
@@ -38,12 +39,14 @@ class Simulation:
             case Schedule_Algo.greedy:
                 self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs_3(self.airport,self.atc.ac_schedule,self.ground_control)
             case Schedule_Algo.genetic:
-                self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs_4(self.airport,self.atc.ac_schedule,self.ground_control)
+                try:
+                    self.tug_intersection:list[TowingVehicle] = generate_schedule_tugs_4(self.airport,self.atc.ac_schedule,self.ground_control)
+                except RuntimeError:
+                    self.state = Status.Failed_Aircraft_Taxi_Time
         self.num_tugs = len(self.tug_intersection)
         self.tug_travelling:list[TravellingVehicle] = []
         self.current_active_routes:list[ActiveRoute] = []
         self.time:int = 0
-        self.state:Status = Status.Running
 
         
     def _add_new_aircraft(self):

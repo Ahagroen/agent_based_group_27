@@ -1,0 +1,11 @@
+ac_freq,taxi_margin,loading_time,scheduler,min_tugs,util_pct_tugs,avg_iddle_t_per_ac,avg_taxi_t_per_ac,simulation_end_result
+1800,900,3780.0,Schedule_Algo.aco,2,13.810286973506287,0.0,542.25,Status.Success
+1800,900,3780.0,Schedule_Algo.aco,2,14.11735079325107,0.0,553.1666666666666,Status.Success
+1800,900,3780.0,Schedule_Algo.aco,2,14.098211118431053,5.75,548.8611111111111,Status.Success
+1800,900,3780.0,Schedule_Algo.aco,2,13.446074982410291,0.0,546.5757575757576,Status.Success
+1800,900,3780.0,Schedule_Algo.aco,2,14.171883892999432,0.0,558.1616161616162,Status.Success
+1800,900,3780.0,Schedule_Algo.aco,2,13.773394031360647,0.0,555.2525252525253,Status.Success
+1800,900,3780.0,Schedule_Algo.aco,2,13.97638784225069,0.0,568.989898989899,Status.Success
+1800,900,3780.0,Schedule_Algo.aco,2,14.212901917030123,0.0,550.5833333333334,Status.Success
+1800,900,3780.0,Schedule_Algo.aco,2,13.467055921880505,0.0,549.0,Status.Success
+1800,900,3780.0,Schedule_Algo.aco,2,13.72618030066871,0.0,538.5277777777777,Status.Success

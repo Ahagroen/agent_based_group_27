@@ -132,7 +132,7 @@ def parse_multiple_runs(path):
         clean_result_dict = {
             "min_tugs": r['min_tugs'],                                    # Minimum number of tugs needed    # [-]
             "util_pct_tugs": r['util_pct'],                               # Tug utilization percentage       # [%]
-            "avg_iddle_t_per_ac": r['avg_wait_arr'] + r['avg_wait_dep'],   # Average idle time per aircraft   # [s]
+            "avg_iddle_t_per_ac": r['avg_wait_arr'] + r['avg_wait_dep'],  # Average idle time per aircraft   # [s]
             "avg_taxi_t_per_ac": r['avg_taxi_arr'] + r['avg_taxi_dep'],   # Average taxi time per aircraft   # [s]
             "simulation_end_result": r['status']                          # Reason for ending simulation     # [-]
         }

@@ -2,6 +2,7 @@ import re
 import json
 from statistics import mean
 from pathlib import Path
+from enum import Enum
 
 # --- Load airport configuration ---
 config_path = "baseline_airport.json"
@@ -12,6 +13,14 @@ GATES             = set(airport_cfg["gates"])
 ARRIVAL_RUNWAYS   = set(airport_cfg["arrival_runways"])
 DEPARTURE_RUNWAYS = set(airport_cfg["dept_runways"])
 
+# --- Define Status Enum ---
+class Status(Enum):
+    Running = 0
+    Success = 1
+    Failed_Aircraft_Taxi_Time = 2
+    Failed_Collision = 3
+    Failed_No_Landing_Space = 4
+
 def parse_single_run(lines):
     arrivals = {}
     arrival_pickups = {}
@@ -21,6 +30,7 @@ def parse_single_run(lines):
     departures = {}
     times = []
     min_tugs = None
+    sim_status = Status.Running  # Default status
 
     event_re   = re.compile(r"-\s*(\d+):\s*(.*)", re.IGNORECASE)
     re_tugs    = re.compile(r"Number of tugs:\s*(\d+)", re.IGNORECASE)
@@ -29,8 +39,17 @@ def parse_single_run(lines):
     re_start   = re.compile(r"Aircraft (\d+) started loading at (\d+)", re.IGNORECASE)
     re_comp    = re.compile(r"Aircraft (\d+) completed loading at (\d+)", re.IGNORECASE)
     re_depart  = re.compile(r"Aircraft (\d+) departing from (\d+)", re.IGNORECASE)
+    re_status  = re.compile(r"reason:\s*Status\.(\w+)", re.IGNORECASE)
 
     for line in lines:
+        # Check if simulation end reason is mentioned
+        if (m := re_status.search(line)):
+            status_str = m.group(1)
+            try:
+                sim_status = Status[status_str]
+            except KeyError:
+                sim_status = Status.Running  # fallback if unknown status
+
         m = re_tugs.search(line)
         if m:
             min_tugs = int(m.group(1))
@@ -77,7 +96,8 @@ def parse_single_run(lines):
         "avg_wait_dep": mean(waits_dep) if waits_dep else float("nan"),
         "avg_taxi_arr": mean(taxis_arr) if taxis_arr else float("nan"),
         "avg_taxi_dep": mean(taxis_dep) if taxis_dep else float("nan"),
-        "util_pct":     util * 100
+        "util_pct":     util * 100,
+        "status":       sim_status
     }
 
 def parse_multiple_runs(path):

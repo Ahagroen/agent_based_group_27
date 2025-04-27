@@ -4,25 +4,18 @@ import math
 from main import simulate_data_single_run
 from src.datatypes import Schedule_Algo, Status
 
-def run_model():
+
+def run_model(run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed):
     """
     Simulate a run of the model.
-    If the model fails, it should return None to handle the errors.
+    If the model fails or returns NaN, it should return None to handle the errors.
     Returns a single metric from simulate_data_single_run.
     """
     try:
-        run_time = 6 * 60 * 60      # Length of simulation [s]
-        ac_freq = 10 * 60           # Frequency of aircraft arrival [s]
-        taxi_margin = 20 * 60       # Time margin for aircraft to arrive at gate [s]
-        loading_time = 30 * 60      # Time spent by aircraft at gate [s]
-        scheduler = Schedule_Algo.greedy  # Algorithm for tug scheduling
-        rng_seed = -1               # Random seed
-
-        # simulate and return the 4th element: avg_taxi_t_per_ac
-        return simulate_data_single_run(
-            run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed
-        )[3]
-
+        value = simulate_data_single_run(run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed)[3]
+        if np.isnan(value):  # Check for NaN
+            return None
+        return value
     except Exception:
         return None
 
@@ -32,12 +25,14 @@ def calculate_n(std_dev, margin_of_error, alpha):
     Calculate the number of simulation runs (n) required for a given confidence interval.
     n = (z_{1-alpha/2} * S / \ell)^2
     """
+    if np.isnan(std_dev):
+        raise ValueError("Standard deviation is NaN, check simulation outputs.")
     z_score = stats.norm.ppf(1 - alpha / 2)
     n = (z_score * std_dev / margin_of_error) ** 2
     return math.ceil(n)
 
 
-def estimate_required_runs(margin_of_error, alpha, initial_runs=100):
+def estimate_required_runs(sim_input, margin_of_error, alpha, initial_runs=100):
     """
     Sequentially run the model until the half-width of the (1-alpha) CI
     for the sample mean U_bar is less than the desired margin_of_error \ell.
@@ -56,7 +51,7 @@ def estimate_required_runs(margin_of_error, alpha, initial_runs=100):
     # Step 1 & 2: collect initial_runs valid results
     while len(results) < initial_runs:
         total_attempts += 1
-        value = run_model()
+        value = run_model(sim_input[0], sim_input[1], sim_input[2], sim_input[3], sim_input[4], sim_input[5])
         if value is not None:
             results.append(value)
         print(f"Attempts: {total_attempts}, valid: {len(results)}")
@@ -77,10 +72,12 @@ def estimate_required_runs(margin_of_error, alpha, initial_runs=100):
 
         # Run additional simulations
         for _ in range(additional):
-            total_attempts += 1
-            value = run_model()
+            value = run_model(sim_input[0], sim_input[1], sim_input[2], sim_input[3], sim_input[4], sim_input[5])
+
             if value is not None:
                 results.append(value)
+            total_attempts += 1
+
         # Update statistics
         U_bar = np.mean(results)
         S = np.std(results, ddof=1)
@@ -92,9 +89,18 @@ def estimate_required_runs(margin_of_error, alpha, initial_runs=100):
 
 
 if __name__ == "__main__":
-    margin_of_error = 5      # desired half-width
-    alpha = 0.05             # for 95% CI
-    U_bar, S, n, half_width, runs, attempts = estimate_required_runs(margin_of_error, alpha)
+    margin_of_error = 5               # desired half-width
+    alpha = 0.05                      # for 95% CI
+
+    run_time = 6 * 60 * 60            # Length of simulation                               [s]
+    ac_freq = 20 * 60                 # Frequency of aircraft arrival                      [s]  20, 30, 40
+    taxi_margin = 7 * 60              # Time margin for aircraft to be moved from A to B   [s]  10, 15, 20
+    loading_time = 40 * 60            # Time spent by aircraft at gate                     [s]  40, 50, 60
+    scheduler = Schedule_Algo.greedy  # Algorithm used to manage tug schedule               [-]
+    rng_seed = -1                     # Seed used to generate random variables             [-]
+
+    sim_input = [run_time, ac_freq, taxi_margin, loading_time, scheduler, rng_seed]
+    U_bar, S, n, half_width, runs, attempts = estimate_required_runs(sim_input, margin_of_error, alpha)
 
     print(f"Sample mean U_bar from {runs} runs: {U_bar:.2f}")
     print(f"Sample standard deviation S: {S:.2f}")

@@ -22,9 +22,9 @@ columns = [
 df = pd.DataFrame(columns=columns)
 
 # Define the ranges globally or pass them in
-i_range = np.arange(5, 50, 5)
-j_range = np.arange(5, 50, 5)
-k_range = np.arange(5, 50, 5)
+i_range = np.arange(20, 40+10, 10)
+j_range = np.arange(10, 20+5, 5)
+k_range = np.arange(40, 60+10, 10)
 
 def get_progress(i, j, k):
     i_index = np.where(i_range == i)[0][0]
@@ -58,12 +58,13 @@ for i in i_range:
                 min_tugs,\
                 util_pct_tugs,\
                 avg_iddle_t_per_ac,\
-                avg_taxi_t_per_ac = simulate_data_single_run(run_time,
-                                                             ac_freq,
-                                                             taxi_margin,
-                                                             loading_time,
-                                                             scheduler,
-                                                             rng_seed)
+                avg_taxi_t_per_ac,\
+                simulation_end_result = simulate_data_single_run(run_time,
+                                                                ac_freq,
+                                                                taxi_margin,
+                                                                loading_time,
+                                                                scheduler,
+                                                                rng_seed)
 
                 new_data = {
                     "ac_freq": ac_freq,
@@ -73,7 +74,8 @@ for i in i_range:
                     "min_tugs": min_tugs,
                     "util_pct_tugs": util_pct_tugs,
                     "avg_iddle_t_per_ac": avg_iddle_t_per_ac,
-                    "avg_taxi_t_per_ac": avg_taxi_t_per_ac
+                    "avg_taxi_t_per_ac": avg_taxi_t_per_ac,
+                    "simulation_end_result": simulation_end_result
                 }
 
                 df.loc[len(df)] = new_data
@@ -85,11 +87,12 @@ for i in i_range:
                     "ac_freq": ac_freq,
                     "taxi_margin": taxi_margin,
                     "loading_time": loading_time,
-                    "scheduler": str(Schedule_Algo.aco),
+                    "scheduler": str(scheduler),
                     "min_tugs": None,
                     "util_pct_tugs": None,
                     "avg_iddle_t_per_ac": None,
-                    "avg_taxi_t_per_ac": None
+                    "avg_taxi_t_per_ac": None,
+                    "simulation_end_result": simulation_end_result
                 }
 
                 df.loc[len(df)] = new_data

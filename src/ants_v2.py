@@ -110,6 +110,20 @@ def populate_aco(connections_list, cost_dict, num_cycles,num_ants,Q,rho,rand_see
             pheremones_dict[i][j] = 1
     if rand_seed != -1:
         seed(rand_seed)
+
+    def determine_weights(start_node,options,pheremones)->list:
+        alpha = 1
+        beta = 1
+        weights_list = []
+        sum_total = 0
+        for i in options:
+            distance = cost_dict[start_node][i]
+            pheremones_val = pheremones[start_node][i]
+            total = pheremones_val**alpha*1/distance**beta 
+            sum_total += total
+            weights_list.append(total)
+        return [x/sum_total for x in weights_list]
+
     class Ant():
         def __init__(self,pheremones):
             self.position = 0
@@ -131,8 +145,8 @@ def populate_aco(connections_list, cost_dict, num_cycles,num_ants,Q,rho,rand_see
                     self.nodes_list = []
                 return 
             else:
-                pheremones_list = [self.options[self.position][x] for x in options]
-                choice = choices(options,weights=pheremones_list)[0]
+                weights = determine_weights(self.position,options,self.options) 
+                choice = choices(options,weights=weights)[0]
                 self.nodes_list.append(choice)
                 self.position = choice
 
@@ -162,7 +176,7 @@ def populate_aco(connections_list, cost_dict, num_cycles,num_ants,Q,rho,rand_see
                 updating[i[0]][i[1]] += delta_ph 
         for i in pheremones_dict.keys():
             for j in pheremones_dict[i].keys():
-                pheremones_dict[i][j] = (1-rho)*pheremones_dict[i][j] + updating[i][j]/cost_dict[i][j]
+                pheremones_dict[i][j] = (1-rho)*pheremones_dict[i][j] + updating[i][j]
 
     return compute_ideal(pheremones_dict)
 def compute_ideal(pheremone)->tuple[int,list]:
@@ -235,8 +249,6 @@ def generate_schedule_tugs_3(airport:Airport,ac_schedule:list[Schedule],ground_c
     for i in airport.dept_runways:
         for j in airport.gates:
             travel_times[j,i] = len(ground_controller.determine_route(i,j,{},0))*edge_len
-
-    edge_len = 15
     @dataclass
     class tug_carry:
         missions:list
@@ -275,7 +287,7 @@ def generate_schedule_tugs_4(airport:Airport,ac_schedule:list[Schedule],ground_c
     ac_schedule.sort(key=lambda x: x.estimated_time)
     for i in ac_schedule:
         start_time = i.estimated_time
-        end_time = start_time + len(ground_controller.determine_route(i.start_pos, i.end_pos, {}, 0))*15
+        end_time = start_time + len(ground_controller.determine_route(i.start_pos, i.end_pos, {}, 0))*15+350+180
         #determine_route(self, start_pos: int, end_pos: int,invalid_nodes:dict[int,list[int]],start_time:int) -> list[tuple[int,int]]:
         jobs.append((start_time, end_time))
     

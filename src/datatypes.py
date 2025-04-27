@@ -3,14 +3,19 @@ from enum import Enum
 
 import src.ground_control as gc
 
-#This is a linked list basically, so each node of the airport connects to N other nodes with certain time costs, and only one vehicle is allowed to be in an edge at once
 class ImageType(Enum):
+    """
+    Type of intersection for visualization
+    """
     four_way_intersection = 0
     three_way_intersection = 1
     turn = 2
     straight = 3
 
 class Schedule_Algo(Enum):
+    """
+    Schedule algorithm selection
+    """
     naive = 0
     greedy = 1
     aco = 2
@@ -18,6 +23,14 @@ class Schedule_Algo(Enum):
 
 @dataclass
 class Node():
+    """
+    Node class 
+        edges:list of connected node numbers
+        x_pos: x position of the node in the world
+        y_pos: y position of the node in the world
+        image_type: What image to display
+        orientation: how the image should be oriented
+    """
     edges:list
     x_pos:int
     y_pos:int
@@ -26,11 +39,25 @@ class Node():
 
 @dataclass
 class NodePathfinding():
+    """
+    Node class for pathfinding, extending the base node class to include a list of blocked times when the node is already in use
+    """
     node:Node
     blocked_times:list
 
 @dataclass
 class Aircraft():
+    """
+    Aircraft Agent class
+    Attributes:
+        name:The name of the aircraft
+        target: The node the aircraft is going to 
+        departure_runway: The departure runway ID of the aircraft if travelling to the gate, or false if travelling from the gate (since the departure runway data is encoded in target)
+        target:True if arriving
+        max_travel_time:the timestamp when this aircraft will violate the taxi time constraint
+        loading_time:How long this aircraft will take to load
+        loading_completion_time:the timestamp when the aircraft will finish loading (not manually set)
+    """
     name:str
     target:int                          #This implicitly holds direction, since its either a gate or a runway
     departure_runway:int
@@ -41,6 +68,15 @@ class Aircraft():
 
 @dataclass
 class Schedule():
+    """
+    Schedule dataclass
+    attributes:
+        name_ac: the name of the aircraft in question
+        estimated_time: the estimated start time of the schedule (when the aircraft arrives or finishes loading)
+        start_pos: the start node of the schedule
+        end_pos: the end node of the schedule
+        dept_runway: the departure runway of the associated aircraft if this schedule is the first half, used in generation of aircraft only.
+    """
     name_ac:int
     estimated_time:int
     start_pos:int
@@ -49,14 +85,30 @@ class Schedule():
 
 @dataclass
 class ActiveRoute():
+    """
+    Structure of the broadcast towing vehicle route information
+    """
     start_time:int
     start_node:int
     end_node:int
 
 @dataclass
 class TowingVehicle():
+    """
+    Towing vehicle Agent
+    Attributes:
+        name: name of the towing vehicle
+        pos: position of the towing vehicle
+        schedule:remaining schedule of this towing vehicle
+        start_time: when the towing vehicle should exit the garage
+    Private Members:
+        connected_aircraft: Aircraft connected to this towing vehicle, none otherwise
+        time_to_next_node: speed of the tug
+        next_node_list: current path to follow
+        done: if the tug is finished with its schedule and returning to base
+    """
     name:str
-    pos:int#Assume all travel time takes the same number of mins (say 1) - can't assume this
+    pos:int
     schedule:list[Schedule]
     start_time:int #when the towing vehicle starts its route
     connected_aircraft:Aircraft|None
@@ -65,7 +117,9 @@ class TowingVehicle():
     done = False
 
     def determine_route(self,known_routes:list[ActiveRoute],time:int,ground_control:gc.groundControl):
-        #We assume no collisions once pathing is started
+        """
+        Pathfinding method. First reconstructs the current global state by determining the paths of all known towing vehicle travel (stored in known routes), then pathfinds its own route
+        """
         active_route_pathing:dict[int,list[int]] = {}
         for i in known_routes:
             if i.start_time+30*60 < time:
@@ -90,6 +144,9 @@ class TowingVehicle():
 
 @dataclass
 class TravellingVehicle():
+    """
+    Travelling vehicle representation, composed with towing vehicle base class and needed information to represent travel in an edge between two nodes
+    """
     vehicle:TowingVehicle
     remaining_time:int
     departure_node:int
@@ -97,6 +154,9 @@ class TravellingVehicle():
     loaded:bool
 
 class Status(Enum):
+    """
+    Different simulation states, any state but 0 ends the simulation
+    """
     Running = 0
     Success = 1
     Failed_Aircraft_Taxi_Time = 2

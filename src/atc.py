@@ -8,6 +8,16 @@ from src.ground_control import groundControl
 
 class ATC():
     def __init__(self,total_time:int,ac_pace:int,loading_time:int,airport:Airport,ground_control:groundControl,rng_seed:int):
+        """
+        Initialize an ATC agent
+        Arguments:
+            total_time:total simulation time (seconds)
+            ac_pace: baseline pace of aircraft generation (seconds)
+            loading_time: Baseline loading time for aircraft (seconds)
+            airport: Airport object corresponding to the simulation airport
+            ground_control: groundControl object for pathing
+            rng_seed: seed for the rng, -1 indicates a random seed
+        """
         self.ac_pace = ac_pace
         if rng_seed != -1:
             self.random_norm = random.default_rng(rng_seed)

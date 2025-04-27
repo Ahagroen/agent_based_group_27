@@ -10,6 +10,17 @@ from copy import deepcopy
 
 def generate_schedule_tugs(airport:Airport,ac_schedule:list,ground_control:groundControl)->list:
     #So from ac_schedule, determine the mission, and the time taken to complete the mission (runway to gate)
+    """
+    Generate the towing vehicle schedule with a naive approach. Not intended for meaningful use, but mainly as an indication for the formulation of a scheduling algorithm.
+
+    Inputs:
+        airport(Airport): the airport object for the simulation
+        ac_schedule(List(Schedule)): A list of all aircraft that will be spawned, based on the ideal arrival times
+        ground_control(groundControl): a groundControl object for use to generate paths
+    Outputs:
+        list(TowingVehicles): List of towing vehicles required for the simulation, preloaded with its schedule
+
+    """
     tugs = []
     working_ac = deepcopy(ac_schedule)
     margin = 180
@@ -39,6 +50,21 @@ def generate_schedule_tugs(airport:Airport,ac_schedule:list,ground_control:groun
 
 def generate_schedule_tugs_2(airport:Airport,ac_schedule:list[Schedule],ground_controller:groundControl,num_cycles:int=10,num_ants:int=250,Q:int=1,rho=0.2)->list:
     #So from ac_schedule, determine the mission, and the time taken to complete the mission (runway to gate)
+    """
+    Generate towing vehicles with preloaded schedule using an Ant Colony Optimization approach
+    Inputs:
+        airport(Airport): the airport object for the simulation
+        ac_schedule(List(Schedule)): A list of all aircraft that will be spawned, based on the ideal arrival times
+        ground_control(groundControl): a groundControl object for use to generate paths
+        num_cycles(int)=10: The number of iterations of the algorithm
+        num_ants(int)=250: the number of ants to consider to the algorithm
+        Q(int)=250: the Q value for pheremone determination
+        rho(int)=0.2: the rho value for pheremone decay
+    Outputs:
+        list(TowingVehicles): List of towing vehicles required for the simulation, preloaded with its schedule
+
+
+    """
     times:dict[int,list[int]] = {}#each row = start position, each column = end_position. None means its an invalid entry (or leave it empty?)
     travel_times:dict[tuple,int] = {} #options are 109-arrivals, 109-gates, gates-arrivals (same as arrivals-gates), departures-arrivals, departures-gates(same as gates-departures)
     edge_len = 15
@@ -99,6 +125,10 @@ def generate_schedule_tugs_2(airport:Airport,ac_schedule:list[Schedule],ground_c
     return tugs
 
 def populate_aco(connections_list, cost_dict, num_cycles,num_ants,Q,rho,rand_seed:int=-1)->tuple[int,list]:
+    """
+    Run the ant colony optimzation
+    """
+
     pheremones_dict = {}
     for i in connections_list.keys():
         pheremones_dict[i] = {}
@@ -125,6 +155,9 @@ def populate_aco(connections_list, cost_dict, num_cycles,num_ants,Q,rho,rand_see
         return [x/sum_total for x in weights_list]
 
     class Ant():
+        """
+        Ant Class for the ACO, inputs are the pheremones dictionary for a deepcopy of it for analysis
+        """
         def __init__(self,pheremones):
             self.position = 0
             self.options = deepcopy(pheremones)
@@ -180,6 +213,9 @@ def populate_aco(connections_list, cost_dict, num_cycles,num_ants,Q,rho,rand_see
 
     return compute_ideal(pheremones_dict)
 def compute_ideal(pheremone)->tuple[int,list]:
+    """
+    Compute the ideal path, by selecting the highest pheremone option at each step
+    """
     tug_missions = []
     used_nodes = []
     while len(used_nodes) < len(pheremone.keys())-1:
@@ -220,9 +256,19 @@ def compute_row(ac_schedule, travel_times, start_time,start_node):
     return time_list
 
 def generate_schedule_tugs_3(airport:Airport,ac_schedule:list[Schedule],ground_controller:groundControl)->list:
+    """
+    Generate the towing vehicles for the simulation with pre-loaded schedules using a greedy algorithm
+    Inputs:
+        airport(Airport): the airport object for the simulation
+        ac_schedule(List(Schedule)): A list of all aircraft that will be spawned, based on the ideal arrival times
+        ground_control(groundControl): a groundControl object for use to generate paths
+    Outputs:
+        list(TowingVehicles): List of towing vehicles required for the simulation, preloaded with its schedule
+
+    """
     margin = 180
     ac_schedule.sort(key=lambda x: x.estimated_time)
-    travel_times:dict[tuple,int] = {} #options are 109-arrivals, 109-gates, gates-arrivals (same as arrivals-gates), departures-arrivals, departures-gates(same as gates-departures)
+    travel_times:dict[tuple,int] = {} #Pre-compute paths to save computational cost
     edge_len = 15
     for i in airport.gates:
         for j in airport.arrival_runways:
@@ -283,6 +329,16 @@ def remove_used(times:dict,used_nodes):
     # best_choice = initial_options.index(min([i for i in initial_options if i != 0]))#find the index of the smallest non-zero cost
 
 def generate_schedule_tugs_4(airport:Airport,ac_schedule:list[Schedule],ground_controller:groundControl)->list:
+    """
+    Generate towing vehicles for the simulation with pre-loaded schedules using a genetic algorithm
+    Inputs:
+        airport(Airport): the airport object for the simulation
+        ac_schedule(List(Schedule)): A list of all aircraft that will be spawned, based on the ideal arrival times
+        ground_control(groundControl): a groundControl object for use to generate paths
+    Outputs:
+        list(TowingVehicles): List of towing vehicles required for the simulation, preloaded with its schedule
+
+    """
     jobs = []
     ac_schedule.sort(key=lambda x: x.estimated_time)
     for i in ac_schedule:

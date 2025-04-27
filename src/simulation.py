@@ -7,6 +7,16 @@ from src.ants_v2 import generate_schedule_tugs,generate_schedule_tugs_2,generate
 from random import choice
 class Simulation:
     def __init__(self,airport:Airport,max_time,ac_interval:int,taxi_margin:int,loading_margin:int, scheduler:Schedule_Algo,rng_seed:int=-1):
+        """
+        Initialize a new Simulation object and begin running the simulation
+        Arguments:
+            airport: Airport object corresponding to the airport to simulate
+            max_time: the amount of time to simulate (seconds)
+            ac_interval: the base interval between aircraft arriving (seconds)
+            taxi_margins: the allowable taxi time (seconds)
+            loading_margin: the base loading time (seconds)
+            scheduler(Schedule_Algo): which scheduling algorithm to use
+        """
         self.airport:Airport = airport
         self.ground_control:groundControl = groundControl(airport.nodes,max_time)
         nominal_taxi = len(self.ground_control.determine_route(choice(self.airport.dept_runways),choice(self.airport.gates),{},0))*15
@@ -159,6 +169,9 @@ class Simulation:
 
 
     def _check_ac_waiting_time(self):
+        """
+        Check if a waiting aircraft has exceeded taxi time constraints
+        """
         for i in self.ac_waiting.keys():
             if self.ac_waiting[i]:
                 if i in self.airport.dept_runways:
@@ -176,6 +189,9 @@ class Simulation:
                         self.dump_state()
 
     def _check_tug_travelling(self):
+        """
+        Update any towing vehicles travelling between two nodes
+        """
         for i in self.tug_travelling:
             for j in self.tug_travelling:
                 if i != j: 
